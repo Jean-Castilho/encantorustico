@@ -1,0 +1,137 @@
+<style>
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2.5rem;
+        align-items: start;
+    }
+
+    /* --- User Card --- */
+    .user-card {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: var(--borda-radius);
+        box-shadow: var(--sombra-padrao);
+        text-align: center;
+    }
+
+    .user-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1rem;
+        border: 4px solid var(--cor-destaque);
+    }
+
+    .user-card h3 {
+        margin-top: 0;
+        font-size: 1.5rem;
+    }
+
+    .user-card p {
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+
+    .account-actions a {
+        display: block;
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: var(--borda-radius);
+        text-align: left;
+        transition: background-color 0.3s, color 0.3s;
+        font-weight: bold;
+        color: var(--cor-secundaria);
+    }
+
+    .account-actions a:hover {
+        background-color: #f1f3f5;
+        color: var(--cor-destaque);
+        text-decoration: none;
+    }
+
+    .account-actions .btn-remover {
+        margin-top: 1rem;
+        border-top: 1px solid var(--cor-borda);
+        padding-top: 1rem;
+    }
+
+    /* --- Profile Form --- */
+    .profile-form-card {
+        background-color: #fff;
+        padding: 2.5rem;
+        border-radius: var(--borda-radius);
+        box-shadow: var(--sombra-padrao);
+    }
+
+    .profile-form-card h3 {
+        margin-top: 0;
+        font-size: 1.8rem;
+        border-bottom: 1px solid var(--cor-borda);
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    /* --- Responsiveness --- */
+    @media (max-width: 992px) {
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="container">
+    <header class="page-header" style="text-align: center; margin-bottom: 3rem;">
+        <h1>Minha Conta</h1>
+        <p style="font-size: 1.2rem; color: #6c757d;">Gerencie suas informações, pedidos e segurança da conta.</p>
+    </header>
+
+    <div class="profile-grid">
+        
+        <!-- Coluna Lateral: Cartão do Usuário e Ações -->
+        <aside class="sidebar-column">
+            <div class="user-card">
+                <img src="/images/About-hero.png" alt="Avatar do Usuário" class="user-avatar">
+                <h3><%= session.user.name %></h3>
+                <p><%= session.user.email.endereco %></p>
+                
+                <div class="account-actions">
+                    <a href="/pedidos">Histórico de Pedidos</a>
+                    <a href="/change-password">Alterar Senha</a>
+                    <a href="/logout" class="btn-remover" style="width: 100%; text-align: center;">Sair da Conta</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Coluna Principal: Formulário de Informações -->
+        <section class="main-column">
+            <div class="profile-form-card">
+                <h3>Editar Informações Pessoais</h3>
+                <form action="/user/update-profile" method="POST">
+
+                    <div class="form-group">
+                        <label for="name" class="form-label">Nome Completo</label>
+                        <input type="text" id="name" name="name" class="form-control" value="<%= session.user.name %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Endereço de E-mail</label>
+                        <input type="email" id="email" name="email" class="form-control" value="<%= session.user.email.endereco %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="number" class="form-label">Telefone</label>
+                        <input type="tel" id="number" name="number" class="form-control" value="<%= session.user.telefone.number %>">
+                    </div>
+
+                    <div style="text-align: right; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-destaque">Salvar Alterações</button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+    </div>
+</div>

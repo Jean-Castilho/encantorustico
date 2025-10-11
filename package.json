@@ -1,0 +1,39 @@
+{
+  "name": "EncantoRustico",
+  "version": "1.0.1",
+  "description": "venda de moveis é decoraçoes",
+  "keywords": [
+    "moveis",
+    "decoracoes",
+    "usuarios",
+    "autenticacao",
+    "verificacao",
+    "otp",
+    "code",
+    "token",
+    "produtos",
+    "venda",
+    "gerenciamento",
+    "ecommerce",
+    "loja",
+    "online",
+    "pagamento",
+    "pix",
+    "qr-code"
+  ],
+  "license": "ISC",
+  "author": "Jean-Castilho",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.2",
+    "mercadopago": "^2.0.8",
+    "multer": "^2.0.2"
+  }
+}

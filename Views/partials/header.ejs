@@ -1,0 +1,62 @@
+<header class="header">
+  <nav class="navbar">
+    <a href="/" class="nav-logo">Encanto Rústico</a>
+
+    <ul class="nav-menu">
+      <li><a href="/"
+          class="nav-link <%= (typeof pageIdentifier !== 'undefined' && pageIdentifier === 'home') ? 'active' : '' %>">Home</a>
+      </li>
+      <li><a href="/about"
+          class="nav-link <%= (typeof pageIdentifier !== 'undefined' && pageIdentifier === 'about') ? 'active' : '' %>">Sobre</a>
+      </li>
+      <li><a href="/contact"
+          class="nav-link <%= (typeof pageIdentifier !== 'undefined' && pageIdentifier === 'contact') ? 'active' : '' %>">Contato</a>
+      </li>
+    </ul>
+
+
+    <div class="header-icons">
+      <div class="header-icons">
+        <% if (user) { %>
+          <a href="/profile" class="nav-link" aria-label="Perfil do Usuário">
+            <span class="material-icons">person</span>
+          </a>
+
+          <% if (user.role === 'admin' ) { %>
+            <a href="/admin/dashboard" class="nav-link" aria-label="Painel do Administrador">
+              <span class="material-icons">admin_panel_settings</span>
+            </a>
+          <% } %>
+
+          <% if (user.role === 'delivery' || user.role === 'admin' ) { %>
+            <a href="/delivery/dashboard" class="nav-link" aria-label="Painel do Entregador">
+              <span class="material-icons">local_shipping</span>
+            </a>
+          <% } %>
+          
+          <% if (user.role==='staff' || user.role==='admin' ) { %>
+            <a href="/admin/inventory" class="nav-link" aria-label="Estoque">
+              <span class="material-icons">inventory</span>
+            </a>
+          <% } %>
+
+          <a href="/logout" class="nav-link" aria-label="Sair">
+                <span class="material-icons">logout</span>
+              </a>
+            <% } else { %>
+              <a href="/login" class="nav-link" aria-label="Login">
+                <span class="material-icons">person</span>
+              </a>
+            <% } %>
+
+              <a href="/favorites" class="nav-link" aria-label="Meus Favoritos">
+                <span class="material-icons">favorite_border</span>
+              </a>
+              <a href="/cart" class="nav-link" aria-label="Meu Carrinho">
+                <span class="material-icons">shopping_cart</span>
+              </a>
+      </div>
+
+    </div>
+  </nav>
+</header>

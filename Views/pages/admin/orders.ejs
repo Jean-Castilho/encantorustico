@@ -1,0 +1,180 @@
+<style>
+  .orders-admin-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    background-color: #f4f7fa;
+  }
+
+  .orders-admin-header h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+  }
+
+  .order-summary {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+  }
+
+  .summary-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    flex-basis: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .summary-card .icon {
+    font-size: 2.5rem;
+    margin-right: 15px;
+  }
+
+  .summary-card .text h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+  }
+
+  .summary-card .text p {
+    margin: 5px 0 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #34495e;
+  }
+
+  .summary-card.total .icon { color: #3498db; }
+  .summary-card.pending .icon { color: #f1c40f; }
+  .summary-card.in-transit .icon { color: #e67e22; }
+
+  .order-table-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+  }
+
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .order-table th, .order-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+  }
+
+  .order-table th {
+    background-color: #ecf0f1;
+    color: #34495e;
+    font-weight: 600;
+  }
+
+  .status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+  }
+
+  .status-pending { background-color: #f1c40f; }
+  .status-in-transit { background-color: #e67e22; }
+  .status-delivered { background-color: #2ecc71; }
+
+  .action-btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .action-btn:hover {
+    background-color: #2980b9;
+  }
+</style>
+
+<div class="orders-admin-container">
+  <div class="orders-admin-header">
+    <h1>Gerenciamento de Pedidos</h1>
+  </div>
+
+  <% 
+    const orders = [
+      { id: '#1234', customer: 'João da Silva', status: 'Pendente', deadline: '05/10/2025' },
+      { id: '#1235', customer: 'Maria Oliveira', status: 'Em Rota', deadline: '06/10/2025' },
+      { id: '#1236', customer: 'Carlos Pereira', status: 'Entregue', deadline: '07/10/2025' },
+      { id: '#1237', customer: 'Ana Costa', status: 'Pendente', deadline: '08/10/2025' },
+      { id: '#1238', customer: 'Pedro Martins', status: 'Em Rota', deadline: '09/10/2025' }
+    ];
+    const totalOrders = orders.length;
+    const pendingOrders = orders.filter(o => o.status === 'Pendente').length;
+    const inTransitOrders = orders.filter(o => o.status === 'Em Rota').length;
+  %>
+
+  <div class="order-summary">
+    <div class="summary-card total">
+      <div class="icon"><span class="material-icons">shopping_bag</span></div>
+      <div class="text">
+        <h3>Total de Pedidos</h3>
+        <p><%= totalOrders %></p>
+      </div>
+    </div>
+    <div class="summary-card pending">
+      <div class="icon"><span class="material-icons">hourglass_top</span></div>
+      <div class="text">
+        <h3>Pedidos Pendentes</h3>
+        <p><%= pendingOrders %></p>
+      </div>
+    </div>
+    <div class="summary-card in-transit">
+      <div class="icon"><span class="material-icons">local_shipping</span></div>
+      <div class="text">
+        <h3>Em Rota</h3>
+        <p><%= inTransitOrders %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-table-container">
+    <table class="order-table">
+      <thead>
+        <tr>
+          <th>ID do Pedido</th>
+          <th>Cliente</th>
+          <th>Status</th>
+          <th>Prazo de Entrega</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(order => { %>
+          <tr>
+            <td><%= order.id %></td>
+            <td><%= order.customer %></td>
+            <td>
+              <span class="status <%= 
+                order.status === 'Pendente' ? 'status-pending' : 
+                order.status === 'Em Rota' ? 'status-in-transit' : 'status-delivered' 
+              %>">
+                <%= order.status %>
+              </span>
+            </td>
+            <td><%= order.deadline %></td>
+            <td><button class="action-btn">Detalhes</button></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>

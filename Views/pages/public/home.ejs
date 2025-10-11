@@ -1,0 +1,200 @@
+<% 
+  const items = Array.isArray(products) ? products : (Array.isArray(allProducts) ? allProducts : []);
+  const userId = session?.user?._id || null;
+  const favorites = session?.user?.favorites || [];
+  const cart = session?.user?.cart || [];
+%>
+
+<style>
+    .in-cart i {
+        color: #28a745; /* Verde para indicar que está no carrinho */
+    }
+</style>
+
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>Móveis Rústicos que Contam Histórias</h1>
+    <p>Transforme seu lar com a beleza e o aconchego da madeira. Peças únicas e personalizadas para cada ambiente.</p>
+
+    <a href="/products" class="btn btn-primario">Ver Todos os Produtos</a>
+
+  </div>
+</section>
+
+<div class="container">
+  <section class="featured-products">
+    <h2>Destaques da Semana</h2>
+    <div class="product-grid">
+    
+      <% if (items.length > 0) { %>
+        <% items.slice(0, 3).forEach(product => { 
+             if (!product) return;
+             const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] : '/assets/img/fallback.jpg';
+             const productId = product._id || product.id || '';
+             const favoritUrl = userId ? `/addFavorite/${productId}` : '/login';
+             const carrinhoUrl = userId ? (cart.includes(productId.toString()) ? '/cart' : `/cart/add/${productId}`) : '/login';
+             const productUrl = `/product/${productId}`;
+             const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Preço sob consulta';
+             const isFavorited = favorites.includes(productId.toString());
+             const isInCart = cart.includes(productId.toString());
+        %>
+        
+          <div class="product-card">
+          
+            <div class="product-card-icons">
+              <a href="<%= favoritUrl %>" class="favorite-btn <%= isFavorited ? 'favorited' : '' %>" data-product-id="<%= productId %>">
+                <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
+              </a>
+              <a href="<%= carrinhoUrl %>" class="add-to-cart-btn <%= isInCart ? 'in-cart' : '' %>" data-product-id="<%= productId %>">
+                <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
+              </a>
+            </div>
+            <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>" alt="<%= product.nome %>">
+            <h3><%= product.nome %></h3>
+            <p class="price"><%= preco %></p>
+            <a href="<%= productUrl %>" class="btn btn-secundario btn-sm" style="margin-bottom: 40px;">Ver Detalhes</a>
+          
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p>Nenhum produto em destaque no momento. Volte em breve!</p>
+      <% } %>
+    
+    </div>
+  </section>
+
+  <section class="product-categories">
+    <h2>Categorias em Destaque</h2>
+    <div class="category-grid">
+      <% const categories=['Sala de Estar', 'Área Gourmet' , 'Cozinha' ]; %>
+        <% categories.forEach(category=> { %>
+          <div class="category-card">
+            <a href="/category/<%= category %>" class="category-title-link">
+              <h3>
+                <%= category %>
+              </h3>
+            </a>
+            <div class="category-products-scroll">
+              <% const productsInCategory=allProducts.filter(p=> p.categoria === category); %>
+                  <% if (productsInCategory && productsInCategory.length> 0) { %>
+                    <% productsInCategory.forEach(product=> { %>
+                      <% const imagem=(product.imagens && product.imagens.length> 0)
+                          ? product.imagens[0]
+                          : '/assets/img/fallback.jpg';
+                          const id = product._id;
+                          const productUrl = `/product/${id}`;
+                          const preco = (product.preco != null)
+                          ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency',
+                          currency: 'BRL' })
+                          : 'Preço sob consulta';
+                          %>
+                          <div class="product-card category-product-item">
+                            <img src="/uploads/<%= imagem %>" alt="<%= product.nome %>">
+                            <h4>
+                              <%= product.nome %>
+                            </h4>
+                            <p class="price">
+                              <%= preco %>
+                            </p>
+                            <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver
+                              Detalhes</a>
+                          </div>
+                          <% }); %>
+                  <% } else { %>
+                    <p>Nenhum produto disponível nesta categoria no momento.</p>
+                  <% } %>
+            </div>
+          </div>
+        <% }); %>
+    </div>
+  </section>
+</div>
+
+<div id="notification-home" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const notification = document.getElementById('notification-home');
+
+    function showNotification(message, isSuccess) {
+        notification.textContent = message;
+        notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+
+    // Handle favorite clicks
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const productId = button.dataset.productId;
+            if (!productId) return;
+
+            const isFavorited = button.classList.contains('favorited');
+            const url = isFavorited ? `/removeFavorite/${productId}` : `/addFavorite/${productId}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                showNotification(result.message, result.success);
+
+                if (result.success) {
+                    button.classList.toggle('favorited');
+                    const icon = button.querySelector('i');
+                    icon.textContent = isFavorited ? 'favorite_border' : 'favorite';
+                }
+            } catch (error) {
+                showNotification('Erro de conexão. Tente novamente.', false);
+            }
+        });
+    });
+
+    // Handle cart clicks
+    const cartButtons = document.querySelectorAll('.add-to-cart-btn');
+    cartButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            if (button.classList.contains('in-cart')) {
+                window.location.href = '/cart';
+                return;
+            }
+
+            const productId = button.dataset.productId;
+            if (!productId) return;
+
+            const url = `/cart/add/${productId}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                showNotification(result.message, result.success);
+
+                if (result.success) {
+                    button.classList.add('in-cart');
+                    const icon = button.querySelector('i');
+                    icon.textContent = 'shopping_cart_checkout';
+                }
+
+            } catch (error) {
+                showNotification('Erro de conexão. Tente novamente.', false);
+            }
+        });
+    });
+});
+</script>

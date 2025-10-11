@@ -1,0 +1,158 @@
+<style>
+    .order-card {
+        background-color: #fff;
+        border-radius: var(--borda-radius);
+        box-shadow: var(--sombra-padrao);
+        margin-bottom: 2rem;
+        overflow: hidden; /* Para garantir que o header se ajuste ao card */
+    }
+
+    .order-header {
+        background-color: #f8f9fa;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--cor-borda);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .order-header-item strong {
+        display: block;
+        color: #6c757d;
+        font-weight: normal;
+        margin-bottom: 0.25rem;
+    }
+
+    .order-body {
+        padding: 1.5rem;
+    }
+
+    .order-item {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--cor-borda);
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .order-item-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: var(--borda-radius);
+    }
+
+    .order-item-details {
+        flex-grow: 1;
+    }
+
+    .order-item-details h5 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .order-item-details p {
+        margin: 0;
+        color: #6c757d;
+    }
+
+    .order-item-price {
+        font-weight: bold;
+        font-size: 1.1rem;
+        text-align: right;
+    }
+
+    .status {
+        font-weight: bold;
+        padding: 0.3rem 0.6rem;
+        border-radius: 1rem;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+    }
+
+    .status-pending_payment {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-processing {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+
+    .status-completed, .status-paid {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+</style>
+
+<div class="container">
+    <header class="page-header" style="text-align: center; margin-bottom: 3rem;">
+        <h1><%= titulo %></h1>
+        <p style="font-size: 1.2rem; color: #6c757d;"><%= mensagem %></p>
+    </header>
+
+    <% if (orders && orders.length > 0) { %>
+        <% orders.forEach(order => { %>
+            <div class="order-card">
+                <div class="order-header">
+                    <div class="order-header-item">
+                        <strong>PEDIDO REALIZADO EM</strong>
+                        <span><%= new Date(order.createdAt).toLocaleDateString('pt-BR') %></span>
+                    </div>
+                    <div class="order-header-item">
+                        <strong>TOTAL</strong>
+                        <span>R$ <%= (order.totalPrice || 0).toFixed(2).replace('.', ',') %></span>
+                    </div>
+                    <div class="order-header-item">
+                        <strong>STATUS</strong>
+                        <span class="status status-<%= order.status.toLowerCase().replace(/\s+/g, '_') %>"><%= order.status.replace('_', ' ') %></span>
+                    </div>
+                    <div class="order-header-item">
+                        <strong>PEDIDO Nº</strong>
+                        <span><%= order._id.toString().slice(-10) %></span>
+                    </div>
+                </div>
+                <div class="order-body">
+                    <% order.items.forEach(item => { %>
+                        <div class="order-item">
+                            <% if (item.productDetails) { %>
+                                <img src="/uploads/<%= item.productDetails.imagens[0] %>" alt="<%= item.productDetails.nome %>" class="order-item-img">
+                                <div class="order-item-details">
+                                    <h5><%= item.productDetails.nome %></h5>
+                                    <p>Quantidade: <%= item.quantity %></p>
+                                </div>
+                                <div class="order-item-price">
+                                    <span>R$ <%= (item.price || 0).toFixed(2).replace('.', ',') %></span>
+                                </div>
+                            <% } else { %>
+                                <div class="order-item-details">
+                                    <h5>Produto não disponível</h5>
+                                    <p>Este produto não pode mais ser exibido.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="card" style="text-align: center; padding: 4rem;">
+            <h2>Nenhum pedido encontrado.</h2>
+            <p style="margin-top: 1rem; margin-bottom: 2rem;">Parece que você ainda não fez nenhuma compra. Que tal explorar nossos produtos?</p>
+            <a href="/products" class="btn btn-destaque">Ver Produtos</a>
+        </div>
+    <% } %>
+</div>

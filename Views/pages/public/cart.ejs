@@ -1,0 +1,111 @@
+<div class="container" id="cart-container">
+    <header class="page-header" style="text-align: center; margin-bottom: 3rem;">
+        <h1>Meu Carrinho de Compras</h1>
+    </header>
+
+    <% if (cart && cart.items && cart.items.length > 0) { %>
+        <% let totalPrice = 0; let totalItems = 0; cart.items.forEach(item => {
+            const price = parseFloat(item.preco) || 0;
+            const quantity = parseInt(item.quantity, 10) || 0;
+            totalPrice += price * quantity;
+            totalItems += quantity;
+        }); %>
+
+        <form action="/checkout" method="GET">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; align-items: start;" id="cart-content">
+
+                <!-- Coluna dos Itens -->
+                <section class="cart-items-column">
+                    <% cart.items.forEach(item => { %>
+                        <div class="cart-item" data-item-id="<%= item._id %>" data-item-price="<%= item.preco %>">
+                            <input type="checkbox" name="selectedItems" value="<%= item._id %>" class="item-checkbox" checked style="margin-right: 15px; transform: scale(1.5);">
+                            <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>">
+                            <div class="item-details">
+                                <h3><%= item.nome %></h3>
+                                <p>Preço: <strong>R$ <%= (parseFloat(item.preco) || 0).toFixed(2).replace('.', ',') %></strong></p>
+                            </div>
+                            <form action="/cart/remove/<%= item._id %>" method="POST" class="remove-form" style="align-self: center;">
+                                <button type="submit" class="btn btn-remover">Remover</button>
+                            </form>
+                        </div>
+                    <% }); %>
+                </section>
+
+                <!-- Coluna do Resumo -->
+                <aside class="summary-column">
+                    <div class="card">
+                        <h4>Resumo do Pedido</h4>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <span id="total-items-count">Subtotal (<%= totalItems %> itens)</span>
+                            <strong id="total-price-display">R$ <%= totalPrice.toFixed(2).replace('.', ',') %></strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 2rem;">
+                            <span>Valor Total</span>
+                            <strong id="total-price-display-main">R$ <%= totalPrice.toFixed(2).replace('.', ',') %></strong>
+                        </div>
+                        <button type="submit" class="btn btn-destaque" style="width: 100%;">Finalizar Compra</button>
+                        <a href="/produtos" class="btn btn-secundario" style="width: 100%; margin-top: 1rem;">Continuar Comprando</a>
+                    </div>
+                </aside>
+            </div>
+        </form>
+    <% } else { %>
+        <div class="card" style="text-align: center; padding: 4rem;">
+            <h2>Seu carrinho está vazio.</h2>
+            <p style="margin-top: 1rem; margin-bottom: 2rem;">Adicione produtos para vê-los aqui.</p>
+            <a href="/produtos" class="btn btn-destaque">Ver Produtos</a>
+        </div>
+    <% } %>
+</div>
+
+<div id="notification-cart" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;"></div>
+
+<style>
+    @media (max-width: 992px) {
+        .container div[style*="grid"] {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Script de remoção de item (já existente)
+        const notification = document.getElementById('notification-cart');
+        function showNotification(message, isSuccess) { /* ... (código existente) ... */ }
+        const removeForms = document.querySelectorAll('.remove-form');
+        removeForms.forEach(form => { /* ... (código existente) ... */ });
+
+        // Novo script para atualização de totais
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        const totalItemsSpan = document.getElementById('total-items-count');
+        const totalPriceStrong = document.getElementById('total-price-display');
+        const totalPriceMainStrong = document.getElementById('total-price-display-main');
+
+        function updateTotals() {
+            let calculatedTotal = 0;
+            let selectedItemsCount = 0;
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const itemDiv = checkbox.closest('.cart-item');
+                    const price = parseFloat(itemDiv.dataset.itemPrice) || 0;
+                    calculatedTotal += price;
+                    selectedItemsCount++;
+                }
+            });
+
+            const formattedPrice = calculatedTotal.toFixed(2).replace('.', ',');
+            if(totalItemsSpan) totalItemsSpan.textContent = `Subtotal (${selectedItemsCount} itens)`;
+            if(totalPriceStrong) totalPriceStrong.textContent = `R$ ${formattedPrice}`;
+            if(totalPriceMainStrong) totalPriceMainStrong.textContent = `R$ ${formattedPrice}`;
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateTotals);
+        });
+
+        // Garante que os totais são calculados na carga inicial da página
+        updateTotals();
+    });
+</script>

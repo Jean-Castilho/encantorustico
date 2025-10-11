@@ -1,0 +1,298 @@
+<% 
+  const cart = session?.user?.cart || [];
+  const productId = product._id || product.id || '';
+  const isInCart = cart.includes(productId.toString());
+%>
+
+<style>
+    .product-detail-page {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        padding: 3rem 0;
+    }
+
+    /* --- Image Gallery --- */
+    .product-gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .main-product-image {
+        border-radius: var(--borda-radius);
+        overflow: hidden;
+        box-shadow: var(--sombra-padrao);
+    }
+
+    .main-product-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s ease;
+    }
+
+    .main-product-image:hover img {
+        transform: scale(1.05);
+    }
+
+    .product-thumbnails {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 1rem;
+    }
+
+    .thumbnail-item {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border: 2px solid var(--cor-borda);
+        border-radius: var(--borda-radius);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .thumbnail-item:hover, .thumbnail-item.active {
+        border-color: var(--cor-destaque);
+        box-shadow: 0 0 8px rgba(169, 110, 91, 0.5);
+    }
+
+    /* --- Product Details --- */
+    .product-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-title {
+        font-size: 2.8rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    .product-price-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .product-price {
+        font-size: 2.2rem;
+        font-weight: bold;
+        color: var(--cor-destaque);
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        color: var(--cor-secundaria);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid var(--cor-borda);
+        padding-bottom: 0.5rem;
+    }
+
+    .product-description {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    /* --- Add to Cart Form --- */
+    .add-to-cart-form {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--cor-borda);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .quantity-selector-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .quantity-label {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .quantity-input {
+        width: 80px;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    .add-to-cart-btn {
+        padding: 1rem;
+        font-size: 1.2rem;
+    }
+
+    /* --- Notification --- */
+    #notification {
+        padding: 1rem;
+        border-radius: var(--borda-radius);
+        margin-top: 1.5rem;
+        text-align: center;
+        font-weight: bold;
+        display: none; /* Hidden by default */
+    }
+
+    #notification.success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    #notification.error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    /* --- Meta Data --- */
+    .product-meta-data .meta-item {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* --- Responsiveness --- */
+    @media (max-width: 992px) {
+        .product-detail-page {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .product-title {
+            font-size: 2.2rem;
+        }
+        .product-price {
+            font-size: 1.8rem;
+        }
+        .add-to-cart-form {
+            flex-direction: column;
+        }
+        .add-to-cart-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container product-detail-page">
+    <!-- Product Image Gallery -->
+    <div class="product-gallery">
+        <% if (product.imagens && product.imagens.length > 0) { %>
+            <div class="main-product-image">
+                <img src="/uploads/<%= product.imagens[0] %>" alt="<%= product.nome %>" id="current-main-image">
+            </div>
+            <div class="product-thumbnails">
+                <% product.imagens.forEach(image => { %>
+                    <img src="/uploads/<%= image %>" alt="<%= product.nome %> thumbnail" class="thumbnail-item" onclick="changeMainImage(this)">
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="main-product-image">
+                <img src="/images/no-image.png" alt="Imagem não disponível">
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Product Details -->
+    <div class="product-details">
+        <h1 class="product-title"><%= product.nome %></h1>
+        
+        <div class="product-price-section">
+            <p class="product-price">
+                <% if (product.preco != null) { %>
+                    <%= Number(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                <% } else { %>
+                    Preço sob consulta
+                <% } %>
+            </p>
+        </div>
+
+        <form id="add-to-cart-form" class="add-to-cart-form <%= isInCart ? 'in-cart' : '' %>">
+            <input type="hidden" name="productId" value="<%= productId %>">
+            <div class="quantity-selector-wrapper">
+                <label for="quantity" class="quantity-label">Quantidade:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control quantity-input">
+            </div>
+            <button type="submit" class="btn btn-destaque add-to-cart-btn">
+                <%= isInCart ? 'Ver Carrinho' : 'Adicionar ao Carrinho' %>
+            </button>
+        </form>
+        
+        <div id="notification"></div>
+
+        <div class="product-description-section">
+            <h2 class="section-title">Descrição</h2>
+            <p class="product-description"><%- product.descricao %></p>
+        </div>
+
+        <div class="product-meta-data">
+            <h2 class="section-title">Detalhes</h2>
+            <% if (product.categoria) { %><p class="meta-item"><strong>Categoria:</strong> <%= product.categoria %></p><% } %>
+            <% if (product.material) { %><p class="meta-item"><strong>Material:</strong> <%= product.material %></p><% } %>
+            <% if (product.dimensoes) { %><p class="meta-item"><strong>Dimensões:</strong> <%= product.dimensoes %></p><% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeMainImage(thumbnail) {
+        const mainImage = document.getElementById('current-main-image');
+        mainImage.src = thumbnail.src;
+        
+        const currentActive = document.querySelector('.thumbnail-item.active');
+        if (currentActive) {
+            currentActive.classList.remove('active');
+        }
+        thumbnail.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const firstThumbnail = document.querySelector('.thumbnail-item');
+        if (firstThumbnail) {
+            firstThumbnail.classList.add('active');
+        }
+
+        const addToCartForm = document.getElementById('add-to-cart-form');
+        const notification = document.getElementById('notification');
+
+        addToCartForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (addToCartForm.classList.contains('in-cart')) {
+                window.location.href = '/cart';
+                return;
+            }
+
+            const productId = addToCartForm.querySelector('input[name="productId"]').value;
+            const quantity = addToCartForm.querySelector('input[name="quantity"]').value;
+            
+            try {
+                const response = await fetch(`/cart/add/${productId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quantity: quantity })
+                });
+
+                const result = await response.json();
+
+                notification.textContent = result.message;
+                notification.className = result.success ? 'success' : 'error';
+                notification.style.display = 'block';
+
+                if (result.success) {
+                    addToCartForm.classList.add('in-cart');
+                    addToCartForm.querySelector('button').textContent = 'Ver Carrinho';
+                }
+
+            } catch (error) {
+                notification.textContent = 'Ocorreu um erro ao adicionar o produto ao carrinho.';
+                notification.className = 'error';
+                notification.style.display = 'block';
+            }
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        });
+    });
+</script>

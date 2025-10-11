@@ -1,0 +1,59 @@
+<div class="container" id="contact-page">
+    <header class="page-header">
+        <h1>Fale Conosco</h1>
+        <p>Tem alguma dúvida, sugestão ou precisa de ajuda? Preencha o formulário abaixo.</p>
+    </header>
+
+    <div class="contact-content">
+        
+        <!-- Coluna do Formulário -->
+        <section class="contact-form">
+            <div class="card">
+                <h3>Envie sua Mensagem</h3>
+                <form action="/contact" method="POST">
+                    <div class="form-group">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Assunto</label>
+                        <input type="text" id="subject" name="subject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="form-label">Mensagem</label>
+                        <textarea id="message" name="message" rows="6" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-destaque">Enviar Mensagem</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Coluna de Informações -->
+        <aside class="contact-info">
+            <div class="card">
+                <h4>Nossos Contatos</h4>
+                <p><span class="material-icons">phone</span> Telefone: (XX) XXXX-XXXX</p>
+                <p><span class="material-icons">email</span> Email: contato@encantorustico.com.br</p>
+                <p><span class="material-icons">location_on</span> Endereço: Rua dos Móveis, 123, Cidade Rústica - CR</p>
+                
+                <hr>
+
+                <h4>Siga-nos</h4>
+                <div class="social-media">
+                    <a href="#" aria-label="Facebook">
+                        <img src="/images/facebook-icon.png" alt="Facebook">
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <img src="/images/instagram-icon.png" alt="Instagram">
+                    </a>
+                    <a href="#" aria-label="WhatsApp">
+                        <img src="/images/whatsapp-icon.png" alt="WhatsApp">
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+</div>

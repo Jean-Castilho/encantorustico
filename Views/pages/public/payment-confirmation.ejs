@@ -1,0 +1,49 @@
+<div class="container" style="text-align: center; margin-top: 3rem; margin-bottom: 3rem;">
+    <div class="card" style="max-width: 500px; margin: auto; padding: 2.5rem;">
+        <header class="page-header">
+            <h1><%= titulo %></h1>
+            <p><%= mensagem %></p>
+        </header>
+
+        <% if (qr_code && qr_code_base64) { %>
+            <div class="pix-info" style="margin-top: 2rem;">
+                <span class="material-icons" style="font-size: 4rem; color: var(--cor-destaque);">qr_code_2</span>
+                <h3>Pague com Pix</h3>
+                <p>Aponte a câmera do seu celular para o QR Code ou use o código abaixo para finalizar a compra.</p>
+                
+                <img src="data:image/png;base64, <%= qr_code_base64 %>" alt="QR Code Pix" style="max-width: 100%; height: auto; margin-top: 1rem; margin-bottom: 1rem;">
+
+                <strong>Código Pix (Copia e Cola):</strong>
+                <div style="background-color: #f0f0f0; padding: 1rem; border-radius: var(--borda-radius); margin-top: 0.5rem; word-wrap: break-word;">
+                    <p id="pix-code" style="margin: 0;"><%= qr_code %></p>
+                </div>
+                <button class="btn btn-secundario" onclick="copyPixCode()" style="margin-top: 1rem;">Copiar Código</button>
+            </div>
+        <% } %>
+
+        <div style="margin-top: 2rem;">
+            <a href="/profile" class="btn btn-destaque">Ver Meus Pedidos</a>
+        </div>
+    </div>
+</div> 
+
+<script>
+function copyPixCode() {
+    const pixCodeElement = document.getElementById('pix-code');
+    const range = document.createRange();
+    range.selectNode(pixCodeElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    try {
+        const successful = document.execCommand('copy');
+        const msg = successful ? 'sucedido' : 'malsucedido';
+        console.log(`Cópia do código Pix foi ${msg}`);
+        // Você pode adicionar um feedback visual para o usuário aqui (ex: tooltip)
+        alert("Código Pix copiado para a área de transferência!");
+    } catch (err) {
+        console.error('Não foi possível copiar o código Pix', err);
+        alert("Não foi possível copiar o código. Por favor, selecione e copie manualmente.");
+    }
+    window.getSelection().removeAllRanges();
+}
+</script>
