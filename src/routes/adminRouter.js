@@ -31,16 +31,18 @@ import {
 // products Controllers
 import {
     postAddProduct,
-    deleteProduct
+    deleteProduct,
+    postEditProduct
 } from '../controllers/productsController.js';
+import { getAddProductPage } from '../controllers/pagesController.js';
 
 router.get('/dashboard', getAdminDashboard);
 router.get('/inventory', getInventoryPage);
-router.get('/orders', getOrdersPage);
+router.get('/orders', getOrdersPage); 
 router.get('/users', getUsersPage);
-
 
 router.post('/products/new', upload.array('imagens', 5), postAddProduct);
 router.post('/products/delete', deleteProduct);
+router.post('/products/edit/:id', upload.array('imagens', 5), postEditProduct);
 
 export default router;

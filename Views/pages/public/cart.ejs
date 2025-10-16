@@ -3,62 +3,77 @@
         <h1>Meu Carrinho de Compras</h1>
     </header>
 
-    <% if (cart && cart.items && cart.items.length > 0) { %>
-        <% let totalPrice = 0; let totalItems = 0; cart.items.forEach(item => {
+    <% if (cart && cart.items && cart.items.length> 0) { %>
+        <% let totalPrice=0; let totalItems=0; cart.items.forEach(item=> {
             const price = parseFloat(item.preco) || 0;
             const quantity = parseInt(item.quantity, 10) || 0;
             totalPrice += price * quantity;
             totalItems += quantity;
-        }); %>
+            }); %>
 
-        <form action="/checkout" method="GET">
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; align-items: start;" id="cart-content">
+            <form action="/checkout" method="GET">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2.5rem; align-items: start;"
+                    id="cart-content">
 
-                <!-- Coluna dos Itens -->
-                <section class="cart-items-column">
-                    <% cart.items.forEach(item => { %>
-                        <div class="cart-item" data-item-id="<%= item._id %>" data-item-price="<%= item.preco %>">
-                            <input type="checkbox" name="selectedItems" value="<%= item._id %>" class="item-checkbox" checked style="margin-right: 15px; transform: scale(1.5);">
-                            <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>">
-                            <div class="item-details">
-                                <h3><%= item.nome %></h3>
-                                <p>Preço: <strong>R$ <%= (parseFloat(item.preco) || 0).toFixed(2).replace('.', ',') %></strong></p>
+                    <!-- Coluna dos Itens -->
+                    <section class="cart-items-column">
+                        <% cart.items.forEach(item=> { %>
+
+                            <% let productId=item._id; %>
+
+                                <div class="cart-item" data-item-id="<%= item._id %>"
+                                    data-item-price="<%= item.preco %>">
+                                    <input type="checkbox" name="selectedItems" value="<%= item._id %>"
+                                        class="item-checkbox" checked
+                                        style="margin-right: 15px; transform: scale(1.5);">
+                                    <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>">
+                                    <div class="item-details">
+                                        <h3>
+                                            <%= item.nome %>
+                                        </h3>
+                                        <p>Preço: <strong>R$ <%= (parseFloat(item.preco)) %></strong></p>
+                                    </div>
+                                    <button class="btn btn-remover" data-product-id="<%= productId %>">Remover</button>
+                                </div>
+
+                                <% }); %>
+                    </section>
+
+                    <!-- Coluna do Resumo -->
+                    <aside class="summary-column">
+                        <div class="card">
+                            <h4>Resumo do Pedido</h4>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                <span id="total-items-count">Subtotal (<%= totalItems %> itens)</span>
+                                <strong id="total-price-display">R$ <%= totalPrice.toFixed(2).replace('.', ',' ) %>
+                                </strong>
                             </div>
-                            <form action="/cart/remove/<%= item._id %>" method="POST" class="remove-form" style="align-self: center;">
-                                <button type="submit" class="btn btn-remover">Remover</button>
-                            </form>
+                            <div
+                                style="display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 2rem;">
+                                <span>Valor Total</span>
+                                <strong id="total-price-display-main">R$ <%= totalPrice.toFixed(2).replace('.', ',' ) %>
+                                </strong>
+                            </div>
+                            <button type="submit" class="btn btn-destaque" style="width: 100%;">Finalizar
+                                Compra</button>
+                            <a href="/produtos" class="btn btn-secundario"
+                                style="width: 100%; margin-top: 1rem;">Continuar Comprando</a>
                         </div>
-                    <% }); %>
-                </section>
-
-                <!-- Coluna do Resumo -->
-                <aside class="summary-column">
-                    <div class="card">
-                        <h4>Resumo do Pedido</h4>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                            <span id="total-items-count">Subtotal (<%= totalItems %> itens)</span>
-                            <strong id="total-price-display">R$ <%= totalPrice.toFixed(2).replace('.', ',') %></strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 2rem;">
-                            <span>Valor Total</span>
-                            <strong id="total-price-display-main">R$ <%= totalPrice.toFixed(2).replace('.', ',') %></strong>
-                        </div>
-                        <button type="submit" class="btn btn-destaque" style="width: 100%;">Finalizar Compra</button>
-                        <a href="/produtos" class="btn btn-secundario" style="width: 100%; margin-top: 1rem;">Continuar Comprando</a>
-                    </div>
-                </aside>
-            </div>
-        </form>
-    <% } else { %>
-        <div class="card" style="text-align: center; padding: 4rem;">
-            <h2>Seu carrinho está vazio.</h2>
-            <p style="margin-top: 1rem; margin-bottom: 2rem;">Adicione produtos para vê-los aqui.</p>
-            <a href="/produtos" class="btn btn-destaque">Ver Produtos</a>
-        </div>
-    <% } %>
+                    </aside>
+                </div>
+            </form>
+            <% } else { %>
+                <div class="card" style="text-align: center; padding: 4rem;">
+                    <h2>Seu carrinho está vazio.</h2>
+                    <p style="margin-top: 1rem; margin-bottom: 2rem;">Adicione produtos para vê-los aqui.</p>
+                    <a href="/products" class="btn btn-destaque">Ver Produtos</a>
+                </div>
+                <% } %>
 </div>
 
-<div id="notification-cart" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;"></div>
+<div id="notification-cart"
+    style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;">
+</div>
 
 <style>
     @media (max-width: 992px) {
@@ -69,43 +84,114 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Script de remoção de item (já existente)
-        const notification = document.getElementById('notification-cart');
-        function showNotification(message, isSuccess) { /* ... (código existente) ... */ }
-        const removeForms = document.querySelectorAll('.remove-form');
-        removeForms.forEach(form => { /* ... (código existente) ... */ });
 
-        // Novo script para atualização de totais
-        const checkboxes = document.querySelectorAll('.item-checkbox');
-        const totalItemsSpan = document.getElementById('total-items-count');
-        const totalPriceStrong = document.getElementById('total-price-display');
-        const totalPriceMainStrong = document.getElementById('total-price-display-main');
 
-        function updateTotals() {
-            let calculatedTotal = 0;
-            let selectedItemsCount = 0;
+    // --- LÓGICA DE NOTIFICAÇÃO (FAVORITOS E CARRINHO) ---
+    const notification = document.getElementById('notification-cart');
 
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    const itemDiv = checkbox.closest('.cart-item');
-                    const price = parseFloat(itemDiv.dataset.itemPrice) || 0;
-                    calculatedTotal += price;
-                    selectedItemsCount++;
-                }
-            });
+    function showNotification(message, isSuccess) {
+        notification.textContent = message;
+        notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
 
-            const formattedPrice = calculatedTotal.toFixed(2).replace('.', ',');
-            if(totalItemsSpan) totalItemsSpan.textContent = `Subtotal (${selectedItemsCount} itens)`;
-            if(totalPriceStrong) totalPriceStrong.textContent = `R$ ${formattedPrice}`;
-            if(totalPriceMainStrong) totalPriceMainStrong.textContent = `R$ ${formattedPrice}`;
+    // Atualiza os totais do carrinho chamando o backend
+    async function updateTotals() {
+        try {
+            console.log('[cart] updateTotals: iniciando fetch /cart/update');
+            const response = await fetch('/cart/update');
+            console.log('[cart] updateTotals: fetch finalizado, status=', response.status);
+            if (!response.ok) {
+                const text = await response.text();
+                console.error('[cart] updateTotals: resposta não OK, body=', text);
+                throw new Error('Erro ao atualizar os totais do carrinho.');
+            }
+
+            const data = await response.json();
+            console.log('[cart] updateTotals: dados recebidos do backend:', data);
+            const { totalPrice, totalItems } = data;
+
+            // Atualiza os valores no DOM
+            const formattedPrice = totalPrice.toFixed(2).replace('.', ',');
+            document.getElementById('total-items-count').textContent = `Subtotal (${totalItems} itens)`;
+            document.getElementById('total-price-display').textContent = `R$ ${formattedPrice}`;
+            document.getElementById('total-price-display-main').textContent = `R$ ${formattedPrice}`;
+        } catch (error) {
+            console.error('[cart] updateTotals: erro capturado ->', error);
+        }
+    }
+
+    // Substitua a função existente por esta:
+    async function removeCart(productId, buttonElement) {
+        if (!productId) {
+            console.warn('[cart] removeCart: productId inválido');
+            showNotification('Produto inválido.', false);
+            return;
         }
 
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateTotals);
-        });
+        if (buttonElement) {
+            buttonElement.disabled = true;
+            buttonElement.textContent = 'Removendo...';
+        }
 
-        // Garante que os totais são calculados na carga inicial da página
-        updateTotals();
+        try {
+            const response = await fetch(`/cart/remove/${encodeURIComponent(productId)}`, {
+                method: 'post',
+            });
+
+            console.log('[cart] removeCart: status', response.status);
+
+            let result = null;
+            try {
+                result = await response.json();
+            } catch (e) {
+                // se não for JSON, tenta text
+                const text = await response.text();
+                result = { success: response.ok, message: text || 'Resposta inesperada do servidor.' };
+            }
+
+            if (!response.ok) {
+                console.error('[cart] removeCart: erro do servidor ->', result);
+                showNotification(result.message || 'Erro ao remover o item do carrinho.', false);
+                // reabilita botão
+                if (buttonElement) {
+                    buttonElement.disabled = false;
+                    buttonElement.textContent = 'Remover';
+                }
+                return;
+            }
+
+            // sucesso: remove o item do DOM
+            const itemElement = document.querySelector(`.cart-item[data-item-id="${productId}"]`);
+            if (itemElement) {
+                itemElement.remove();
+            }
+
+            // atualiza totais e notifica
+            updateTotals();
+            showNotification(result.message || 'Item removido com sucesso!', true);
+        } catch (err) {
+            console.error('[cart] removeCart: exceção ->', err);
+            showNotification('Erro de rede ao remover o item.', false);
+            if (buttonElement) {
+                buttonElement.disabled = false;
+                buttonElement.textContent = 'Remover';
+            }
+        }
+    }
+
+    // Conectar os botões (executar após DOMContentLoaded)
+    document.addEventListener('DOMContentLoaded', () => {
+        const removeButtons = document.querySelectorAll('.btn-remover');
+        removeButtons.forEach(button => {
+            button.addEventListener('click', event => {
+                event.preventDefault();
+                const productId = button.getAttribute('data-product-id');
+                removeCart(productId, button);
+            });
+        });
     });
 </script>

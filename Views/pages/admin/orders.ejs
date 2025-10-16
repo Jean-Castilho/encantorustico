@@ -109,39 +109,27 @@
     <h1>Gerenciamento de Pedidos</h1>
   </div>
 
-  <% 
-    const orders = [
-      { id: '#1234', customer: 'João da Silva', status: 'Pendente', deadline: '05/10/2025' },
-      { id: '#1235', customer: 'Maria Oliveira', status: 'Em Rota', deadline: '06/10/2025' },
-      { id: '#1236', customer: 'Carlos Pereira', status: 'Entregue', deadline: '07/10/2025' },
-      { id: '#1237', customer: 'Ana Costa', status: 'Pendente', deadline: '08/10/2025' },
-      { id: '#1238', customer: 'Pedro Martins', status: 'Em Rota', deadline: '09/10/2025' }
-    ];
-    const totalOrders = orders.length;
-    const pendingOrders = orders.filter(o => o.status === 'Pendente').length;
-    const inTransitOrders = orders.filter(o => o.status === 'Em Rota').length;
-  %>
 
   <div class="order-summary">
     <div class="summary-card total">
       <div class="icon"><span class="material-icons">shopping_bag</span></div>
       <div class="text">
         <h3>Total de Pedidos</h3>
-        <p><%= totalOrders %></p>
+        <p><%= orders.length %></p>
       </div>
     </div>
     <div class="summary-card pending">
       <div class="icon"><span class="material-icons">hourglass_top</span></div>
       <div class="text">
         <h3>Pedidos Pendentes</h3>
-        <p><%= pendingOrders %></p>
+        <p>5</p>
       </div>
     </div>
     <div class="summary-card in-transit">
       <div class="icon"><span class="material-icons">local_shipping</span></div>
       <div class="text">
         <h3>Em Rota</h3>
-        <p><%= inTransitOrders %></p>
+        <p>3</p>
       </div>
     </div>
   </div>
@@ -160,8 +148,8 @@
       <tbody>
         <% orders.forEach(order => { %>
           <tr>
-            <td><%= order.id %></td>
-            <td><%= order.customer %></td>
+            <td><%= order._id %></td>
+            <td><%= order.user.name %></td>
             <td>
               <span class="status <%= 
                 order.status === 'Pendente' ? 'status-pending' : 
@@ -170,7 +158,7 @@
                 <%= order.status %>
               </span>
             </td>
-            <td><%= order.deadline %></td>
+            <td>15 dias</td>
             <td><button class="action-btn">Detalhes</button></td>
           </tr>
         <% }); %>

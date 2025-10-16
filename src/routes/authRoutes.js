@@ -16,6 +16,4 @@ router.post("/cart/add/:productId", addCart);
 router.get('/cart/products', getProductByIdsCart);
 router.post("/cart/remove/:productId", removeCart);
 
-
-
 export default router;

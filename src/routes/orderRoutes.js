@@ -1,20 +1,46 @@
 import { Router } from 'express';
-import { 
+import {
     createOrder,
-    getCheckoutPage,
-    getOrdersPage 
+    getOrdersPage,
+    payOrder
 } from '../controllers/orderController.js';
 
 const router = Router();
 
-// Rota para exibir a página de checkout
-router.get('/checkout', getCheckoutPage);
+// Rota para pegar informações da ordem;
+// Suporta listagem de pedidos em /orders e /orders/pedido
+router.get('/', getOrdersPage);
 
-// Rota para exibir o histórico de pedidos do usuário
-router.get('/pedidos', getOrdersPage);
-
-// Rota para criar um novo pedido (Endpoint da API)
+// Rota para criar um novo pedido (Endpoint da API);
 router.post('/', createOrder);
 
+// Iniciar pagamento (página ou redirecionamento);
+router.get('/pay/:id', async (req, res, next) => {
+    try {
+        return payOrder(req, res, next);
+    } catch (e) {
+        next(e);
+    }
+});
+
+// Cancelar pedido;
+router.post('/cancel/:id', async (req, res, next) => {
+    try {
+        const { cancelOrder } = await import('../controllers/orderController.js');
+        return cancelOrder(req, res, next);
+    } catch (e) {
+        next(e);
+    }
+});
+
+// Baixar fatura / gerar invoice;
+router.get('/invoice/:id', async (req, res, next) => {
+    try {
+        const { getInvoice } = await import('../controllers/orderController.js');
+        return getInvoice(req, res, next);
+    } catch (e) {
+        next(e);
+    }
+});
 
 export default router;

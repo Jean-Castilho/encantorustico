@@ -1,15 +1,14 @@
 import { apiFetch } from '../utils/apiClient.js';
 import dotenv from 'dotenv';
+import { getCartDetails } from '../services/cartService.js';
+import { validateOrderItems, buildOrderItems } from '../services/orderService.js';
+import { formatCurrency, formatDate, formatTime, statusLabel } from '../utils/formatters.js';
 
-// Carrega as variáveis de ambiente.
 dotenv.config();
 
-// --- Funções Auxiliares (Copiadas de pagesController para autossuficiência) ---
-
-/**
- * Renderiza uma página com um conjunto padrão de opções.
- */
 const renderPage = (res, page, options = {}) => {
+  // disponibiliza helpers nas views
+  res.locals.formatters = { formatCurrency, formatDate, formatTime, statusLabel };
   res.render(res.locals.layout, {
     page,
     ...options,
@@ -17,94 +16,13 @@ const renderPage = (res, page, options = {}) => {
   });
 };
 
-/**
- * Lida com erros, registrando-os e renderizando uma página de erro.
- */
 const handleError = (res, error, page, data) => {
   console.error(`Error on page ${page}:`, error.message);
   renderPage(res, page, data);
 };
 
-/**
- * Busca os detalhes dos itens do carrinho.
- */
-const getCartDetails = async (cartProducts) => {
-  if (!cartProducts || cartProducts.length === 0) {
-    return { items: [], totalPrice: 0, totalItems: 0 };
-  }
-
-  const productQuantities = cartProducts.reduce((acc, id) => {
-    acc[id] = (acc[id] || 0) + 1;
-    return acc;
-  }, {});
-
-  const uniqueProductIds = Object.keys(productQuantities);
-
-  const detailsResApi = await apiFetch('/public/productsCart', {
-    method: 'POST',
-    body: JSON.stringify({ cartProducts: uniqueProductIds }),
-  });
-
-  const detailedProducts = detailsResApi.data || [];
-
-  const items = detailedProducts.map(product => ({
-    ...product,
-    quantity: productQuantities[product._id.toString()] || 0
-  }));
-
-  const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.preco) || 0) * item.quantity, 0);
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-
-  return { items, totalPrice, totalItems };
-};
-
-
-// --- Controladores de Pedidos ---
-
-/**
- * Valida os dados essenciais da requisição para criação de um pedido.
- */
-const validateOrderRequest = (req) => {
-  if (!req.session.user || !req.session.user._id) {
-    const error = new Error('Usuário não autenticado.');
-    error.statusCode = 401;
-    throw error;
-  }
-  const { endereco, items, paymentMethod } = req.body;
-  if (!endereco || !items || !Array.isArray(items) || items.length === 0 || !paymentMethod) {
-    const error = new Error('Dados do pedido incompletos ou inválidos.');
-    error.statusCode = 400;
-    throw error;
-  }
-};
-
-/**
- * Valida os itens do pedido consultando a API de produtos.
- */
-const validateOrderItems = async (items) => {
-  const productIds = items.map(item => item.productId);
-  const productsApiResult = await apiFetch('/public/productsCart', {
-    method: 'POST',
-    body: JSON.stringify({ cartProducts: productIds }),
-  });
-
-  if (!productsApiResult || !productsApiResult.success || !productsApiResult.data) {
-    throw new Error('Não foi possível validar os produtos do carrinho via API.');
-  }
-
-  const foundIds = productsApiResult.data.map(p => p._id.toString());
-  const notFound = productIds.filter(id => !foundIds.includes(id));
-
-  if (notFound.length > 0) {
-    throw new Error(`Os seguintes produtos não foram encontrados: ${notFound.join(', ')}`);
-  }
-  return productsApiResult.data;
-};
-
-/**
- * Exibe a página de checkout com os itens do carrinho.
- */
 export const getCheckoutPage = async (req, res) => {
+
   const pageOptions = {
     titulo: 'Checkout - Encanto Rústico',
     cart: { items: [] },
@@ -116,103 +34,80 @@ export const getCheckoutPage = async (req, res) => {
     return res.redirect('/login');
   };
 
+
   try {
     const { items, totalPrice, totalItems } = await getCartDetails(req.session.user.cart);
+
+    pageOptions.cart.items = items;
+    pageOptions.totalPrice = totalPrice;
+    pageOptions.totalItems = totalItems;
+
     renderPage(res, '../pages/public/checkout', { ...pageOptions, cart: { items }, totalPrice, totalItems, mensagem: 'Finalize sua compra aqui.' });
   } catch (error) {
     handleError(res, error, '../pages/public/checkout', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
   }
 };
 
-/**
- * Exibe a página de histórico de pedidos do usuário.
- */
 export const getOrdersPage = async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
   const pageOptions = {
     titulo: 'Meus Pedidos',
     orders: [],
   };
 
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
-
   try {
-    const orders = await apiFetch(`/orders?userId=${req.session.user._id}`);
+    const userId = req.session.user._id;
+    const resOrders = await apiFetch(`/orders/${userId}`);
+    const orders = resOrders.data;
+
     if (!orders || orders.length === 0) {
       return renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: 'Você ainda não fez nenhum pedido.' });
     }
 
-    const productIds = orders.flatMap(order => order.items.map(item => item.productId));
-    const uniqueProductIds = [...new Set(productIds)];
+    pageOptions.orders = orders;
 
-    const productsData = await apiFetch('/public/productsCart', {
-      method: 'POST',
-      body: JSON.stringify({ cartProducts: uniqueProductIds }),
-    });
+    if (!orders || orders.length === 0) {
+      return renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: 'Você ainda não fez nenhum pedido.' });
+    }
 
-    const productsMap = new Map(productsData.data.map(p => [p._id.toString(), p]));
-
-    const enrichedOrders = orders.map(order => ({
-      ...order,
-      items: order.items.map(item => ({
-        ...item,
-        productDetails: productsMap.get(item.productId.toString()),
-      })),
-    }));
-
-    renderPage(res, '../pages/public/orders', { ...pageOptions, orders: enrichedOrders, mensagem: 'Seu histórico de pedidos.' });
-
+    renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: 'Seu histórico de pedidos.' });
   } catch (error) {
-    handleError(res, error, '../pages/public/orders', { ...pageOptions, mensagem: 'Erro ao carregar seu histórico de pedidos.' });
+
+    const apiMessage = (error && error.data && (error.data.message || error.data.msg)) || error.message || 'Erro ao carregar seu histórico de pedidos.';
+    console.error('Erro ao buscar orders para usuário:', apiMessage, error);
+    return renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: apiMessage });
   }
 };
 
-/**
- * Processa a criação de um novo pedido.
- */
+
 export const createOrder = async (req, res) => {
   try {
-    validateOrderRequest(req);
     const validatedItems = await validateOrderItems(req.body.items);
-    const totalPrice = validatedItems.reduce((acc, item) => acc + item.preco, 0);
-    const {endereco } = req.body;
 
-    let orderStatus;
+    const { endereco } = req.body;
 
-    orderStatus = 'pending_payment';
+    const { _id, name, role } = req.session.user;
+
     const payment_data = {
-      transaction_amount: totalPrice,
       description: 'Pagamento PIX - Encanto Rústico',
-      payment_method_id: 'pix',
-      payer: {
-        userId: req.session.user.userId,
-      },
+      payment_method: 'pix',
     };
 
-    const orderItems = req.body.items.map(item => {
-      const productDetails = validatedItems.find(p => p._id.toString() === item.productId);
-      return {
-        productId: item.productId,
-        quantity: parseInt(item.quantity, 10),
-        price: productDetails.preco,
-        name: productDetails.nome, // Adicionando nome para integridade
-        sku: productDetails.sku || null // Adicionando SKU para integridade
-      };
-    });
+    const orderItems = buildOrderItems(req.body.items, validatedItems);
+
+    let orderStatus;
+    orderStatus = 'Pendente';
 
     const orderPayload = {
-      userId: req.session.user._id,
+      user: { id: _id, name, role },
       items: orderItems,
       endereco: endereco,
-      totalPrice: totalPrice,
       paymentMethod: payment_data,
       status: orderStatus,
     };
-
-    console.log("Payload do pedido:", orderPayload);
-    
-    console.log('bearer', req.cookie);
 
     const apiResponse = await apiFetch('/orders', {
       method: 'POST',
@@ -224,33 +119,107 @@ export const createOrder = async (req, res) => {
     }
 
     const user = req.session.user;
-
-    if (!Array.isArray(user.pedidos)) {
-      user.pedidos = [];
-    }
     user.pedidos.push(apiResponse.data._id);
 
-
-    const responsUp = await apiFetch(`/privacy/updateUser/${req.session.user._id}`,{
+    const userUpdate = await apiFetch(`/privacy/${req.session.user._id}`, {
       method: "PUT",
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     });
 
-    console.log(responsUp);
+    req.session.user = { ...req.session.user, ...userUpdate.data };
 
     const pageOptions = {
-      titulo: 'Pagamento Confirmado - Encanto Rústico',
+      titulo: 'Pedido Confirmado',
       mensagem: 'Seu pedido foi recebido com sucesso!',
+      order: apiResponse.data,
+      qr_code: apiResponse.data.paymentMethod.payment.qr_code,
+      qr_code_base64: apiResponse.data.paymentMethod.payment.qr_code_base64
     };
 
-    renderPage(res, '../pages/public/paymant-confirmation', { ...pageOptions, mensagem: 'pedido concluido' });
+    renderPage(res, '../pages/public/payment-confirmation', { ...pageOptions });
 
   } catch (error) {
     console.error('Erro ao criar o pedido:', error);
     handleError(res, error, '../pages/public/error', {
-        titulo: 'Erro ao Criar Pedido',
-        mensagem: error.message,
-        error: { status: error.statusCode || 500, stack: error.stack }
+      titulo: 'Erro ao Criar Pedido',
+      mensagem: error.message,
+      error: { status: error.statusCode || 500, stack: error.stack }
     });
+  }
+};
+
+export const payOrder = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) return res.status(400).send('Order id missing');
+
+    // Chama API para iniciar pagamento (endpoint hipotético)
+    const apiRes = await apiFetch(`/orders/${id}`, { method: 'GET' });
+
+
+    // Se a API retornar uma URL de redirecionamento para pagamento
+    if (apiRes && apiRes.paymentUrl) {
+      return res.redirect(apiRes.paymentUrl);
+    }
+
+    const pageOptions = {
+      titulo: 'Confirmação de Pagamento',
+      mensagem: 'Por favor, confirme seu pagamento abaixo.',
+      order: apiRes.data,
+      qr_code: apiRes.data.paymentMethod.payment.qr_code,
+      qr_code_base64: apiRes.data.paymentMethod.payment.qr_code_base64
+    };
+
+    // Caso contrário renderiza página de pagamento com dados retornados
+    return renderPage(res, '../pages/public/payment-confirmation', { ...pageOptions });
+  } catch (error) {
+    console.error('Erro ao iniciar pagamento:', error);
+    return handleError(res, error, '../pages/public/error', { titulo: 'Erro no Pagamento', mensagem: error.message });
+  }
+};
+
+export const cancelOrder = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    if (!orderId) return res.status(400).send('Order id missing');
+
+    const apiRes = await apiFetch(`/orders/${orderId}/cancel`, { method: 'POST' });
+
+    // redireciona ao histórico de pedidos
+    req.session.message = apiRes.message || 'Pedido cancelado.';
+    return res.redirect('/orders');
+  } catch (error) {
+    console.error('Erro ao cancelar pedido:', error);
+    return handleError(res, error, '../pages/public/error', { titulo: 'Erro ao Cancelar', mensagem: error.message });
+  }
+};
+
+export const getInvoice = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    if (!orderId) return res.status(400).send('Order id missing');
+
+    // Endpoint que retorna PDF como buffer ou base64
+    const apiRes = await apiFetch(`/orders/${orderId}/invoice`, { method: 'GET' });
+
+    if (!apiRes) return res.status(404).send('Invoice not found');
+
+    // Se a API retornar base64
+    if (apiRes.base64) {
+      const buffer = Buffer.from(apiRes.base64, 'base64');
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=invoice-${orderId}.pdf`);
+      return res.send(buffer);
+    }
+
+    // Se API retornar URL para download
+    if (apiRes.url) {
+      return res.redirect(apiRes.url);
+    }
+
+    return res.status(500).send('Formato de invoice desconhecido');
+  } catch (error) {
+    console.error('Erro ao obter invoice:', error);
+    return handleError(res, error, '../pages/public/error', { titulo: 'Erro ao Baixar Fatura', mensagem: error.message });
   }
 };

@@ -150,7 +150,7 @@
                                     ? precoVal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
                                     : 'Preço sob consulta';
                                 const estoque = (product.stock != null) ? product.stock : (product.estoque != null ? product.estoque : '—');
-                                const ativo = product.ativo == true;
+                                const ativo = product.ativo == "true";
                                 const requerMontagem = product.requerMontagem === 'on' || product.requerMontagem === true;
                                 const categoria = product.categoria || '—';
                             %>
@@ -178,7 +178,9 @@
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="/products/edit/<%= product._id %>" class="btn btn-sm btn-secundario">Editar</a>
+                                        
+                                        <a href="/product/edit/<%= product._id %>" class="btn btn-sm btn-secundario">Editar</a>
+                                        
                                         <form action="/admin/products/delete" method="post" onsubmit="return confirm('Confirma a exclusão deste produto?');">
                                             <input type="hidden" name="id" value="<%= product._id %>">
                                             <button type="submit" class="btn btn-sm btn-remover">Excluir</button>
