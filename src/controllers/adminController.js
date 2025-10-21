@@ -9,8 +9,6 @@ const handleError = (res, error, page, data) => {
   renderAdminPage(res, page, { ...data, error: `Não foi possível carregar os dados: ${error.message}` });
 };
 
-
-
 export const getAdminDashboard = (req, res) => {
   renderAdminPage(res, '../pages/admin/dashboard', {
     titulo: 'Dashboard',

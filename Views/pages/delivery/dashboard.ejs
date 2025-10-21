@@ -1,20 +1,24 @@
 <style>
     :root {
-        --cor-primaria-entrega: #f8f9fa;
+        --cor-primaria-entrega: #f7f7f7;
         --cor-secundaria-entrega: #ffffff;
         --cor-destaque-entrega: #007bff;
-        --cor-texto-entrega: #343a40;
-        --cor-borda-entrega: #dee2e6;
-        --sombra-padrao: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --cor-texto-entrega: #333;
+        --cor-texto-secundario: #666;
+        --cor-borda-entrega: #e0e0e0;
+        --sombra-padrao: 0 6px 18px rgba(0, 0, 0, 0.06);
+        --borda-radius: 12px;
     }
 
     .delivery-dashboard {
         display: grid;
-        grid-template-columns: 400px 1fr;
-        gap: 2rem;
-        padding: 2rem;
+        grid-template-columns: 380px 1fr;
+        gap: 2.5rem;
+        padding: 2.5rem;
         background-color: var(--cor-primaria-entrega);
-        height: calc(100vh - 4rem);
+        height: calc(100vh - 80px);
+        /* Ajustado para um header de 80px */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     /* --- Orders List --- */
@@ -24,55 +28,97 @@
         box-shadow: var(--sombra-padrao);
         padding: 1.5rem;
         overflow-y: auto;
+        transition: box-shadow 0.3s ease;
     }
 
-    .orders-list-container h2 {
-        margin-top: 0;
-        font-size: 1.8rem;
-        border-bottom: 2px solid var(--cor-borda-entrega);
+    .orders-list-container:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .orders-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--cor-borda-entrega);
         padding-bottom: 1rem;
         margin-bottom: 1.5rem;
     }
 
+    .orders-list-header h2 {
+        margin: 0;
+        font-size: 1.6rem;
+        color: var(--cor-texto-entrega);
+    }
+
+    #order-count {
+        background-color: var(--cor-destaque-entrega);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
     .order-card {
-        background-color: #fdfdfd;
+        background-color: #fff;
         border: 1px solid var(--cor-borda-entrega);
         border-radius: var(--borda-radius);
         padding: 1.5rem;
         margin-bottom: 1rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-        border-left: 5px solid transparent;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-left-color 0.2s ease;
+        border-left: 4px solid transparent;
     }
 
     .order-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         border-left-color: var(--cor-destaque-entrega);
-        transform: translateX(5px);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     }
 
     .order-card.selected {
-        background-color: #e9f5ff;
-        border-left-color: #0056b3;
-        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        background-color: #f0f7ff;
+        border-color: var(--cor-destaque-entrega);
+        border-left-width: 5px;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
     }
 
     .order-card h3 {
         margin: 0 0 0.5rem 0;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+        color: var(--cor-texto-entrega);
     }
 
     .order-card p {
-        margin: 0;
-        color: #6c757d;
+        margin: 0.2rem 0;
+        color: var(--cor-texto-secundario);
+        font-size: 0.95rem;
     }
 
     .order-status {
-        font-size: 0.9rem;
-        font-weight: bold;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.3rem 0.7rem;
+        border-radius: 15px;
+        margin-top: 0.8rem;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+        background-color: #fff0e1;
+        color: #ff8c00;
+    }
+
+    .status-in-transit {
+        background-color: #e6f7ff;
+        color: #1890ff;
+    }
+
+    .status-delivered {
+        background-color: #e6f9f0;
         color: #28a745;
-        margin-top: 0.5rem;
-        display: block;
     }
 
     /* --- Selected Order Details --- */
@@ -80,33 +126,105 @@
         background-color: var(--cor-secundaria-entrega);
         border-radius: var(--borda-radius);
         box-shadow: var(--sombra-padrao);
-        padding: 2rem;
         display: flex;
         flex-direction: column;
     }
 
     #map-placeholder {
         width: 100%;
-        height: 300px;
+        height: 480px;
         background-color: #e9ecef;
-        border-radius: var(--borda-radius);
+        border-radius: var(--borda-radius) var(--borda-radius) 0 0;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
         color: #6c757d;
+    }
+
+    #selected-order-content {
+        padding: 2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        color: var(--cor-texto-secundario);
+    }
+
+    #empty-state .material-icons {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        color: #ccc;
+    }
+
+    #order-details-info h3 {
+        margin-top: 0;
+        font-size: 1.8rem;
+        color: var(--cor-texto-entrega);
+        margin-bottom: 1.5rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
         margin-bottom: 2rem;
     }
 
-    #selected-order-details h3 {
-        margin-top: 0;
-        font-size: 2rem;
+    .info-item strong {
+        display: block;
+        color: #555;
+        margin-bottom: 0.3rem;
+        font-weight: 600;
     }
 
     .delivery-actions {
-        margin-top: auto; /* Pushes buttons to the bottom */
+        margin-top: auto;
         display: flex;
         gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--cor-borda-entrega);
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-destaque {
+        background-color: var(--cor-destaque-entrega);
+        color: white;
+    }
+
+    .btn-destaque:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-secundario {
+        background-color: #f0f0f0;
+        color: #555;
+        border: 1px solid #ccc;
+    }
+
+    .btn-secundario:hover {
+        background-color: #e0e0e0;
+        border-color: #bbb;
     }
 
     /* --- Responsiveness --- */
@@ -114,9 +232,11 @@
         .delivery-dashboard {
             grid-template-columns: 1fr;
             height: auto;
+            padding: 1.5rem;
         }
+
         .orders-list-container {
-            max-height: 50vh;
+            max-height: 45vh;
         }
     }
 </style>
@@ -125,71 +245,266 @@
 
     <!-- Coluna da Lista de Pedidos -->
     <div class="orders-list-container">
-        <h2>Pedidos Disponíveis</h2>
+        <div class="orders-list-header">
+            <h2>Pedidos de Entrega</h2>
+            <span id="order-count">
+                <%= orders.length %>
+            </span>
+        </div>
         <div id="order-list">
-            <% 
-              const orders = [
-                { id: 1, customerName: 'João da Silva', address: 'Rua das Flores, 123, São Paulo, SP', distance: '5.2 km', status: 'Aguardando Coleta' },
-                { id: 2, customerName: 'Maria Oliveira', address: 'Avenida Brasil, 456, Rio de Janeiro, RJ', distance: '8.1 km', status: 'Aguardando Coleta' },
-                { id: 3, customerName: 'Carlos Pereira', address: 'Praça da Sé, 789, Salvador, BA', distance: '12.5 km', status: 'Aguardando Coleta' },
-                { id: 4, customerName: 'Ana Costa', address: 'Rua dos Pinheiros, 101, Curitiba, PR', distance: '3.8 km', status: 'Aguardando Coleta' },
-              ];
-            %>
-            <% orders.forEach(order => { %>
-              <div class="order-card" data-order-id="<%= order.id %>" data-order='<%- JSON.stringify(order) %>'>
-                <h3><%= order.customerName %></h3>
-                <p><%= order.address %></p>
-                <p><strong>Distância:</strong> <%= order.distance %></p>
-                <span class="order-status"><%= order.status %></span>
-              </div>
-            <% }); %>
+            <% if (orders.length===0) { %>
+                <p>Nenhum pedido disponível no momento.</p>
+                <% } else { %>
+                    <% orders.forEach(order=> { %>
+                        <div class="order-card" data-order-id="<%= order.id %>"
+                            data-order='<%- JSON.stringify(order) %>'>
+                            <h3>Pedido #<%= order._id.substring(0, 8) %>
+                            </h3>
+                            <p><strong>Cliente:</strong>
+                                <%= order.user.name %>
+                            </p>
+                            <p><strong>Distância:</strong> 5.2km</p>
+                            <p><strong>Endereço:</strong>
+                                <%= order.endereco.rua %>, <%= order.endereco.numero %>
+                                        <span
+                                            class="order-status status-<%= order.status.toLowerCase().replace(' ', '-') %>">
+                                            <%= order.status %>
+                                        </span>
+                        </div>
+                        <% }); %>
+                            <% } %>
         </div>
     </div>
 
     <!-- Coluna de Detalhes do Pedido Selecionado -->
     <div class="selected-order-container">
         <div id="map-placeholder">
-            <span>Mapa da Rota</span>
+            <span class="material-icons" style="font-size: 5rem; color: #bbb;">map</span>
         </div>
-        <div id="selected-order-details">
-            <h3>Selecione um pedido para ver os detalhes</h3>
-            <p>O endereço e as ações de entrega aparecerão aqui.</p>
-        </div>
-        <div class="delivery-actions" style="display: none;">
-            <button class="btn btn-destaque">Iniciar Entrega</button>
-            <button class="btn btn-secundario">Obter Direções</button>
+        <div id="selected-order-content">
+            <div id="empty-state">
+                <span class="material-icons">list_alt</span>
+                <h3>Selecione um Pedido</h3>
+                <p>Os detalhes do pedido e a rota aparecerão aqui.</p>
+            </div>
+            <div id="order-details-info" style="display: none;">
+                <h3>Detalhes do Pedido</h3>
+                <div class="info-grid">
+                    <div class="info-item" id="detail-client-name"></div>
+                    <div class="info-item" id="detail-address"></div>
+                    <div class="info-item" id="detail-distance"></div>
+                    <div class="info-item" id="detail-status"></div>
+                    <div class="info-item">
+                        <strong>Minha Localização (Origem):</strong>
+                        <input type="text" id="origin"
+                            style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" readonly>
+                    </div>
+                </div>
+                <div class="delivery-actions">
+                    <button class="btn btn-destaque">Confirmar Entrega</button>
+                    <button type="button" class="btn btn-creatRota" onclick="tracarRota()">Traçar Rota</button>
+                    <button class="btn btn-secundario">Ver no Mapa</button>
+                    <button type="button" class="btn btn-secundario" onclick="getUserLocation()">Obter
+                        Localização</button>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
 
 <script>
+
+    let address_client;
+    let geocoder;
+    let markerA = null;
+    let iconA, iconB;
+    let markerB = null;
+
+    function tracarRota() {
+
+        if (!markerA) {
+            alert('Primeiro, obtenha sua localização clicando em "Obter Localização".');
+            return;
+        }
+
+        if (!address_client) {
+            alert('Selecione um pedido para definir o destino.');
+            return;
+        }
+
+        const origin = markerA.getPosition();
+
+        console.log(address_client)
+
+        const destination = address_client;
+
+        directionsService.route({
+            origin: origin,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING
+        }, (response, status) => {
+            if (status === 'OK') {
+                directionsRenderer.setDirections(response);
+
+                if (markerA) markerA.setMap(null);
+                if (markerB) markerB.setMap(null);
+
+                const leg = response.routes[0].legs[0];
+                if (!markerB) {
+                    markerB = new google.maps.Marker({
+                        position: leg.end_location,
+                        map: map,
+                        icon: iconB,
+                        title: 'Destino'
+                    });
+                } else {
+                    markerB.setPosition(leg.end_location);
+                    if (!markerB.getMap()) {
+                        markerB.setMap(map);
+                    }
+                }
+
+            } else {
+                window.alert('Falha ao traçar a rota: ' + status);
+            }
+        });
+
+    }
+
+    function getUserLocation() {
+        console.log("Tentando obter a localização do usuário...");
+        if (navigator.geolocation) {
+            console.log("API de Geolocalização suportada pelo navegador.");
+
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 11000,
+                maximumAge: 0
+            };
+
+            navigator.geolocation.getCurrentPosition(position => {
+                console.log("Localização obtida com sucesso:", position);
+                const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                map.setCenter(pos);
+
+                if (markerA) {
+                    markerA.setPosition(pos);
+                } else {
+                    markerA = new google.maps.Marker({
+                        position: pos,
+                        map: map,
+                        icon: iconA,
+                        title: 'Origem'
+                    });
+                }
+                reverseGeocode(pos, (address) => {
+                    document.getElementById('origin').value = address || `${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
+                });
+            }, (error) => {
+                console.error("Erro ao obter a localização: ", error);
+                let errorMessage = "Erro: O serviço de geolocalização falhou.";
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = "Erro: Permissão de localização negada.";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = "Erro: Informação de localização indisponível.";
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage = "Erro: A requisição de localização expirou (timeout).";
+                        break;
+                }
+                alert(errorMessage);
+            }, options);
+        } else {
+            console.error("API de Geolocalização não suportada por este navegador.");
+            alert("Erro: Seu navegador não suporta geolocalização.");
+        }
+    }
+
+    function reverseGeocode(latLng, callback) {
+        if (!geocoder) {
+            callback(null);
+            return;
+        }
+
+        geocoder.geocode({ location: latLng }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+
+                console.log(results[0].formatted_address);
+
+                callback(results[0].formatted_address);
+            } else {
+                callback(null);
+            }
+        })
+    }
+
+    function initMap() { 
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        geocoder = new google.maps.Geocoder();
+
+        const myLatLng = { lat: -22.8894, lng: -42.0286 };
+        map = new google.maps.Map(document.getElementById("map-placeholder"), {
+            zoom: 11,
+            center: myLatLng,
+        });
+        directionsRenderer.setMap(map);
+
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         const orderList = document.getElementById('order-list');
-        const detailsContainer = document.getElementById('selected-order-details');
-        const deliveryActions = document.querySelector('.delivery-actions');
+        const emptyState = document.getElementById('empty-state');
+        const orderDetailsInfo = document.getElementById('order-details-info');
+
+        if (!orderList) return;
 
         orderList.addEventListener('click', (event) => {
             const cardElement = event.target.closest('.order-card');
             if (!cardElement) return;
 
-            const orderData = JSON.parse(cardElement.dataset.order);
-
-            // Remove selection from other cards
+            // Remove a seleção de outros cartões;
             document.querySelectorAll('.order-card').forEach(card => card.classList.remove('selected'));
-            // Add selection to the clicked card
+            // Adiciona a seleção ao cartão clicado;
             cardElement.classList.add('selected');
 
-            // Update details panel
-            detailsContainer.innerHTML = `
-                <h3>${orderData.customerName}</h3>
-                <p><strong>Endereço:</strong> ${orderData.address}</p>
-                <p><strong>Distância Estimada:</strong> ${orderData.distance}</p>
-                <p><strong>Status:</strong> <span class="order-status">${orderData.status}</span></p>
-            `;
+            // Esconde o estado de vazio e mostra os detalhes;
+            emptyState.style.display = 'none';
+            orderDetailsInfo.style.display = 'flex';
+            orderDetailsInfo.style.flexDirection = 'column';
+            orderDetailsInfo.style.flexGrow = '1';
 
-            // Show action buttons
-            deliveryActions.style.display = 'flex';
+            // Preenche os detalhes;
+            const orderData = JSON.parse(cardElement.dataset.order);
+            document.getElementById('detail-client-name').innerHTML = `<strong>Cliente:</strong> ${orderData.user.name}`;
+            document.getElementById('detail-address').innerHTML = `<strong>Endereço:</strong> ${orderData.endereco.rua}, ${orderData.endereco.numero}, ${orderData.endereco.bairro}`;
+            document.getElementById('detail-status').innerHTML = `<strong>Status:</strong> <span class="order-status status-${orderData.status.toLowerCase().replace(' ', '-')}">${orderData.status}</span>`;
+
+            address_client = `${orderData.endereco.rua} - ${orderData.endereco.bairro}, ${orderData.endereco.cidade}, ${orderData.endereco.estado}, ${orderData.endereco.cep}`;
+
+            // Aqui você pode adicionar a lógica para o mapa e ações;
         });
+
+        // Lógica para o caso de não haver pedidos
+        const orders = JSON.parse('<%- JSON.stringify(orders) %>');
+        if (orders.length === 0) {
+            emptyState.innerHTML = `
+                <span class="material-icons"> inbox </span>
+                <h3>Nenhum Pedido Disponível</h3>
+                <p>Volte mais tarde para verificar novas entregas.</p>`;
+        }
     });
+
+</script>
+
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&libraries=places&callback=initMap">
 </script>

@@ -13,12 +13,12 @@ export const addFavorite = async (req, res) => {
     const userId = handleAuth(req, res);
     if (!userId) return;
 
-    const { productId } = req.params;
+    const { id } = req.params;
 
     try {
         const resApi = await apiFetch('/public/addFavoritos', {
             method: 'POST',
-            body: JSON.stringify({ userId, productId }),
+            body: JSON.stringify({ userId, id }),
         });
 
         req.session.user.favorites = resApi.data.updatedUser.favorites;
@@ -34,12 +34,12 @@ export const removeFavorite = async (req, res) => {
     const userId = handleAuth(req, res);
     if (!userId) return;
 
-    const { productId } = req.params;
+    const { id } = req.params;
 
     try {
         const resApi = await apiFetch('/public/removeFavoritos', {
             method: 'POST',
-            body: JSON.stringify({ userId, productId }),
+            body: JSON.stringify({ userId, id }),
         });
 
         req.session.user.favorites = resApi.data.favorites;
@@ -55,12 +55,12 @@ export const addCart = async (req, res) => {
     const userId = handleAuth(req, res);
     if (!userId) return;
 
-    const { productId } = req.params;
+    const { id } = req.params;
 
     try {
         const resApi = await apiFetch('/public/addCarrinho', {
             method: 'POST',
-            body: JSON.stringify({ userId, productId }),
+            body: JSON.stringify({ userId, id }),
         });
 
         req.session.user.cart = resApi.data.updatedUser.cart;
@@ -76,11 +76,11 @@ export const removeCart = async (req, res) => {
     const userId = handleAuth(req, res);
     if (!userId) return;
 
-    const { productId } = req.params;
+    const { id } = req.params;
     try {
         const removeResApi = await apiFetch('/public/removeCarrinho', {
             method: 'POST',
-            body: JSON.stringify({ userId, productId }),
+            body: JSON.stringify({ userId, id }),
         });
         req.session.user.cart = removeResApi.data.cart;
         return res.json({ success: true, message: 'Produto removido do carrinho!' });

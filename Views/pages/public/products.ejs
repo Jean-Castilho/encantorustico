@@ -83,17 +83,17 @@
         <%
               // Extrai e formata os dados do produto
               const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] : '/assets/img/fallback.jpg';
-              const productId = product._id || product.id || '';
-              const productUrl = `/product/${productId}`;
+              const id = product._id || product.id || '';
+              const productUrl = `/product/${id}`;
               const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Preço sob consulta';
               
               // Verifica se o produto está nos favoritos ou no carrinho do usuário
-              const isFavorited = (session?.user?.favorites || []).map(String).includes(String(productId));
-              const isInCart = (session?.user?.cart || []).map(String).includes(String(productId));
+              const isFavorited = (session?.user?.favorites || []).map(String).includes(String(id));
+              const isInCart = (session?.user?.cart || []).map(String).includes(String(id));
 
               // Define as URLs de ação (requer login)
-              const favoritUrl = session?.user?._id ? `/addFavorite/${productId}` : '/login';
-              const carrinhoUrl = session?.user?._id ? (isInCart ? '/cart' : `/cart/add/${productId}`) : '/login';
+              const favoritUrl = session?.user?._id ? `/addFavorite/${id}` : '/login';
+              const carrinhoUrl = session?.user?._id ? (isInCart ? '/cart' : `/cart/add/${id}`) : '/login';
 
               // Formata as categorias do produto para o atributo de dados
               const productCategories = Array.isArray(product.categoria) ? product.categoria.join(',') : (product.categoria || '');
@@ -103,11 +103,11 @@
         <div class="product-card" data-categories="<%= productCategories %>">
             <div class="product-card-icons">
                 <a href="<%= favoritUrl %>" class="favorite-btn <%= isFavorited ? 'favorited' : '' %>"
-                    data-product-id="<%= productId %>">
+                    data-product-id="<%= id %>">
                     <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
                 </a>
                 <a href="<%= carrinhoUrl %>" class="add-to-cart-btn <%= isInCart ? 'in-cart' : '' %>"
-                    data-product-id="<%= productId %>">
+                    data-product-id="<%= id %>">
                     <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
                 </a>
             </div>

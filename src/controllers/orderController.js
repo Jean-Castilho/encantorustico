@@ -11,8 +11,7 @@ const renderPage = (res, page, options = {}) => {
   res.locals.formatters = { formatCurrency, formatDate, formatTime, statusLabel };
   res.render(res.locals.layout, {
     page,
-    ...options,
-    apiBaseUrl: process.env.API_BASE_URL
+    ...options
   });
 };
 

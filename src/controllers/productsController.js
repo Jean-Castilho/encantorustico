@@ -6,6 +6,7 @@ export const postAddProduct = async (req, res) => {
     const filenames = files.map(file => file.filename);
 
     try {
+
         await apiFetch('/products', {
             method: 'POST',
             body: JSON.stringify({ 
@@ -16,20 +17,22 @@ export const postAddProduct = async (req, res) => {
         });
 
         res.redirect('/admin/inventory');
+
     } catch (error) {
         console.error('Erro ao adicionar produto:', error.message);
         // Idealmente, renderizar uma página de erro com uma mensagem amigável
         res.status(error.status || 500).send('Erro interno do servidor ao adicionar o produto.');
     }
+    
 };
 
 export const deleteProduct = async (req, res) => {
-    const { id: productId } = req.body;
+    const { id } = req.body;
 
     try {
         await apiFetch(`/products`, {
             method: 'DELETE', 
-            body: JSON.stringify({ id: productId }),
+            body: JSON.stringify({ id }),
         });
 
         res.redirect('/admin/inventory');

@@ -19,7 +19,7 @@
                     <section class="cart-items-column">
                         <% cart.items.forEach(item=> { %>
 
-                            <% let productId=item._id; %>
+                            <% let id = item._id; %>
 
                                 <div class="cart-item" data-item-id="<%= item._id %>"
                                     data-item-price="<%= item.preco %>">
@@ -33,7 +33,7 @@
                                         </h3>
                                         <p>Preço: <strong>R$ <%= (parseFloat(item.preco)) %></strong></p>
                                     </div>
-                                    <button class="btn btn-remover" data-product-id="<%= productId %>">Remover</button>
+                                    <button class="btn btn-remover" data-product-id="<%= id %>">Remover</button>
                                 </div>
 
                                 <% }); %>
@@ -56,7 +56,7 @@
                             </div>
                             <button type="submit" class="btn btn-destaque" style="width: 100%;">Finalizar
                                 Compra</button>
-                            <a href="/produtos" class="btn btn-secundario"
+                            <a href="/products" class="btn btn-secundario"
                                 style="width: 100%; margin-top: 1rem;">Continuar Comprando</a>
                         </div>
                     </aside>
@@ -125,8 +125,8 @@
     }
 
     // Substitua a função existente por esta:
-    async function removeCart(productId, buttonElement) {
-        if (!productId) {
+    async function removeCart(id, buttonElement) {
+        if (!id) {
             console.warn('[cart] removeCart: productId inválido');
             showNotification('Produto inválido.', false);
             return;
@@ -138,7 +138,7 @@
         }
 
         try {
-            const response = await fetch(`/cart/remove/${encodeURIComponent(productId)}`, {
+            const response = await fetch(`/cart/remove/${encodeURIComponent(id)}`, {
                 method: 'post',
             });
 
@@ -165,7 +165,7 @@
             }
 
             // sucesso: remove o item do DOM
-            const itemElement = document.querySelector(`.cart-item[data-item-id="${productId}"]`);
+            const itemElement = document.querySelector(`.cart-item[data-item-id="${id}"]`);
             if (itemElement) {
                 itemElement.remove();
             }
@@ -189,8 +189,8 @@
         removeButtons.forEach(button => {
             button.addEventListener('click', event => {
                 event.preventDefault();
-                const productId = button.getAttribute('data-product-id');
-                removeCart(productId, button);
+                const id = button.getAttribute('data-product-id');
+                removeCart(id, button);
             });
         });
     });

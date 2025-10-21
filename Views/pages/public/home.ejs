@@ -14,8 +14,6 @@
 <section class="hero-section">
   <div class="hero-content">
     <h1>Móveis Rústicos que Contam Histórias</h1>
-    <p>Transforme seu lar com a beleza e o aconchego da madeira. Peças únicas e personalizadas para cada ambiente.</p>
-
     <a href="/products" class="btn btn-primario">Ver Todos os Produtos</a>
 
   </div>
@@ -28,24 +26,25 @@
     
       <% if (items.length > 0) { %>
         <% items.slice(0, 3).forEach(product => { 
+
              if (!product) return;
              const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] : '/assets/img/fallback.jpg';
-             const productId = product._id || product.id || '';
-             const favoritUrl = userId ? `/addFavorite/${productId}` : '/login';
-             const carrinhoUrl = userId ? (cart.includes(productId.toString()) ? '/cart' : `/cart/add/${productId}`) : '/login';
-             const productUrl = `/product/${productId}`;
+             const id = product._id;
+             const favoritUrl = userId ? `/addFavorite/${id}` : '/login';
+             const carrinhoUrl = userId ? (cart.includes(id.toString()) ? '/cart' : `/cart/add/${id}`) : '/login';
+             const productUrl = `/product/${id}`;
              const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Preço sob consulta';
-             const isFavorited = favorites.includes(productId.toString());
-             const isInCart = cart.includes(productId.toString());
+             const isFavorited = favorites.includes(id.toString());
+             const isInCart = cart.includes(id.toString());
         %>
         
           <div class="product-card">
           
             <div class="product-card-icons">
-              <a href="<%= favoritUrl %>" class="favorite-btn <%= isFavorited ? 'favorited' : '' %>" data-product-id="<%= productId %>">
+              <a href="<%= favoritUrl %>" class="favorite-btn <%= isFavorited ? 'favorited' : '' %>" data-product-id="<%= id %>">
                 <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
               </a>
-              <a href="<%= carrinhoUrl %>" class="add-to-cart-btn <%= isInCart ? 'in-cart' : '' %>" data-product-id="<%= productId %>">
+              <a href="<%= carrinhoUrl %>" class="add-to-cart-btn <%= isInCart ? 'in-cart' : '' %>" data-product-id="<%= id %>">
                 <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
               </a>
             </div>
@@ -132,6 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             const productId = button.dataset.productId;
             if (!productId) return;
+
+
 
             const isFavorited = button.classList.contains('favorited');
             const url = isFavorited ? `/removeFavorite/${productId}` : `/addFavorite/${productId}`;

@@ -8,10 +8,10 @@
             <% favorites.forEach(item => { %>
                 <% 
                 const imagem = (item.imagens && item.imagens.length > 0) ? item.imagens[0] : '/assets/img/fallback.jpg';
-                const productId = item._id || item.id || '';
-                const productUrl = `/product/${item.slug || productId}`;
+                const id = item.id;
+                const productUrl = `/product/${id}`;
                 %> 
-                <div class="product-card" id="favorite-card-<%= productId %>">
+                <div class="product-card" id="favorite-card-<%= id %>">
                     <a href="<%= productUrl %>">
                         <img src="/uploads/<%= imagem %>" alt="<%= item.name %>">
                     </a>
@@ -20,7 +20,7 @@
                                 <%= item.name %>
                             </a></h3>
                         <p class="price">R$ <%= item.preco %></p>
-                        <button class="btn btn-remover remove-favorite-btn" data-product-id="<%= productId %>">Remover dos Favoritos</button>
+                        <button class="btn btn-remover remove-favorite-btn" data-product-id="<%= id %>">Remover dos Favoritos</button>
                     </div>
                 </div>
             <% }); %>

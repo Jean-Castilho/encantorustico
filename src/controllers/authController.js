@@ -41,7 +41,9 @@ export async function login(req, res) {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
+    
     handleAuthSuccess(req, res, data);
+
   } catch (error) {
     handleAuthError(
       res,
@@ -60,7 +62,23 @@ export async function register(req, res) {
       method: 'POST',
       body: JSON.stringify({ name, number, email, password }),
     });
-    handleAuthSuccess(req, res, data);
+
+    req.session.user = data.user;
+
+    const otpResponse = await apiFetch('/email/sendOtp', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+
+    console.log(`OTP sent response: ${otpResponse}`);
+    
+    res.render('layout/main', { 
+      page: '../pages/public/otpCode', 
+      titulo: 'Verificação de Código',
+      mensagem: 'Um código OTP foi enviado para o seu e-mail.',
+      email 
+    });
+
   } catch (error) {
     handleAuthError(
       res,

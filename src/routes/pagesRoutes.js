@@ -16,7 +16,8 @@ import {
     getPaymentConfirmationPage,
     getDeliveryDashboardPage,
     updateCartDetails,
-    getEditProductPage
+    getEditProductPage,
+    getOtpPage
 } from '../controllers/pagesController.js';
 
 import { getCheckoutPage, getOrdersPage } from '../controllers/orderController.js';
@@ -34,6 +35,10 @@ router.get('/contact', getContactPage);
 // Rotas de autenticação;
 router.get('/login', getLoginPage);
 router.get('/register', getRegisterPage);
+
+
+
+router.get('/otpCode', getOtpPage);
 
 // Rotas de usuário autenticado;
 router.get('/profile', getProfilePage);

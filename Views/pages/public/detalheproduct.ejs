@@ -1,12 +1,13 @@
 <% 
   const cart = session?.user?.cart || [];
-  const productId = product._id || product.id || '';
-  const isInCart = cart.includes(productId.toString());
+  const id = product._id || product.id || '';
+  const isInCart = cart.includes(id.toString());
 %>
 
 <style>
     .product-detail-page {
         display: grid;
+        justify-content: center;
         grid-template-columns: 1fr 1fr;
         gap: 3rem;
         padding: 3rem 0;
@@ -82,8 +83,8 @@
     .section-title {
         font-size: 1.4rem;
         color: var(--cor-secundaria);
-        margin-top: 2rem;
-        margin-bottom: 1rem;
+        margin-top: 1.7rem;
+        margin-bottom: 0.1rem;
         border-bottom: 2px solid var(--cor-borda);
         padding-bottom: 0.5rem;
     }
@@ -208,7 +209,7 @@
         </div>
 
         <form id="add-to-cart-form" class="add-to-cart-form <%= isInCart ? 'in-cart' : '' %>">
-            <input type="hidden" name="productId" value="<%= productId %>">
+            <input type="hidden" name="id" value="<%= id %>">
             <div class="quantity-selector-wrapper">
                 <label for="quantity" class="quantity-label">Quantidade:</label>
                 <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control quantity-input">
@@ -263,11 +264,11 @@
                 return;
             }
 
-            const productId = addToCartForm.querySelector('input[name="productId"]').value;
+            const id = addToCartForm.querySelector('input[name="id"]').value;
             const quantity = addToCartForm.querySelector('input[name="quantity"]').value;
             
             try {
-                const response = await fetch(`/cart/add/${productId}`, {
+                const response = await fetch(`/cart/add/${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ quantity: quantity })

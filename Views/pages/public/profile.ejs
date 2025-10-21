@@ -79,23 +79,68 @@
             grid-template-columns: 1fr;
         }
     }
+
+    /* --- Verification Badge --- */
+    .verification-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        gap: 6px;
+        letter-spacing: 0.5px;
+    }
+
+    .verification-badge .material-icons {
+        font-size: 1rem;
+        /* Ajustado para 1rem */
+    }
+
+    .verification-badge.verified {
+        background-color: #e8f5e9;
+        /* Verde claro */
+        color: #2e7d32;
+        /* Verde escuro */
+    }
+
+    .verification-badge.not-verified {
+        background-color: #fff3e0;
+        /* Laranja claro */
+        color: #e65100;
+        /* Laranja escuro */
+    }
+
+    .verification-badge .verify-link {
+        color: inherit;
+        text-decoration: underline;
+        margin-left: 5px;
+        font-weight: normal;
+    }
+
+    .verification-badge .verify-link:hover {
+        text-decoration: none;
+    }
 </style>
 
 <div class="container">
     <header class="page-header" style="text-align: center; margin-bottom: 3rem;">
         <h1>Minha Conta</h1>
-        <p style="font-size: 1.2rem; color: #6c757d;">Gerencie suas informações, pedidos e segurança da conta.</p>
     </header>
 
     <div class="profile-grid">
-        
+
         <!-- Coluna Lateral: Cartão do Usuário e Ações -->
         <aside class="sidebar-column">
             <div class="user-card">
                 <img src="/images/About-hero.png" alt="Avatar do Usuário" class="user-avatar">
-                <h3><%= session.user.name %></h3>
-                <p><%= session.user.email.endereco %></p>
-                
+                <h3>
+                    <%= session.user.name %>
+                </h3>
+                <p>
+                    <%= session.user.email.endereco %>
+                </p>
+
                 <div class="account-actions">
                     <a href="/orders">Histórico de Pedidos</a>
                     <a href="/change-password">Alterar Senha</a>
@@ -112,17 +157,47 @@
 
                     <div class="form-group">
                         <label for="name" class="form-label">Nome Completo</label>
-                        <input type="text" id="name" name="name" class="form-control" value="<%= session.user.name %>" required>
+                        <input type="text" id="name" name="name" class="form-control" value="<%= session.user.name %>"
+                            required>
                     </div>
 
                     <div class="form-group">
-                        <label for="email" class="form-label">Endereço de E-mail</label>
-                        <input type="email" id="email" name="email" class="form-control" value="<%= session.user.email.endereco %>" required>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="email" class="form-label" style="margin-bottom: 0;">Endereço de E-mail</label>
+                            <% if (session.user.email && session.user.email.verified) { %>
+                                <span class="verification-badge verified">
+                                    <i class="material-icons">check_circle</i> Verificado
+                                </span>
+                                <% } else if (session.user.email) { %>
+                                    <span class="verification-badge not-verified">
+                                        <i class="material-icons">warning</i> Não verificado
+                                        <a href="/resendOtp/<%= session.user.email.endereco %>"
+                                            class="verify-link">(Verificar agora)</a>
+                                    </span>
+                                    <% } %>
+                        </div>
+                        <input type="email" id="email" name="email" class="form-control" value="<%= session.user.email.endereco %>">
                     </div>
 
                     <div class="form-group">
-                        <label for="number" class="form-label">Telefone</label>
-                        <input type="tel" id="number" name="number" class="form-control" value="<%= session.user.telefone.number %>">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label for="number" class="form-label" style="margin-bottom: 0;">Telefone</label>
+                            <% if (session.user.telefone && session.user.telefone.verified) { %>
+                                <span class="verification-badge verified">
+                                    <i class="material-icons">check_circle</i> Verificado
+                                </span>
+                                <% } else if (session.user.telefone && session.user.telefone.number) { %>
+                                    <span class="verification-badge not-verified">
+                                        <i class="material-icons">warning</i> Não verificado
+                                        <a href="/send-sms-otp?phone=<%= session.user.telefone.number %>"
+                                            class="verify-link">(Verificar agora)</a>
+                                    </span>
+                                    <% } %>
+                        </div>
+                        <input type="tel" id="number" name="number" class="form-control"
+                            value="<%= session.user.telefone.number %>">
                     </div>
 
                     <div style="text-align: right; margin-top: 2rem;">

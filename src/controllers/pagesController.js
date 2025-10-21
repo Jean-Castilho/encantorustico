@@ -17,10 +17,10 @@ const normalizeProducts = (data) => {
 };
 
 const renderPage = (res, page, options = {}) => {
-  res.render(res.locals.layout, { 
-    page, 
+  res.render(res.locals.layout, {
+    page,
     ...options,
-    apiBaseUrl: process.env.API_BASE_URL 
+    apiBaseUrl: process.env.API_BASE_URL
   });
 };
 
@@ -153,11 +153,21 @@ const getAddProductPage = (req, res) => {
 
 const getDetalheProductPage = async (req, res) => {
   try {
-    const { id: productId } = req.params;
-    const product = await apiFetch(`/products/getProductById/${productId}`);
+    const { id } = req.params;
+    const resProduct = await apiFetch(`/products/${id}`);
+
+    const product = (resProduct && resProduct.data) ? resProduct.data : resProduct;
+
+    if (!product) {
+      return res.status(404).render('../pages/public/error', {
+        titulo: 'Erro',
+        mensagem: 'Produto não encontrado.',
+      });
+    }
+
     renderPage(res, '../pages/public/detalheproduct', {
       titulo: 'Detalhes do Produto',
-      product,
+      product: product,
     });
   } catch (error) {
     const status = error.status || 500;
@@ -200,12 +210,18 @@ const getPaymentConfirmationPage = (req, res) => {
   });
 };
 
-const getDeliveryDashboardPage = (req, res) => {
-  const orders = [];
+const getDeliveryDashboardPage = async (req, res) => {
+
+  const response = await apiFetch('/orders');
+
+  console.log('Orders fetched for delivery dashboard:', response);
+
+  const orders = response.data || [];
 
   renderPage(res, '../pages/delivery/Dashboard', {
     titulo: 'Dashboard de Entrega - Encanto Rústico',
     mensagem: 'Página de entrega é rota',
+    apiKey: process.env.GOOGLE_MAPS_API_KEY,
     orders,
   });
 };
@@ -226,11 +242,9 @@ const updateCartDetails = async (req, res) => {
 
 const getEditProductPage = async (req, res) => {
   try {
-    const { id: productId } = req.params;
-    const apiRes = await apiFetch(`/products/getProductById/${productId}`);
+    const { id } = req.params;
+    const apiRes = await apiFetch(`/products/${id}`);
     const product = (apiRes && apiRes.data) ? apiRes.data : apiRes;
-
-    console.log('Fetched product for editing:', product);
 
     if (!product) {
       return res.status(404).render('../pages/public/error', {
@@ -283,6 +297,23 @@ const getEditProductPage = async (req, res) => {
   }
 };
 
+
+const getOtpPage = (req, res) => {
+
+  const user = req.session.user;
+
+  if (!user) {
+    return res.redirect('/login');
+  }
+
+  renderPage(res, '../pages/public/otpCode', {
+    titulo: 'Código OTP - Encanto Rústico',
+    estilo: 'auth',
+    mensagem: 'Insira o código OTP enviado ao seu email.',
+  });
+}
+
+
 export {
   getHomePage,
   getContactPage,
@@ -299,5 +330,6 @@ export {
   getPaymentConfirmationPage,
   getDeliveryDashboardPage,
   updateCartDetails,
-  getEditProductPage
+  getEditProductPage,
+  getOtpPage
 };
