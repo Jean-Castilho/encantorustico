@@ -276,7 +276,7 @@
 
                         </div>
                         <% }); %>
-                    <% } %>
+                            <% } %>
         </div>
     </div>
 
@@ -285,11 +285,15 @@
         <div id="map-placeholder">
             <span class="material-icons" style="font-size: 5rem; color: #bbb;">map</span>
         </div>
+
+        
         <div id="selected-order-content">
             <div id="empty-state">
                 <span class="material-icons">list_alt</span>
                 <h3>Selecione um Pedido</h3>
             </div>
+
+
             <div id="order-details-info" style="display: none;">
                 <h3>Detalhes do Pedido</h3>
                 <div class="info-grid">
@@ -298,7 +302,15 @@
                     <!-- <div class="info-item" id="detail-distance"></div> -->
                     <div class="info-item" id="detail-status"></div>
 
+
+
+
                     <div style=" display: flex; align-items: center; justify-content: space-between; flex-direction: row;">
+
+
+                        <button type="button" class="btn btn-destaque" onclick="enviarCodigo()">
+                            Enviar Codigo de Entrega...
+                        </button>
 
                         <input type="text" id="OtpToClient"
                             style="width: 45%; margin-right: 10px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
@@ -309,14 +321,21 @@
                         </button>
 
                     </div>
+
+
+
+
+
                 </div>
                 <div class="delivery-actions">
                     <button type="button" class="btn btn-creatRota" onclick="tracarRota()">Traçar Rota</button>
                     <button class="btn btn-secundario" onclick="vernoMapa()">Ver no Mapa</button>
-                    <button type="button" id="location-btn" class="btn btn-secundario" onclick="toggleLocationTracking()">Obter Localização</button>
+                    <button type="button" id="location-btn" class="btn btn-secundario"
+                        onclick="toggleLocationTracking()">Obter Localização</button>
                     <div class="info-item">
                         <strong>Minha Localização (Origem):</strong>
-                        <input type="text" id="origin" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" readonly>
+                        <input type="text" id="origin"
+                            style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" readonly>
                     </div>
                 </div>
             </div>
@@ -583,19 +602,32 @@
     }
 
 
+
+    
+
+    async function enviarCodigo() {
+
+        const enviarCodOtp = await fetch("/enviarCodigo", {
+            method: 'POST',
+        })
+        console.log(enviarCodOtp);
+
+    }
+
     async function confirmarEntrega() {
 
-        const confirmDeliverd = await fetch("/notifiqUserForShipped", {
+        const confirmDeliverd = await fetch("/confirmDelivery", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ orderId })
         })
-
         console.log(confirmDeliverd);
 
     }
+
+
 
 
 

@@ -15,7 +15,6 @@ const router = express.Router();
 
 router.get('/login', getLoginPage);
 router.get('/register', getRegisterPage);
-router.get('/otpCode', getOtpPage);
 
 router.post("/login", login);
 router.post("/register", register);
@@ -32,25 +31,6 @@ router.post("/removeFavorite/:id", removeFavorite);
 router.post("/cart/add/:id", addCart);
 router.get('/cart/products', getProductByIdsCart);
 router.post("/cart/remove/:id", removeCart);
-
-
-
-
-
-
-
-router.post("/notifiqUserForShipped", async (req, res) => {
-  const { orderId } = req.body;
-
-  const response = await apiFetch(`/orders/${orderId}/status`, {
-    method: 'PUT',
-    body: JSON.stringify({ status: 'shipped' }),
-  });
-
-  return {messagem: "produto saiu para entrega"}
-});
-
-
 
 
 
@@ -75,6 +55,34 @@ router.post("/contact", async (req, res) => {
 
 });
 
+
+
+router.post("/enviarCodigo", async (req, res) => {
+  
+  const { email } = req.body;
+
+  console.log("email",email);
+
+});
+
+
+
+
+router.get('/otpCode', getOtpPage);
+
+router.post("/confirmDelivery", async (req, res) => {
+  const { orderId } = req.body;
+
+  const response = await apiFetch(`/orders/${orderId}/status`, {
+    method: 'PUT',
+    body: JSON.stringify({ status: 'shipped' }),
+  });
+
+  return {messagem: "produto saiu para entrega"}
+});
+
+
+
 router.post("/sendOtp", async (req, res) => {
   const { email } = req.body;
 
@@ -87,6 +95,8 @@ router.post("/sendOtp", async (req, res) => {
 
   res.send("OTP sent");
 });
+
+
 
 router.get("/resendOtp/:email", async (req, res) => {
   const { email } = req.params;
@@ -103,6 +113,8 @@ router.get("/resendOtp/:email", async (req, res) => {
   res.redirect('/otpCode');
 });
 
+
+
 router.post("/verifyOtp", async (req, res) => {
   const { email, code } = req.body;
 
@@ -113,11 +125,9 @@ router.post("/verifyOtp", async (req, res) => {
     body: JSON.stringify({ email, code }),
   });
 
-  console.log(response);
-
   if (!response) {
     return res.render('layout/main', {
-      page: '../pages/public/otpCode',
+      page: '../pages/auth/otpCode',
       titulo: 'Verificação de Código',
       mensagem: 'Falha na verificação do código OTP. Tente novamente.',
       email
@@ -129,6 +139,15 @@ router.post("/verifyOtp", async (req, res) => {
   return res.redirect('/')
 
 });
+
+
+
+
+
+
+
+
+
 
 router.get("/cep/:cep", (req, res) => {
   const cep = req.params.cep;

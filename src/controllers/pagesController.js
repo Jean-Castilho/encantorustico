@@ -137,10 +137,6 @@ const getPaymentConfirmationPage = (req, res) => {
   });
 };
 
-
-
-
-
 const getDeliveryDashboardPage = async (req, res) => {
 
   const resApi = await apiFetch('/orders/');

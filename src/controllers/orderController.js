@@ -21,30 +21,54 @@ const handleError = (res, error, page, data) => {
 };
 
 export const getCheckoutPage = async (req, res) => {
+    const pageOptions = {
+        titulo: 'Checkout - Encanto Rústico',
+        cart: { items: [] },
+        totalPrice: 0,
+        totalItems: 0,
+    };
 
-  const pageOptions = {
-    titulo: 'Checkout - Encanto Rústico',
-    cart: { items: [] },
-    totalPrice: 0,
-    totalItems: 0,
-  };
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
 
-  if (!req.session.user) {
-    return res.redirect('/login');
-  };
+    let { selectedItems } = req.query;
 
+    if (!selectedItems || selectedItems.length === 0) {
+        return res.redirect('/cart'); 
+    }
 
-  try {
-    const { items, totalPrice, totalItems } = await getCartDetails(req.session.user.cart);
+    // Garante que selectedItems seja um array
+    if (!Array.isArray(selectedItems)) {
+        selectedItems = [selectedItems];
+    }
 
-    pageOptions.cart.items = items;
-    pageOptions.totalPrice = totalPrice;
-    pageOptions.totalItems = totalItems;
+    try {
+        const { items: allCartItems } = await getCartDetails(req.session.user.cart);
 
-    renderPage(res, '../pages/public/checkout', { ...pageOptions, cart: { items }, totalPrice, totalItems, mensagem: 'Finalize sua compra aqui.' });
-  } catch (error) {
-    handleError(res, error, '../pages/public/checkout', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
-  }
+        // Filtra os itens do carrinho para incluir apenas os selecionados
+        const selectedCartItems = allCartItems.filter(item => selectedItems.includes(item._id.toString()));
+
+        // Se, por algum motivo, nenhum item corresponder (ex: URL manipulada), volta ao carrinho
+        if (selectedCartItems.length === 0) {
+            return res.redirect('/cart');
+        }
+
+        let totalPrice = 0;
+        let totalItems = 0;
+        selectedCartItems.forEach(item => {
+            totalPrice += (parseFloat(item.preco) || 0) * (parseInt(item.quantity, 10) || 0);
+            totalItems += parseInt(item.quantity, 10) || 0;
+        });
+
+        pageOptions.cart.items = selectedCartItems;
+        pageOptions.totalPrice = totalPrice;
+        pageOptions.totalItems = totalItems;
+
+        renderPage(res, '../pages/public/checkout', { ...pageOptions, mensagem: 'Finalize sua compra aqui.' });
+    } catch (error) {
+        handleError(res, error, '../pages/public/checkout', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
+    }
 };
 
 

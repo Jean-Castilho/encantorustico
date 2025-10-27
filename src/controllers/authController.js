@@ -62,6 +62,11 @@ export const getRegisterPage = (req, res) => {
   });
 }
 
+
+
+
+
+
 export const getOtpPage = (req, res) => {
 
   const user = req.session.user;
@@ -76,6 +81,10 @@ export const getOtpPage = (req, res) => {
     mensagem: 'Insira o código OTP enviado ao seu email.',
   });
 }
+
+
+
+
 
 
 
@@ -173,7 +182,7 @@ export async function register(req, res) {
     });
 
     res.render('layout/main', {
-      page: '../pages/public/otpCode',
+      page: '../pages/auth/otpCode',
       titulo: 'Verificação de Código',
       mensagem: 'Um código OTP foi enviado para o seu e-mail.',
       email
@@ -183,7 +192,7 @@ export async function register(req, res) {
     handleAuthError(
       res,
       error,
-      '../pages/public/register',
+      '../pages/auth/register',
       'Registrar - Encanto Rústico',
       'Não foi possível criar a conta. Verifique os dados.'
     );

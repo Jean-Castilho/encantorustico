@@ -22,9 +22,13 @@
                             <% let id=item._id; %>
 
                                 <div class="cart-item" data-item-id="<%= item._id %>"
-                                    data-item-price="<%= item.preco %>">
+                                    data-item-price="<%= item.preco %>" data-item-quantity="<%= item.quantity %>">
+
+                                    
                                     <input type="checkbox" name="selectedItems" value="<%= item._id %>"
                                         class="item-checkbox" checked style="transform: scale(1.5);">
+
+
                                     <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>">
                                     <div class="item-details">
                                         <h3>
@@ -82,9 +86,6 @@
 </style>
 
 <script>
-
-
-    // --- LÓGICA DE NOTIFICAÇÃO (FAVORITOS E CARRINHO) ---
     const notification = document.getElementById('notification-cart');
 
     function showNotification(message, isSuccess) {
@@ -96,36 +97,32 @@
         }, 3000);
     }
 
-    // Atualiza os totais do carrinho chamando o backend
-    async function updateTotals() {
-        try {
-            console.log('[cart] updateTotals: iniciando fetch /cart/update');
-            const response = await fetch('/cart/update');
-            console.log('[cart] updateTotals: fetch finalizado, status=', response.status);
-            if (!response.ok) {
-                const text = await response.text();
-                console.error('[cart] updateTotals: resposta não OK, body=', text);
-                throw new Error('Erro ao atualizar os totais do carrinho.');
+    function updateSummary() {
+        let totalPrice = 0;
+        let totalItems = 0;
+
+        document.querySelectorAll('.item-checkbox:checked').forEach(checkbox => {
+            const itemElement = checkbox.closest('.cart-item');
+            if (itemElement) {
+                const price = parseFloat(itemElement.dataset.itemPrice) || 0;
+                const quantity = parseInt(itemElement.dataset.itemQuantity, 10) || 0;
+                totalPrice += price * quantity;
+                totalItems += quantity;
             }
+        });
 
-            const data = await response.json();
-            console.log('[cart] updateTotals: dados recebidos do backend:', data);
-            const { totalPrice, totalItems } = data;
+        const formattedPrice = totalPrice.toFixed(2).replace('.', ',');
+        const totalItemsCountEl = document.getElementById('total-items-count');
+        const totalPriceDisplayEl = document.getElementById('total-price-display');
+        const totalPriceDisplayMainEl = document.getElementById('total-price-display-main');
 
-            // Atualiza os valores no DOM
-            const formattedPrice = totalPrice.toFixed(2).replace('.', ',');
-            document.getElementById('total-items-count').textContent = `Subtotal (${totalItems} itens)`;
-            document.getElementById('total-price-display').textContent = `R$ ${formattedPrice}`;
-            document.getElementById('total-price-display-main').textContent = `R$ ${formattedPrice}`;
-        } catch (error) {
-            console.error('[cart] updateTotals: erro capturado ->', error);
-        }
+        if (totalItemsCountEl) totalItemsCountEl.textContent = `Subtotal (${totalItems} itens)`;
+        if (totalPriceDisplayEl) totalPriceDisplayEl.textContent = `R$ ${formattedPrice}`;
+        if (totalPriceDisplayMainEl) totalPriceDisplayMainEl.textContent = `R$ ${formattedPrice}`;
     }
 
-    // Substitua a função existente por esta:
     async function removeCart(id, buttonElement) {
         if (!id) {
-            console.warn('[cart] removeCart: productId inválido');
             showNotification('Produto inválido.', false);
             return;
         }
@@ -137,24 +134,16 @@
 
         try {
             const response = await fetch(`/cart/remove/${encodeURIComponent(id)}`, {
-                method: 'post',
+                method: 'POST',
             });
 
-            console.log('[cart] removeCart: status', response.status);
-
-            let result = null;
-            try {
-                result = await response.json();
-            } catch (e) {
-                // se não for JSON, tenta text
-                const text = await response.text();
-                result = { success: response.ok, message: text || 'Resposta inesperada do servidor.' };
-            }
+            const result = await response.json().catch(() => ({
+                success: response.ok,
+                message: 'Resposta inesperada do servidor.'
+            }));
 
             if (!response.ok) {
-                console.error('[cart] removeCart: erro do servidor ->', result);
-                showNotification(result.message || 'Erro ao remover o item do carrinho.', false);
-                // reabilita botão
+                showNotification(result.message || 'Erro ao remover o item.', false);
                 if (buttonElement) {
                     buttonElement.disabled = false;
                     buttonElement.textContent = 'Remover';
@@ -162,17 +151,20 @@
                 return;
             }
 
-            // sucesso: remove o item do DOM
             const itemElement = document.querySelector(`.cart-item[data-item-id="${id}"]`);
             if (itemElement) {
                 itemElement.remove();
             }
 
-            // atualiza totais e notifica
-            updateTotals();
+            updateSummary(); // Atualiza o resumo localmente
             showNotification(result.message || 'Item removido com sucesso!', true);
+
+            // Se o carrinho ficar vazio, recarrega a página para mostrar o estado "vazio"
+            if (document.querySelectorAll('.cart-item').length === 0) {
+                window.location.reload();
+            }
+
         } catch (err) {
-            console.error('[cart] removeCart: exceção ->', err);
             showNotification('Erro de rede ao remover o item.', false);
             if (buttonElement) {
                 buttonElement.disabled = false;
@@ -181,7 +173,6 @@
         }
     }
 
-    // Conectar os botões (executar após DOMContentLoaded)
     document.addEventListener('DOMContentLoaded', () => {
         const removeButtons = document.querySelectorAll('.btn-remover');
         removeButtons.forEach(button => {
@@ -191,5 +182,13 @@
                 removeCart(id, button);
             });
         });
+
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateSummary);
+        });
+
+        // Garante que o resumo seja calculado na carga inicial da página
+        updateSummary();
     });
 </script>
