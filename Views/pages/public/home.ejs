@@ -26,7 +26,6 @@
     
       <% if (items.length > 0) { %>
         <% items.slice(0, 3).forEach(product => { 
-
              if (!product) return;
              const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] : '/assets/img/fallback.jpg';
              const id = product._id;
@@ -41,16 +40,15 @@
           <div class="product-card">
           
             <div class="product-card-icons">
-              <a href="<%= favoritUrl %>" class="favorite-btn <%= isFavorited ? 'favorited' : '' %>" data-product-id="<%= id %>">
+              <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>" data-product-id="<%= id %>">
                 <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
               </a>
-              <a href="<%= carrinhoUrl %>" class="add-to-cart-btn <%= isInCart ? 'in-cart' : '' %>" data-product-id="<%= id %>">
+              <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>" data-product-id="<%= id %>">
                 <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
               </a>
             </div>
             <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>" alt="<%= product.nome %>">
             <h3><%= product.nome %></h3>
-            <p class="price"><%= preco %></p>
             <a href="<%= productUrl %>" class="btn btn-secundario btn-sm" style="margin-bottom: 40px;">Ver Detalhes</a>
           
           </div>
@@ -66,7 +64,7 @@
     <h2>Categorias em Destaque</h2>
     <div class="category-grid">
       <% const categories=['Sala de Estar', 'Área Gourmet' , 'Cozinha' ]; %>
-        <% categories.forEach(category=> { %>
+        <% categories.forEach(category => { %>
           <div class="category-card">
             <a href="/category/<%= category %>" class="category-title-link">
               <h3>

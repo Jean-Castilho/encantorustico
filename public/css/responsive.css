@@ -1,0 +1,147 @@
+@media (max-width: 992px) {
+    .contact-content {
+        grid-template-columns: 1fr;
+    }
+
+    .search-bar {
+        display: none; /* Oculta a barra de pesquisa principal */
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px; /* Altura do header */
+        flex-direction: column;
+        background-color: var(--cor-primaria);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-item {
+        margin: 2.5rem 0;
+    }
+
+    .hamburger {
+        display: block;
+        cursor: pointer;
+    }
+
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.8rem;
+    }
+
+    .cart-item {
+        grid-template-columns: 100px 1fr;
+        gap: 1rem;
+    }
+
+    .cart-item img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .cart-item .btn-remover {
+        grid-column: 2;
+        justify-self: start;
+        margin-top: 1rem;
+    }
+
+    .add-product-form .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-detail-page {
+        flex-direction: column;
+        /* Empilha as colunas em telas menores */
+        gap: 20px;
+    }
+
+    .product-gallery,
+    .product-details {
+        max-width: 100%;
+        /* Ocupa a largura total */
+        min-width: unset;
+    }
+
+    .product-title {
+        font-size: 2em;
+    }
+
+    .product-price {
+        font-size: 1.8em;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        /* Botão ocupa a largura total em mobile */
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+        /* Stack categories on smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        font-size: 16px;
+    }
+
+    .container {
+        margin: 1.5rem auto;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content {
+        padding: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .product-title {
+        font-size: 1.8em;
+    }
+
+    .product-price {
+        font-size: 1.6em;
+    }
+
+    .thumbnail-item {
+        width: 60px;
+        height: 60px;
+    }
+}

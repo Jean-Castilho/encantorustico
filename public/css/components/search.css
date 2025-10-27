@@ -1,0 +1,44 @@
+/* --- Estilos da Barra de Busca --- */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--borda-radius);
+    padding: 0.5rem 1rem;
+    width: 300px;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 3px rgba(169, 110, 91, 0.2);
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-family: var(--fonte-corpo);
+    font-size: 1rem;
+    color: var(--cor-texto-escuro);
+}
+
+.search-bar input::placeholder {
+    color: #aaa;
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-texto-escuro);
+}
+
+.search-bar button .material-icons {
+    font-size: 24px;
+}

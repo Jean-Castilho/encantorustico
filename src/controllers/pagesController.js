@@ -24,7 +24,6 @@ const renderPage = (res, page, options = {}) => {
   });
 };
 
-
 const renderProductsPage = async (res, page, options) => {
   try {
     const productData = await apiFetch('/products');
@@ -65,76 +64,6 @@ const getContactPage = (req, res) => {
   });
 };
 
-const getLoginPage = (req, res) => {
-  renderPage(res, '../pages/public/login', {
-    titulo: 'Login - Encanto Rústico',
-    estilo: 'auth',
-    mensagem: 'Faça login na sua conta.',
-  });
-};
-
-const getRegisterPage = (req, res) => {
-  renderPage(res, '../pages/public/register', {
-    titulo: 'Registrar - Encanto Rústico',
-    estilo: 'auth',
-    mensagem: 'Crie uma nova conta.',
-  });
-}
-
-const getProfilePage = (req, res) => {
-  renderPage(res, '../pages/public/profile', {
-    titulo: 'Perfil - Encanto Rústico',
-    mensagem: 'Veja e edite suas informações de perfil.',
-  });
-};
-
-const getFavoritesPage = async (req, res) => {
-  const pageOptions = {
-    titulo: 'Meus Favoritos',
-    favorites: [],
-  };
-
-  if (!req.session.user) {
-    return renderPage(res, '../pages/public/favorites', { ...pageOptions, mensagem: 'Usuário não autenticado' });
-  }
-
-  const { favorites: favoritProducts } = req.session.user;
-
-  if (!favoritProducts || favoritProducts.length === 0) {
-    return renderPage(res, '../pages/public/favorites', { ...pageOptions, mensagem: 'Você ainda não adicionou nenhum produto aos seus favoritos.' });
-  }
-
-  try {
-    const resApi = await apiFetch('/public/ProductsFavorit', {
-      method: 'POST',
-      body: JSON.stringify({ favoritProducts }),
-    });
-    renderPage(res, '../pages/public/favorites', { ...pageOptions, favorites: resApi.data, mensagem: 'Seus produtos favoritos.' });
-  } catch (error) {
-    handleError(res, error, '../pages/public/favorites', { ...pageOptions, mensagem: 'Erro ao carregar seus favoritos. Tente novamente mais tarde.' });
-  }
-};
-
-const getCartPage = async (req, res) => {
-  const pageOptions = {
-    titulo: 'Carrinho',
-    cart: { items: [] },
-    totalPrice: 0,
-    totalItems: 0,
-  };
-
-  if (!req.session.user) {
-    return renderPage(res, '../pages/public/cart', { ...pageOptions, mensagem: 'Você precisa estar logado para ver seu carrinho.' });
-  };
-
-  try {
-    const { items, totalPrice, totalItems } = await getCartDetails(req.session.user.cart);
-    renderPage(res, '../pages/public/cart', { ...pageOptions, cart: { items }, totalPrice, totalItems, mensagem: 'Seus produtos no carrinho.' });
-  } catch (error) {
-    handleError(res, error, '../pages/public/cart', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
-  };
-};
-
 const getProductsPage = (req, res) => {
   renderProductsPage(res, '../pages/public/products', {
     titulo: 'Todos os Produtos - Encanto Rústico',
@@ -144,7 +73,7 @@ const getProductsPage = (req, res) => {
 
 };
 
-//if user == admin
+//if user == admin;
 const getAddProductPage = (req, res) => {
   renderPage(res, '../pages/public/addProduct', {
     titulo: 'Adicionar Produto',
@@ -205,19 +134,21 @@ const getPaymentConfirmationPage = (req, res) => {
   renderPage(res, '../pages/public/payment-confirmation', {
     titulo: 'Pagamento Confirmado - Encanto Rústico',
     mensagem: 'Seu pedido foi recebido com sucesso!',
-
-
   });
 };
 
+
+
+
+
 const getDeliveryDashboardPage = async (req, res) => {
 
-  const response = await apiFetch('/orders');
+  const resApi = await apiFetch('/orders/');
 
-  console.log('Orders fetched for delivery dashboard:', response);
-
-  const orders = response.data || [];
-
+  const ordernsShipped = resApi.data.filter(order => order.status === 'shipped');
+  const ordernsApproved = resApi.data.filter(order => order.status === 'approved');
+  
+  const orders = [...ordernsShipped, ...ordernsApproved] || [];
   renderPage(res, '../pages/delivery/Dashboard', {
     titulo: 'Dashboard de Entrega - Encanto Rústico',
     mensagem: 'Página de entrega é rota',
@@ -225,6 +156,14 @@ const getDeliveryDashboardPage = async (req, res) => {
     orders,
   });
 };
+
+
+
+
+
+
+
+
 
 const updateCartDetails = async (req, res) => {
   try {
@@ -297,32 +236,10 @@ const getEditProductPage = async (req, res) => {
   }
 };
 
-
-const getOtpPage = (req, res) => {
-
-  const user = req.session.user;
-
-  if (!user) {
-    return res.redirect('/login');
-  }
-
-  renderPage(res, '../pages/public/otpCode', {
-    titulo: 'Código OTP - Encanto Rústico',
-    estilo: 'auth',
-    mensagem: 'Insira o código OTP enviado ao seu email.',
-  });
-}
-
-
 export {
   getHomePage,
   getContactPage,
   getAboutPage,
-  getLoginPage,
-  getRegisterPage,
-  getProfilePage,
-  getFavoritesPage,
-  getCartPage,
   getProductsPage,
   getAddProductPage,
   getDetalheProductPage,
@@ -331,5 +248,4 @@ export {
   getDeliveryDashboardPage,
   updateCartDetails,
   getEditProductPage,
-  getOtpPage
 };

@@ -7,8 +7,6 @@ import {
 
 const router = Router();
 
-// Rota para pegar informações da ordem;
-// Suporta listagem de pedidos em /orders e /orders/pedido
 router.get('/', getOrdersPage);
 
 // Rota para criar um novo pedido (Endpoint da API);

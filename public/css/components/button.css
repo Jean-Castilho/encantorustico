@@ -1,0 +1,50 @@
+/* --- Component: Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border: 2px solid transparent;
+    border-radius: var(--borda-radius);
+    font-family: var(--fonte-corpo);
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-destaque {
+    background-color: var(--cor-destaque);
+    color: #fff;
+}
+
+.btn-destaque:hover {
+    background-color: #9a6250;
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-secundario {
+    background-color: var(--cor-secundaria);
+    color: #fff;
+}
+
+.btn-secundario:hover {
+    background-color: #4c453e;
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-remover {
+    background: none;
+    border-color: var(--cor-erro);
+    color: var(--cor-erro);
+}
+
+.btn-remover:hover {
+    background-color: var(--cor-erro);
+    color: #fff;
+    text-decoration: none;
+}

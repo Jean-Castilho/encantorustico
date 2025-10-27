@@ -47,6 +47,14 @@ export const getCheckoutPage = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
+
+
 export const getOrdersPage = async (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
@@ -80,6 +88,18 @@ export const getOrdersPage = async (req, res) => {
     return renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: apiMessage });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 export const createOrder = async (req, res) => {
@@ -153,8 +173,7 @@ export const payOrder = async (req, res) => {
     if (!id) return res.status(400).send('Order id missing');
 
     // Chama API para iniciar pagamento (endpoint hipotético)
-    const apiRes = await apiFetch(`/orders/${id}`, { method: 'GET' });
-
+    const apiRes = await apiFetch(`/orders/${id}/payment`, { method: 'PATCH' });;
 
     // Se a API retornar uma URL de redirecionamento para pagamento
     if (apiRes && apiRes.paymentUrl) {
@@ -222,3 +241,5 @@ export const getInvoice = async (req, res) => {
     return handleError(res, error, '../pages/public/error', { titulo: 'Erro ao Baixar Fatura', mensagem: error.message });
   }
 };
+
+

@@ -1,0 +1,22 @@
+:root {
+    /* --- Paleta de Cores (Tons Terrosos) --- */
+    --cor-primaria: #F4F3F0;
+    /* 60%: Off-white (Fundo) */
+    --cor-secundaria: #605A51;
+    /* 30%: Marrom Terroso (Header/Footer/Text) */
+    --cor-destaque: #A96E5B;
+    /* 10%: Terracota (Botões, Links Ativos) */
+    --cor-erro: #e74c3c;
+    /* Cor para alertas e remoção */
+
+    --cor-texto-escuro: #3d3d3d;
+    --cor-texto-claro: #f5f5f5;
+    --cor-borda: #dcdcdc;
+
+    --sombra-padrao: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --borda-radius: 8px;
+
+    /* --- Tipografia --- */
+    --fonte-titulo: 'Playfair Display', serif;
+    --fonte-corpo: 'Lato', sans-serif;
+}

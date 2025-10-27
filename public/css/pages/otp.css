@@ -1,0 +1,55 @@
+/* --- Page: OTP Verification --- */
+#otp-page .page-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+#otp-page .otp-content .card {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#otp-page .otp-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 2rem 0;
+}
+
+#otp-page .otp-input {
+    width: 50px;
+    height: 60px;
+    font-size: 2rem;
+    text-align: center;
+    border: 2px solid var(--cor-borda);
+    border-radius: var(--borda-radius);
+    transition: all 0.3s ease;
+    font-family: var(--fonte-corpo);
+}
+
+#otp-page .otp-input:focus {
+    outline: none;
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 3px rgba(169, 110, 91, 0.4);
+}
+
+/* Remove arrows from number input */
+#otp-page .otp-input::-webkit-outer-spin-button,
+#otp-page .otp-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#otp-page .otp-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+#otp-page .form-actions {
+    margin-top: 1rem;
+}
+
+#otp-page .resend-otp {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}

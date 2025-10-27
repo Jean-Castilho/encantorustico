@@ -9,10 +9,27 @@ const handleError = (res, error, page, data) => {
   renderAdminPage(res, page, { ...data, error: `Não foi possível carregar os dados: ${error.message}` });
 };
 
-export const getAdminDashboard = (req, res) => {
+export const getAdminDashboard = async (req, res) => {
+
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  const resApiProduct = await apiFetch('/products');
+  const products = resApiProduct.data;
+
+  const resApiOrders = await apiFetch('/orders/',
+    { method: 'GET' }
+  );
+
+  const ordernsApproved = resApiOrders.data.filter(order => order.status === 'approved');
+
   renderAdminPage(res, '../pages/admin/dashboard', {
     titulo: 'Dashboard',
+    totalProducts: products.length,
+    totalOrders: ordernsApproved.length,
   });
+
 };
 
 export const getInventoryPage = async (req, res) => {
@@ -39,17 +56,29 @@ export const getOrdersPage = async (req, res) => {
 
   const pageOptions = {
     titulo: 'Gerenciar Pedidos',
+    totalApproved: 0,
+    totalDelivered: 0,
+    ordernsEnviada: 0,
     orders: []
-
   };
+
   try {
-      const resApi = await apiFetch('/orders/',
-        { method: 'GET' }
-      );
+    const resApi = await apiFetch('/orders/',
+      { method: 'GET' }
+    );
 
-      pageOptions.orders = resApi.data;
+    const ordernsApproved = resApi.data.filter(order => order.status === 'approved');
+    pageOptions.totalApproved = ordernsApproved.length;
 
-      console.log('page option fetched:', pageOptions);
+    const ordernsDelivered = resApi.data.filter(order => order.status === 'delivered');
+    pageOptions.totalDelivered = ordernsDelivered.length;
+
+    const ordernsEnviada = resApi.data.filter(order => order.status === 'shipped');
+    pageOptions.ordernsEnviada = ordernsEnviada.length;
+
+
+
+    pageOptions.orders = [...ordernsEnviada, ...ordernsApproved, ...ordernsDelivered]
 
     renderAdminPage(res, '../pages/admin/orders', { ...pageOptions });
 

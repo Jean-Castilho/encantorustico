@@ -19,23 +19,21 @@
                     <section class="cart-items-column">
                         <% cart.items.forEach(item=> { %>
 
-                            <% let id = item._id; %>
+                            <% let id=item._id; %>
 
                                 <div class="cart-item" data-item-id="<%= item._id %>"
                                     data-item-price="<%= item.preco %>">
                                     <input type="checkbox" name="selectedItems" value="<%= item._id %>"
-                                        class="item-checkbox" checked
-                                        style="margin-right: 15px; transform: scale(1.5);">
+                                        class="item-checkbox" checked style="transform: scale(1.5);">
                                     <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>">
                                     <div class="item-details">
                                         <h3>
                                             <%= item.nome %>
                                         </h3>
-                                        <p>Preço: <strong>R$ <%= (parseFloat(item.preco)) %></strong></p>
+                                        <p><strong>R$ <%= (parseFloat(item.preco)) %></strong></p>
                                     </div>
                                     <button class="btn btn-remover" data-product-id="<%= id %>">Remover</button>
                                 </div>
-
                                 <% }); %>
                     </section>
 

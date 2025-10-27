@@ -102,11 +102,11 @@
         <!-- Card do Produto -->
         <div class="product-card" data-categories="<%= productCategories %>">
             <div class="product-card-icons">
-                <a href="<%= favoritUrl %>" class="favorite-btn <%= isFavorited ? 'favorited' : '' %>"
+                <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>"
                     data-product-id="<%= id %>">
                     <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
                 </a>
-                <a href="<%= carrinhoUrl %>" class="add-to-cart-btn <%= isInCart ? 'in-cart' : '' %>"
+                <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>"
                     data-product-id="<%= id %>">
                     <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
                 </a>

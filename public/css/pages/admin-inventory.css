@@ -1,0 +1,95 @@
+/* --- Page: Admin Inventory --- */
+.inventory-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: var(--borda-radius);
+    box-shadow: var(--sombra-padrao);
+}
+
+.inventory-actions {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+.inventory-table-container {
+    overflow-x: auto;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.inventory-table thead th {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    text-align: left;
+    font-family: var(--fonte-corpo);
+    font-weight: bold;
+    color: var(--cor-secundaria);
+    border-bottom: 2px solid var(--cor-borda);
+}
+
+.inventory-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.inventory-table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.inventory-table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.inventory-product-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: var(--borda-radius);
+}
+
+.status-badge {
+    padding: 0.3em 0.6em;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+.alert-info {
+    background-color: #cce5ff;
+    color: #004085;
+    padding: 1.5rem;
+    border: 1px solid #b8daff;
+    border-radius: var(--borda-radius);
+}

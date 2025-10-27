@@ -1,0 +1,12 @@
+/* --- Component: Footer --- */
+.footer {
+    background-color: var(--cor-primaria);
+    /* Fundo neutro claro */
+    color: var(--cor-texto-escuro);
+    /* Texto escuro para contraste */
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: auto;
+    border-top: 1px solid var(--cor-borda);
+    /* Borda para separação visual */
+}

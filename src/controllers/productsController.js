@@ -44,7 +44,7 @@ export const deleteProduct = async (req, res) => {
 
 export const postEditProduct = async (req, res) => {
     const { id } = req.params;
-    const { nome, slug, price, ambientes, ativo, colecao, requerMontagem, garantia, categoria, estoque, descricao, peso } = req.body;
+    const { nome, slug, preco, ambientes, ativo, colecao, requerMontagem, garantia, categoria, estoque, descricao, peso } = req.body;
     // dimensoes podem vir como campos aninhados: dimensoes[altura]
     const altura = req.body['dimensoes[altura]'] || req.body.altura;
     const largura = req.body['dimensoes[largura]'] || req.body.largura;

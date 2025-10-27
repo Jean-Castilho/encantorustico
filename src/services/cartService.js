@@ -29,9 +29,5 @@ export const getCartDetails = async (cartProducts) => {
   const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.preco) || 0) * item.quantity, 0);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  console.log('Total Price:', totalPrice, 'Total Items:', totalItems);
-
-  console.log('Cart Items:', items);
-
   return { items, totalPrice, totalItems };
 };

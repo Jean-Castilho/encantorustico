@@ -1,10 +1,3 @@
-
-<style>
-  .material-icons {
-    font-size: 22px;
-  }
-</style>
-
 <header class="header">
   <nav class="navbar">
     <a href="/" class="nav-logo">Encanto Rústico</a>
@@ -24,49 +17,54 @@
       </li>
     </ul>
 
-
     <div class="header-icons">
       <div class="header-icons">
         <% if (user) { %>
           <a href="/profile" class="nav-link" aria-label="Perfil do Usuário">
-            <span class="material-icons">person</span>
+            <span class="material-icons notranslate md-22">person</span>
           </a>
 
           <% if (user.role === 'admin' ) { %>
             <a href="/admin/dashboard" class="nav-link" aria-label="Painel do Administrador">
-              <span class="material-icons">admin_panel_settings</span>
+              <span class="material-icons notranslate md-22">admin_panel_settings</span>
             </a>
           <% } %>
 
           <% if (user.role === 'delivery' || user.role === 'admin' ) { %>
             <a href="/delivery/dashboard" class="nav-link" aria-label="Painel do Entregador">
-              <span class="material-icons">local_shipping</span>
+              <span class="material-icons notranslate md-22">local_shipping</span>
             </a>
           <% } %>
           
           <% if (user.role==='staff' || user.role==='admin' ) { %>
             <a href="/admin/inventory" class="nav-link" aria-label="Estoque">
-              <span class="material-icons">inventory</span>
+              <span class="material-icons notranslate md-22">inventory</span>
             </a>
           <% } %>
 
           <a href="/logout" class="nav-link" aria-label="Sair">
-                <span class="material-icons">logout</span>
+                <span class="material-icons notranslate md-22">logout</span>
               </a>
             <% } else { %>
               <a href="/login" class="nav-link" aria-label="Login">
-                <span class="material-icons">person</span>
+                <span class="material-icons notranslate md-22">person</span>
               </a>
             <% } %>
 
               <a href="/favorites" class="nav-link" aria-label="Meus Favoritos">
-                <span class="material-icons">favorite_border</span>
+                <span class="material-icons notranslate md-22">favorite_border</span>
               </a>
               <a href="/cart" class="nav-link" aria-label="Meu Carrinho">
-                <span class="material-icons">shopping_cart</span>
+                <span class="material-icons notranslate md-22">shopping_cart</span>
               </a>
       </div>
 
+    </div>
+
+    <div class="hamburger">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </div>
   </nav>
 </header>

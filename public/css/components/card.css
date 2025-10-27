@@ -1,0 +1,10 @@
+/* --- Component: Cards --- */
+.card {
+    background-color: #fff;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--borda-radius);
+    box-shadow: var(--sombra-padrao);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}

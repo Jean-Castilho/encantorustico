@@ -1,0 +1,74 @@
+/* --- Component: Header / Navbar --- */
+.header {
+    width: 100%;
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-escuro);
+    padding: 1rem 0;
+    box-shadow: var(--sombra-padrao);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-logo {
+    font-family: var(--fonte-titulo);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cor-secundaria);
+    text-decoration: none;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-link {
+    color: var(--cor-texto-escuro);
+    font-weight: bold;
+    padding-bottom: 8px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--cor-destaque);
+    border-bottom-color: var(--cor-destaque);
+    text-decoration: none;
+}
+
+.header-icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.header-icons .nav-link {
+    padding: 8px;
+    font-size: 24px;
+    border-bottom: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cor-texto-escuro);
+}
+
+.header-icons .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-bottom-color: transparent;
+}

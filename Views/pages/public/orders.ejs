@@ -87,7 +87,7 @@
         color: #004085;
     }
 
-    .status-completed,
+    .status-approved,
     .status-paid {
         background-color: #d4edda;
         color: #155724;
@@ -167,7 +167,7 @@
 
 <div class="container">
     <header class="page-header" style="text-align: center; margin-bottom: 3rem;">
-        <h1>
+        <h1 style="margin-bottom: 0px; margin-top: 1.5rem;">
             <%= titulo %>
         </h1>
     </header>
@@ -181,7 +181,6 @@
                         <strong>PEDIDO REALIZADO EM</strong>
                         <span>
                             <%= formatters.formatDate(order.createdAt) %> - <%= formatters.formatTime(order.createdAt) %>
-                            
                         </span>
                     </div>
                     <div class="order-header-item">
@@ -247,17 +246,19 @@
                                         <% if (order.endereco) { %>
                                             <div>
                                                 • CEP: <%= order.endereco.cep || order.endereco.zip || '' %> </br>
-                                                • Estado: <%= order.endereco.estado || order.endereco.state || '' %>
-                                                
+                                                    • Estado: <%= order.endereco.estado || order.endereco.state || '' %>
+
                                             </div>
                                             <div>
-                                                • Bairo: <%= order.endereco.bairro || order.endereco.district || '' %> </br>
-                                                • Cidade: <%= order.endereco.cidade || order.endereco.city || '' %>
+                                                • Bairo: <%= order.endereco.bairro || order.endereco.district || '' %>
+                                                    </br>
+                                                    • Cidade: <%= order.endereco.cidade || order.endereco.city || '' %>
                                             </div>
 
                                             <div>
-                                                • rua: <%= order.endereco.logradouro || order.endereco.rua || '' %> </br>
-                                                • casa: <%= order.endereco.numero || order.endereco.number || '' %>
+                                                • rua: <%= order.endereco.logradouro || order.endereco.rua || '' %>
+                                                    </br>
+                                                    • casa: <%= order.endereco.numero || order.endereco.number || '' %>
                                             </div>
                                             <% } else { %>
                                                 <div>Endereço não informado</div>
@@ -270,14 +271,8 @@
                                     <div style="margin-top:0.5rem; color: #495057;">
                                         <% if (order.paymentMethod) { %>
                                             <div>
-                                               Método de pagamento: <%= order.paymentMethod.payment_method %>
+                                                Método de pagamento: <%= order.paymentMethod.payment_method %>
                                             </div>
-                                            <% if (order.paymentMethod) { %>
-                                                <div>Status: <span
-                                                        class="status status-<%= (order.status || '').toLowerCase() %>">
-                                                        <%= order.status %>
-                                                    </span></div>
-                                                <% } %>
                                                     <% } else { %>
                                                         <div>Método não informado</div>
                                                         <% } %>
@@ -301,25 +296,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                style="margin-top:1rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+                            <div style="margin-top:1rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+
                                 <div>
                                     <div class="timeline">
-                                        <% const
-                                            steps=['pendente','pagamento_aprovado','processando','enviado','entregue','cancelado'];
-                                            %>
-                                            <% steps.forEach(s=> { %>
-                                                <% const cls=(s===order.status) ? 'timeline-step active'
-                                                    : 'timeline-step' ; %>
-                                                    <div class="<%= cls %>">
-                                                        <%= s.replace('_', ' ' ).toUpperCase() %>
-                                                    </div>
+                                        <% const statusTranslations = { 'pending' : 'pendente' , 'approved'
+                                            : 'pagamento aprovado' , 'processing' : 'processando' , 'shipped'
+                                            : 'enviado' , 'delivered' : 'entregue' , 'cancelled' : 'cancelado' }; %>
+
+                                            <% const steps = ['pending', 'approved' , 'processing' , 'shipped'
+                                                , 'delivered' , 'cancelled' ]; %>
+
+                                                <% steps.forEach( s => { %>
+                                                    <% const cls = (s === order.status) ? 'timeline-step active'
+                                                        : 'timeline-step'; %>
+                                                        <div class="<%= cls %>">
+                                                            <%= (statusTranslations[s] || s).replace('_', ' ').toUpperCase() %>
+                                                        </div>
                                                     <% }); %>
                                     </div>
+                                    
                                 </div>
 
                                 <div style="display:flex; gap:0.5rem;">
-                                    <% if (order.status==='pendente' ) { %>
+                                    <% if (order.status==='pending' ) { %>
                                         <a href="/orders/pay/<%= order._id %>" class="btn btn-primary">Pagar</a>
                                         <a href="/orders/cancel/<%= order._id %>"
                                             class="btn btn-outline-danger">Cancelar</a>
@@ -330,17 +330,18 @@
                                                 <a href="/support?order=<%= order._id %>"
                                                     class="btn btn-outline-info">Suporte</a>
                                 </div>
-                            </div>
-                </div>
 
+                </div>
             </div>
-            <% }); %>
-                <% } else { %>
-                    <div class="card" style="text-align: center; padding: 4rem;">
-                        <h2>Nenhum pedido encontrado.</h2>
-                        <p style="margin-top: 1rem; margin-bottom: 2rem;">Parece que você ainda não fez nenhuma compra.
-                            Que tal explorar nossos produtos?</p>
-                        <a href="/products" class="btn btn-destaque">Ver Produtos</a>
-                    </div>
-                <% } %>
+
 </div>
+<% }); %>
+    <% } else { %>
+        <div class="card" style="text-align: center; padding: 4rem;">
+            <h2>Nenhum pedido encontrado.</h2>
+            <p style="margin-top: 1rem; margin-bottom: 2rem;">Parece que você ainda não fez nenhuma compra.
+                Que tal explorar nossos produtos?</p>
+            <a href="/products" class="btn btn-destaque">Ver Produtos</a>
+        </div>
+        <% } %>
+            </div>

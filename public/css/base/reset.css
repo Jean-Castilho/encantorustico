@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    /* Oculta a barra de rolagem no Firefox */
+}
+
+/* Oculta a barra de rolagem em navegadores WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    font-family: var(--fonte-corpo);
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-escuro);
+    font-size: 17px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh)
+}

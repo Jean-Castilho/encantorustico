@@ -1,0 +1,31 @@
+/* --- Component: Forms --- */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--cor-secundaria);
+}
+
+.form-control {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--borda-radius);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1rem;
+    font-family: var(--fonte-corpo);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 3px rgba(169, 110, 91, 0.4);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 110px;
+}

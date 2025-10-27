@@ -1,0 +1,62 @@
+main {
+    flex-grow: 1;
+    /* Faz o conteúdo principal crescer e ocupar o espaço disponível */
+}
+
+h1 {
+    font-family: var(--fonte-titulo);
+    color: var(--cor-destaque);
+    margin-top: 1.5rem;
+    font-size: 2rem;
+}
+
+h2 {
+    font-family: var(--fonte-titulo);
+    color: var(--cor-destaque);
+    font-size: 2.25rem;
+}
+
+h3 {
+    font-family: var(--fonte-titulo);
+    color: var(--cor-destaque);
+    font-size: 1.5rem; 
+}
+
+h4 {
+    font-family: var(--fonte-titulo);
+    color: var(--cor-destaque);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1.3;
+}
+h5 {
+    font-family: var(--fonte-titulo);
+    color: var(--cor-secundaria);
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+}
+h6 {
+    font-family: var(--fonte-titulo);
+    color: var(--cor-secundaria);
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+}
+
+a {
+    color: var(--cor-destaque);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #dededee0;
+}
+
+p {
+    margin: 0 0 0.5rem 0;
+}
+
+strong {
+    font-weight: 700;
+    color: rgb(0, 0, 0);
+}

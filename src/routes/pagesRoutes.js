@@ -4,11 +4,6 @@ import {
     getHomePage,
     getContactPage,
     getAboutPage,
-    getLoginPage,
-    getRegisterPage,
-    getProfilePage,
-    getFavoritesPage,
-    getCartPage,
     getProductsPage,
     getAddProductPage,
     getDetalheProductPage,
@@ -17,8 +12,7 @@ import {
     getDeliveryDashboardPage,
     updateCartDetails,
     getEditProductPage,
-    getOtpPage
-} from '../controllers/pagesController.js';
+    } from '../controllers/pagesController.js';
 
 import { getCheckoutPage, getOrdersPage } from '../controllers/orderController.js';
 
@@ -32,27 +26,15 @@ router.get('/', getHomePage);
 router.get('/about', getAboutPage);
 router.get('/contact', getContactPage);
 
-// Rotas de autenticação;
-router.get('/login', getLoginPage);
-router.get('/register', getRegisterPage);
-
-
-
-router.get('/otpCode', getOtpPage);
-
-// Rotas de usuário autenticado;
-router.get('/profile', getProfilePage);
-router.get('/favorites', getFavoritesPage);
-router.get('/cart', getCartPage);
-
-// Rota para atualizar os detalhes do carrinho;
-router.get('/cart/update', updateCartDetails);
-
 // Rotas de produtos;
 router.get('/products', getProductsPage);
 router.get('/product/add', getAddProductPage);
 router.get('/product/:id', getDetalheProductPage);
 router.get('/product/edit/:id', getEditProductPage);
+
+
+// Rota para atualizar os detalhes do carrinho;
+router.get('/cart/update', updateCartDetails);
 
 // Rotas de pagamento;
 router.get('/payment', getPaymentPage);
