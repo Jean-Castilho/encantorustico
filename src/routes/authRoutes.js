@@ -2,7 +2,7 @@ import express from "express";
 import https from "https";
 
 import {
-  getLoginPage, getRegisterPage, getOtpPage,
+  getLoginPage, getRegisterPage,
   getProfilePage,
   getFavoritesPage,
   getCartPage, login, register, logout
@@ -38,6 +38,7 @@ router.post("/cart/remove/:id", removeCart);
 
 
 
+
 router.post("/contact", async (req, res) => {
   const { email, subject, message } = req.body;
 
@@ -65,11 +66,6 @@ router.post("/enviarCodigo", async (req, res) => {
 
 });
 
-
-
-
-router.get('/otpCode', getOtpPage);
-
 router.post("/confirmDelivery", async (req, res) => {
   const { orderId } = req.body;
 
@@ -80,70 +76,6 @@ router.post("/confirmDelivery", async (req, res) => {
 
   return {messagem: "produto saiu para entrega"}
 });
-
-
-
-router.post("/sendOtp", async (req, res) => {
-  const { email } = req.body;
-
-  console.log(`OTP requested for email: ${email}`);
-
-  const response = await apiFetch('/email/sendOtp', {
-    method: 'POST',
-    body: JSON.stringify({ email }),
-  });
-
-  res.send("OTP sent");
-});
-
-
-
-router.get("/resendOtp/:email", async (req, res) => {
-  const { email } = req.params;
-
-  console.log(`OTP requested for email: ${email}`);
-
-  const response = await apiFetch('/email/sendOtp', {
-    method: 'POST',
-    body: JSON.stringify({ email }),
-  });
-
-  console.log(`OTP resend response: ${response}`);
-
-  res.redirect('/otpCode');
-});
-
-
-
-router.post("/verifyOtp", async (req, res) => {
-  const { email, code } = req.body;
-
-  console.log(`OTP verification requested for email: ${email} with OTP: ${code}`);
-
-  const response = await apiFetch('/email/verifyCode', {
-    method: 'POST',
-    body: JSON.stringify({ email, code }),
-  });
-
-  if (!response) {
-    return res.render('layout/main', {
-      page: '../pages/auth/otpCode',
-      titulo: 'Verificação de Código',
-      mensagem: 'Falha na verificação do código OTP. Tente novamente.',
-      email
-    });
-  }
-
-  req.session.user = response.user;
-
-  return res.redirect('/')
-
-});
-
-
-
-
-
 
 
 

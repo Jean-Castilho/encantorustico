@@ -67,25 +67,6 @@ export const getRegisterPage = (req, res) => {
 
 
 
-export const getOtpPage = (req, res) => {
-
-  const user = req.session.user;
-
-  if (!user) {
-    return res.redirect('/login');
-  }
-
-  renderPage(res, '../pages/auth/otpCode', {
-    titulo: 'Código OTP - Encanto Rústico',
-    estilo: 'auth',
-    mensagem: 'Insira o código OTP enviado ao seu email.',
-  });
-}
-
-
-
-
-
 
 
 export const getProfilePage = (req, res) => {
