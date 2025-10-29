@@ -62,13 +62,6 @@ export const getRegisterPage = (req, res) => {
   });
 }
 
-
-
-
-
-
-
-
 export const getProfilePage = (req, res) => {
   renderPage(res, '../pages/auth/profile', {
     titulo: 'Perfil - Encanto Rústico',

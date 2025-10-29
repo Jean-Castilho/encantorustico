@@ -603,14 +603,19 @@
 
 
 
-    
+
 
     async function enviarCodigo() {
 
-        const enviarCodOtp = await fetch("/enviarCodigo", {
+        const response = await fetch("/sendCodforDelivery", {
             method: 'POST',
+            headers: {
+                'content-Type': 'application/json'
+            },
+            body: JSON.stringify({ number })
         })
-        console.log(enviarCodOtp);
+        const resCod = await response.json();
+        console.log(resCod);
 
     }
 
@@ -621,7 +626,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ orderId })
+            body: JSON.stringify({ number, code })
         })
         console.log(confirmDeliverd);
 

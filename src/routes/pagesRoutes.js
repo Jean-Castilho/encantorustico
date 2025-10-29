@@ -12,6 +12,7 @@ import {
     getDeliveryDashboardPage,
     updateCartDetails,
     getEditProductPage,
+    changePassword
     } from '../controllers/pagesController.js';
 
 import { getCheckoutPage, getOrdersPage } from '../controllers/orderController.js';
@@ -31,6 +32,8 @@ router.get('/products', getProductsPage);
 router.get('/product/add', getAddProductPage);
 router.get('/product/:id', getDetalheProductPage);
 router.get('/product/edit/:id', getEditProductPage);
+
+router.get('/change-password', changePassword)
 
 
 // Rota para atualizar os detalhes do carrinho;

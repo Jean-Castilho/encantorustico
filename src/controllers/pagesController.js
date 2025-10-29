@@ -232,6 +232,13 @@ const getEditProductPage = async (req, res) => {
   }
 };
 
+const changePassword = (req, res) => {
+  renderPage(res, '../pages/auth/changePassword', {
+    titulo: 'Alterar Senha',
+  });
+};
+
+
 export {
   getHomePage,
   getContactPage,
@@ -244,4 +251,5 @@ export {
   getDeliveryDashboardPage,
   updateCartDetails,
   getEditProductPage,
+  changePassword
 };

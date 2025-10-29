@@ -58,23 +58,27 @@ router.post("/contact", async (req, res) => {
 
 
 
-router.post("/enviarCodigo", async (req, res) => {
-  
-  const { email } = req.body;
+router.post("/sendCodforDelivery", async (req, res) => {
+  const { number } = req.body;
 
-  console.log("email",email);
+  const response = await apiFetch(`/watsapp/send-code`, {
+    method: 'PUT',
+    body: JSON.stringify({number}),
+  });
+
+  console.log("nu,ber",email);
 
 });
 
 router.post("/confirmDelivery", async (req, res) => {
-  const { orderId } = req.body;
+  const { number, code } = req.body;
 
-  const response = await apiFetch(`/orders/${orderId}/status`, {
+  const response = await apiFetch(`/verifyCode`, {
     method: 'PUT',
     body: JSON.stringify({ status: 'shipped' }),
   });
 
-  return {messagem: "produto saiu para entrega"}
+  return { messagem: "produto saiu para entrega" }
 });
 
 
