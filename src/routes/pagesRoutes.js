@@ -9,10 +9,8 @@ import {
     getDetalheProductPage,
     getPaymentPage,
     getPaymentConfirmationPage,
-    getDeliveryDashboardPage,
     updateCartDetails,
-    getEditProductPage,
-    changePassword
+    getEditProductPage
     } from '../controllers/pagesController.js';
 
 import { getCheckoutPage, getOrdersPage } from '../controllers/orderController.js';
@@ -33,9 +31,6 @@ router.get('/product/add', getAddProductPage);
 router.get('/product/:id', getDetalheProductPage);
 router.get('/product/edit/:id', getEditProductPage);
 
-router.get('/change-password', changePassword)
-
-
 // Rota para atualizar os detalhes do carrinho;
 router.get('/cart/update', updateCartDetails);
 
@@ -47,7 +42,5 @@ router.get('/payment-confirmation', getPaymentConfirmationPage);
 router.get('/checkout', getCheckoutPage);
 router.get('/orders', getOrdersPage);
 
-// Rotas de entrega;
-router.get('/delivery/dashboard', getDeliveryDashboardPage);
 
 export default router;

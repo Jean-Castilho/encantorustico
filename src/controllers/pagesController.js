@@ -26,8 +26,8 @@ const renderPage = (res, page, options = {}) => {
 
 const renderProductsPage = async (res, page, options) => {
   try {
-    const productData = await apiFetch('/products');
 
+    const productData = await apiFetch('/products');
     const products = normalizeProducts(productData);
 
     renderPage(res, page, { ...options, products, allProducts: products });
@@ -137,29 +137,6 @@ const getPaymentConfirmationPage = (req, res) => {
   });
 };
 
-const getDeliveryDashboardPage = async (req, res) => {
-
-  const resApi = await apiFetch('/orders/');
-
-  const ordernsShipped = resApi.data.filter(order => order.status === 'shipped');
-  const ordernsApproved = resApi.data.filter(order => order.status === 'approved');
-  
-  const orders = [...ordernsShipped, ...ordernsApproved] || [];
-  renderPage(res, '../pages/delivery/Dashboard', {
-    titulo: 'Dashboard de Entrega - Encanto Rústico',
-    mensagem: 'Página de entrega é rota',
-    apiKey: process.env.GOOGLE_MAPS_API_KEY,
-    orders,
-  });
-};
-
-
-
-
-
-
-
-
 
 const updateCartDetails = async (req, res) => {
   try {
@@ -232,9 +209,10 @@ const getEditProductPage = async (req, res) => {
   }
 };
 
-const changePassword = (req, res) => {
-  renderPage(res, '../pages/auth/changePassword', {
+const changePasswordPage = (req, res) => {
+  renderPage(res, '../pages/auth/otpCode', {
     titulo: 'Alterar Senha',
+    mensagem: 'solicite o codigo para redefinir senha',
   });
 };
 
@@ -248,8 +226,7 @@ export {
   getDetalheProductPage,
   getPaymentPage,
   getPaymentConfirmationPage,
-  getDeliveryDashboardPage,
   updateCartDetails,
   getEditProductPage,
-  changePassword
+  changePasswordPage
 };

@@ -1,6 +1,7 @@
 import { apiFetch } from '../utils/apiClient.js';
 
 import { getCartDetails } from '../services/cartService.js';
+import { sendOtp } from './otpController.js';
 // Helper Functions
 
 const renderPage = (res, page, options = {}) => {
@@ -150,16 +151,13 @@ export async function register(req, res) {
 
     req.session.user = data.user;
 
-    const otpResponse = await apiFetch('/email/sendOtp', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    });
+    await sendOtp(email, 'email');
 
     res.render('layout/main', {
       page: '../pages/auth/otpCode',
       titulo: 'Verificação de Código',
       mensagem: 'Um código OTP foi enviado para o seu e-mail.',
-      email
+      contact: email
     });
 
   } catch (error) {
@@ -184,3 +182,33 @@ export function logout(req, res) {
     res.redirect('/');
   });
 }
+
+export const changePasswordPage = (req, res) => {
+  renderPage(res, '../pages/auth/changePassword', {
+    titulo: 'Alterar Senha',
+    mensagem: 'solicite o codigo para redefinir senha',
+  });
+};
+
+export const forgotPassword = async (req, res) => {
+  const { contact, send_method } = req.body;
+
+  try {
+    await sendOtp(contact, send_method);
+
+    res.render('layout/main', {
+      page: '../pages/auth/otpCode',
+      titulo: 'Verificação de Código',
+      mensagem: `Um código OTP foi enviado para ${contact}`,
+      contact
+    });
+  } catch (error) {
+    handleAuthError(
+      res,
+      error,
+      '../pages/auth/changePassword',
+      'Alterar Senha',
+      'Não foi possível enviar o código. Verifique os dados.'
+    );
+  }
+};

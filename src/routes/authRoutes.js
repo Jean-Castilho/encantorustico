@@ -5,7 +5,7 @@ import {
   getLoginPage, getRegisterPage,
   getProfilePage,
   getFavoritesPage,
-  getCartPage, login, register, logout
+  getCartPage, login, register, logout, changePasswordPage, forgotPassword
 } from "../controllers/authController.js";
 import { addFavorite, removeFavorite, addCart, getProductByIdsCart, removeCart } from "../controllers/usersController.js";
 import { apiFetch } from "../utils/apiClient.js";
@@ -19,6 +19,10 @@ router.get('/register', getRegisterPage);
 router.post("/login", login);
 router.post("/register", register);
 router.get("/logout", logout);
+
+
+router.get('/change-password', changePasswordPage);
+router.post('/forgot-password', forgotPassword);
 
 // Rotas de usuário autenticado;
 router.get('/profile', getProfilePage);

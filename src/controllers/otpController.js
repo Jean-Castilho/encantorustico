@@ -1,80 +1,87 @@
-
 import { apiFetch } from '../utils/apiClient.js';
 
-const renderPage = (res, page, options = {}) => {
-    res.render(res.locals.layout, {
-        page,
-        ...options,
-        apiBaseUrl: process.env.API_BASE_URL
-    });
-};
-
-export const getOtpPage = (req, res) => {
-
-    const user = req.session.user;
-
-    if (!user) {
-        return res.redirect('/login');
-    }
-
-    renderPage(res, '../pages/auth/otpCode', {
-        titulo: 'Código OTP - Encanto Rústico',
-        estilo: 'auth',
-        mensagem: 'Insira o código OTP enviado ao seu email.',
-    });
+const isEmail = (contact) => {
+    const emailRegex = /^[^S@]+@[^S@]+\.[^S@]+$/;
+    return emailRegex.test(contact);
 }
 
-export const sendOtp = async (req, res) => {
-    const { email } = req.body;
-
-    console.log(`OTP requested for email: ${email}`);
-
-    const response = await apiFetch('/email/sendOtp', {
-        method: 'POST',
-        body: JSON.stringify({ email }),
-    });
-
-    res.send("OTP sent");
+export const sendOtp = async (contact, method) => {
+    if (method === 'email') {
+        console.log(`OTP requested for email: ${contact}`);
+        return await apiFetch('/email/sendOtp', {
+            method: 'POST',
+            body: JSON.stringify({ email: contact }),
+        });
+    } else if (method === 'sms') {
+        console.log(`OTP requested for sms: ${contact}`);
+        return await apiFetch('/whatsapp/send-code', {
+            method: 'POST',
+            body: JSON.stringify({ number: contact }),
+        });
+    }
+    throw new Error('Invalid OTP method');
 };
-
 
 export const resendOtp = async (req, res) => {
-    const { email } = req.params;
+    const { contact } = req.body;
+    const method = isEmail(contact) ? 'email' : 'sms';
 
-    console.log(`OTP requested for email: ${email}`);
-
-    const response = await apiFetch('/email/sendOtp', {
-        method: 'POST',
-        body: JSON.stringify({ email }),
-    });
-
-    console.log(`OTP resend response: ${response}`);
-
-    res.redirect('/otpCode');
+    try {
+        await sendOtp(contact, method);
+        res.render('layout/main', {
+            page: '../pages/auth/otpCode',
+            titulo: 'Verificação de Código',
+            mensagem: `Um novo código OTP foi enviado para ${contact}`,
+            contact
+        });
+    } catch (error) {
+        res.render('layout/main', {
+            page: '../pages/auth/otpCode',
+            titulo: 'Verificação de Código',
+            mensagem: 'Falha ao reenviar o código OTP. Tente novamente.',
+            contact,
+            error: error.message
+        });
+    }
 };
 
-
 export const verifyOtp = async (req, res) => {
-    const { email, code } = req.body;
+    const { contact, code } = req.body;
+    const method = isEmail(contact) ? 'email' : 'sms';
 
-    console.log(`OTP verification requested for email: ${email} with OTP: ${code}`);
+    try {
+        let response;
+        if (method === 'email') {
+            response = await apiFetch('/email/verifyCode', {
+                method: 'POST',
+                body: JSON.stringify({ email: contact, code }),
+            });
+        } else if (method === 'sms') {
+            response = await apiFetch('/whatsapp/verify-code', {
+                method: 'PUT',
+                body: JSON.stringify({ number: contact, code }),
+            });
+        }
 
-    const response = await apiFetch('/email/verifyCode', {
-        method: 'POST',
-        body: JSON.stringify({ email, code }),
-    });
+        if (!response) {
+            return res.render('layout/main', {
+                page: '../pages/auth/otpCode',
+                titulo: 'Verificação de Código',
+                mensagem: 'Falha na verificação do código OTP. Tente novamente.',
+                contact
+            });
+        }
 
-    if (!response) {
-        return res.render('layout/main', {
+        req.session.user = response.user;
+
+        return res.redirect('/')
+    } catch (error) {
+        res.render('layout/main', {
             page: '../pages/auth/otpCode',
             titulo: 'Verificação de Código',
             mensagem: 'Falha na verificação do código OTP. Tente novamente.',
-            email
+            contact,
+            error: error.message
         });
     }
-
-    req.session.user = response.user;
-
-    return res.redirect('/')
-
 };

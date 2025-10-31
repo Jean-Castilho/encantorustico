@@ -174,7 +174,7 @@
 
     .info-grid {
         display: grid;
-        grid-template-columns: 22% 25% 14% auto;
+        grid-template-columns: 22% 25% auto;
         gap: 0.8rem;
         margin-bottom: 1rem;
     }
@@ -300,9 +300,6 @@
                     <div class="info-item" id="detail-client-name"></div>
                     <div class="info-item" id="detail-address"></div>
                     <!-- <div class="info-item" id="detail-distance"></div> -->
-                    <div class="info-item" id="detail-status"></div>
-
-
 
 
                     <div style=" display: flex; align-items: center; justify-content: space-between; flex-direction: row;">
@@ -324,15 +321,14 @@
 
 
 
-
-
                 </div>
                 <div class="delivery-actions">
+
                     <button type="button" class="btn btn-creatRota" onclick="tracarRota()">Traçar Rota</button>
                     <button class="btn btn-secundario" onclick="vernoMapa()">Ver no Mapa</button>
                     <button type="button" id="location-btn" class="btn btn-secundario"
                         onclick="toggleLocationTracking()">Obter Localização</button>
-                    <div class="info-item">
+                    <div style="margin-left: auto;" class="info-item">
                         <strong>Minha Localização (Origem):</strong>
                         <input type="text" id="origin"
                             style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" readonly>

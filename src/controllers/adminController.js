@@ -15,6 +15,11 @@ export const getAdminDashboard = async (req, res) => {
     return res.redirect('/login');
   }
 
+  const resApiUsers = await apiFetch('/public/users',{
+    method: 'GET'}
+  );
+  const users = resApiUsers.data;
+
   const resApiProduct = await apiFetch('/products');
   const products = resApiProduct.data;
 
@@ -23,9 +28,14 @@ export const getAdminDashboard = async (req, res) => {
   );
 
   const ordernsApproved = resApiOrders.data.filter(order => order.status === 'approved');
+  const totalPriceApproved = parseFloat(ordernsApproved.reduce((total, order) => total + order.valor, 0).toFixed(3));
+
+  
 
   renderAdminPage(res, '../pages/admin/dashboard', {
     titulo: 'Dashboard',
+    totalPriceApproved, totalPriceApproved,
+    totalUsers: users.length,
     totalProducts: products.length,
     totalOrders: ordernsApproved.length,
   });

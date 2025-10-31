@@ -3,6 +3,9 @@ import pagesRoutes from './pagesRoutes.js';
 import authRoutes from './authRoutes.js';
 import adminRouter from './adminRouter.js';
 import orderRoutes from './orderRoutes.js';
+import otpRoutes from './otpRoutes.js';
+import deliveryRouter from './deliveryRouter.js';
+
 
 /**
  * Centraliza e carrega todas as rotas da aplicação.
@@ -14,4 +17,6 @@ export default function loadRoutes(app) {
   app.use('/', authRoutes);
   app.use('/admin', adminRouter);
   app.use('/orders', orderRoutes);
+  app.use('/', otpRoutes);
+  app.use('/', deliveryRouter);
 };

@@ -53,7 +53,8 @@ a:hover {
 }
 
 p {
-    margin: 0 0 0.5rem 0;
+    margin-top: 10px;
+    margin-bottom: 0.5rem;
 }
 
 strong {

@@ -172,7 +172,7 @@
                                 <% } else if (session.user.email) { %>
                                     <span class="verification-badge not-verified">
                                         <i class="material-icons">warning</i> Não verificado
-                                        <a href="/resendOtp/<%= session.user.email.endereco %>"
+                                        <a href="/sendOtp/<%= session.user.email.endereco %>"
                                             class="verify-link">(Verificar agora)</a>
                                     </span>
                                     <% } %>

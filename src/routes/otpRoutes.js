@@ -1,13 +1,9 @@
 import express from "express";
-import { getOtpPage, resendOtp, sendOtp, verifyOtp } from "../controllers/otpController.js";
+import { verifyOtp, resendOtp } from "../controllers/otpController.js";
 
 const router = express.Router();
 
-router.get('/otpCode', getOtpPage);
-router.get("/resendOtp/:email", resendOtp);
-router.post("/sendOtp", sendOtp);
-router.post("/verifyOtp", verifyOtp);
-
-
+router.post("/verify-otp", verifyOtp);
+router.post("/resend-otp", resendOtp);
 
 export default router;

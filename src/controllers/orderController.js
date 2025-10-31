@@ -1,4 +1,4 @@
-import { apiFetch } from '../utils/apiClient.js';
+ import { apiFetch } from '../utils/apiClient.js';
 import dotenv from 'dotenv';
 import { getCartDetails } from '../services/cartService.js';
 import { validateOrderItems, buildOrderItems } from '../services/orderService.js';
@@ -7,7 +7,7 @@ import { formatCurrency, formatDate, formatTime, statusLabel } from '../utils/fo
 dotenv.config();
 
 const renderPage = (res, page, options = {}) => {
-  // disponibiliza helpers nas views
+  // disponibiliza helpers nas views;
   res.locals.formatters = { formatCurrency, formatDate, formatTime, statusLabel };
   res.render(res.locals.layout, {
     page,
@@ -70,14 +70,6 @@ export const getCheckoutPage = async (req, res) => {
         handleError(res, error, '../pages/public/checkout', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
     }
 };
-
-
-
-
-
-
-
-
 
 export const getOrdersPage = async (req, res) => {
   if (!req.session.user) {

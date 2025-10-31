@@ -34,7 +34,6 @@ import {
     deleteProduct,
     postEditProduct
 } from '../controllers/productsController.js';
-import { getAddProductPage } from '../controllers/pagesController.js';
 
 router.get('/dashboard', getAdminDashboard);
 router.get('/inventory', getInventoryPage);
