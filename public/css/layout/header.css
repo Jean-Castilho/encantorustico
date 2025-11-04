@@ -32,6 +32,7 @@
     list-style: none;
     display: flex;
     gap: 2.5rem;
+    align-items: center; /* Align items vertically */
 }
 
 .nav-link {
@@ -49,6 +50,11 @@
     color: var(--cor-destaque);
     border-bottom-color: var(--cor-destaque);
     text-decoration: none;
+}
+
+/* Container for the icons within the nav menu */
+.header-icons-container {
+    margin-left: auto; /* Pushes icons to the right */
 }
 
 .header-icons {
@@ -71,4 +77,20 @@
 .header-icons .nav-link:hover {
     background-color: rgba(0, 0, 0, 0.05);
     border-bottom-color: transparent;
+}
+
+/* Hide hamburger on desktop */
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--cor-texto-escuro);
 }

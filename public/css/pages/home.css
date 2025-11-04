@@ -31,35 +31,51 @@
 .product-grid,
 .favorites-grid {
     display: grid;
-    justify-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjusted minmax */
+    gap: 2rem; /* Reduced gap */
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .product-card {
-    width: 380px;
     background-color: #fff;
     border: 1px solid var(--cor-borda);
     border-radius: var(--borda-radius);
     overflow: hidden;
-    transform: translateY(0px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
+    text-align: left; /* Align text to the left */
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.product-card .product-image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card img {
+    width: 100%;
+    height: 250px; /* Increased height */
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
 }
 
 .product-card-icons {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 1rem;
+    right: 1rem;
     display: flex;
-    gap: 10px;
+    flex-direction: column; /* Stack icons vertically */
+    gap: 0.8rem;
 }
 
 .product-card-icons .icon-btn {
@@ -68,46 +84,51 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    color: #333; /* Default icon color */
-}
-
-.product-card-icons .icon-btn .material-icons {
-    font-size: 1.5rem;
-    transition: color 0.3s ease;
+    color: #333;
 }
 
 .product-card-icons .icon-btn:hover {
     background-color: var(--cor-destaque);
     color: #fff;
+    transform: scale(1.1);
 }
 
-/* --- Style for favorited items --- */
-.favorite-btn .favorited .material-icons {
+.product-card-icons .icon-btn .material-icons {
+    font-size: 1.4rem;
+}
+
+.favorited .material-icons {
   color: var(--cor-destaque);
-  font-weight: bold; /* Make the icon a bit bolder */
 }
 
-.product-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
+.product-card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card h3 {
-    font-size: 1.5rem;
-    margin: 0.5rem 1rem 1rem;
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
 }
 
 .product-card .price {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--cor-destaque);
-    margin: 0 1rem 1.5rem;
+    margin-bottom: 1.5rem;
 }
+
+.product-card .btn {
+    margin-top: auto; /* Pushes button to the bottom */
+}
+
 
 /* --- Page: Home - Product Categories --- */
 .product-categories {

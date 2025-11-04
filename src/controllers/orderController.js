@@ -194,12 +194,6 @@ export const payOrder = async (req, res) => {
 
     console.log('API Response:', apiRes);
 
-
-    // Se a API retornar uma URL de redirecionamento para pagamento
-    if (apiRes && apiRes.paymentUrl) {
-      return res.redirect(apiRes.paymentUrl);
-    }
-
     const pageOptions = {
       titulo: 'Confirmação de Pagamento',
       mensagem: 'Por favor, confirme seu pagamento abaixo.',

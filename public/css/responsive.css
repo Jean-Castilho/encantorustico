@@ -12,26 +12,53 @@
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 70px; /* Altura do header */
+        top: 0; /* Align to the top */
         flex-direction: column;
         background-color: var(--cor-primaria);
-        width: 100%;
+        width: 80%; /* Make it a sidebar */
+        max-width: 320px;
+        height: 100%;
         text-align: center;
-        transition: 0.3s;
-        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+        transition: left 0.3s ease; /* Animate left property */
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        align-items: flex-start; /* Align items to the left */
+        padding: 4rem 2rem;
+        z-index: 1001; /* Above overlay */
     }
 
     .nav-menu.active {
         left: 0;
     }
 
+    /* Overlay for the background */
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 1000;
+    }
+
+    .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
     .nav-item {
-        margin: 2.5rem 0;
+        margin: 1rem 0;
+        width: 100%;
+        text-align: left;
     }
 
     .hamburger {
         display: block;
         cursor: pointer;
+        z-index: 1002; /* Above menu and overlay */
     }
 
     .hamburger.active .bar:nth-child(2) {
@@ -44,6 +71,31 @@
 
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* --- Mobile Header Icons --- */
+    .header-icons-container {
+        margin-left: 0;
+        margin-top: 2rem;
+        border-top: 1px solid var(--cor-borda);
+        padding-top: 2rem;
+        width: 100%;
+    }
+
+    .header-icons {
+        flex-direction: column; /* Stack icons vertically */
+        gap: 1.5rem;
+        align-items: flex-start; /* Align to the left */
+    }
+
+    .header-icons .nav-link {
+        padding: 8px 0; /* Adjust padding */
+        border-radius: 0;
+        font-size: 1.2rem; /* Match other links */
+    }
+
+    .header-icons .nav-link:hover {
+        background-color: transparent;
     }
 
     h1 {

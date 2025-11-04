@@ -101,24 +101,27 @@
 
         <!-- Card do Produto -->
         <div class="product-card" data-categories="<%= productCategories %>">
-            <div class="product-card-icons">
-                <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>"
-                    data-product-id="<%= id %>">
-                    <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
+            <div class="product-image-container">
+                <a href="<%= productUrl %>" class="product-link">
+                    <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>"
+                        alt="<%= product.nome %>">
                 </a>
-                <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>"
-                    data-product-id="<%= id %>">
-                    <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
-                </a>
+                <div class="product-card-icons">
+                    <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>"
+                        data-product-id="<%= id %>">
+                        <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
+                    </a>
+                    <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>"
+                        data-product-id="<%= id %>">
+                        <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
+                    </a>
+                </div>
             </div>
-            <a href="<%= productUrl %>" class="product-link">
-                <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>"
-                    alt="<%= product.nome %>">
+            <div class="product-card-content">
                 <h3><%= product.nome %></h3>
                 <p class="price"><%= preco %></p>
-            </a>
-            <a href="<%= productUrl %>" class="btn btn-secundario btn-sm" style="margin-bottom: 20px;">Ver
-                Detalhes</a>
+                <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
+            </div>
         </div>
         <% }); %>
         <% } else { %>
