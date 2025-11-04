@@ -5,8 +5,7 @@ import {
   getLoginPage, getRegisterPage,
   getProfilePage,
   getFavoritesPage,
-  getCartPage, login, register, logout, changePasswordPage, forgotPassword
-} from "../controllers/authController.js";
+  getCartPage, login, register, logout, changePasswordPage, forgotPassword} from "../controllers/authController.js";
 import { addFavorite, removeFavorite, addCart, getProductByIdsCart, removeCart } from "../controllers/usersController.js";
 import { apiFetch } from "../utils/apiClient.js";
 
@@ -65,14 +64,16 @@ router.post("/contact", async (req, res) => {
 router.post("/sendCodforDelivery", async (req, res) => {
   const { number } = req.body;
 
-  const response = await apiFetch(`/watsapp/send-code`, {
-    method: 'PUT',
+  const response = await apiFetch(`/whatzapp/send-code`, {
+    method: 'POST',
     body: JSON.stringify({number}),
   });
 
-  console.log("nu,ber",email);
+  console.log("number: ",number);
 
 });
+
+
 
 router.post("/confirmDelivery", async (req, res) => {
   const { number, code } = req.body;

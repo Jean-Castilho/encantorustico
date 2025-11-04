@@ -1,4 +1,4 @@
- import { apiFetch } from '../utils/apiClient.js';
+import { apiFetch } from '../utils/apiClient.js';
 import dotenv from 'dotenv';
 import { getCartDetails } from '../services/cartService.js';
 import { validateOrderItems, buildOrderItems } from '../services/orderService.js';
@@ -21,54 +21,54 @@ const handleError = (res, error, page, data) => {
 };
 
 export const getCheckoutPage = async (req, res) => {
-    const pageOptions = {
-        titulo: 'Checkout - Encanto Rústico',
-        cart: { items: [] },
-        totalPrice: 0,
-        totalItems: 0,
-    };
+  const pageOptions = {
+    titulo: 'Checkout - Encanto Rústico',
+    cart: { items: [] },
+    totalPrice: 0,
+    totalItems: 0,
+  };
 
-    if (!req.session.user) {
-        return res.redirect('/login');
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  let { selectedItems } = req.query;
+
+  if (!selectedItems || selectedItems.length === 0) {
+    return res.redirect('/cart');
+  }
+
+  // Garante que selectedItems seja um array
+  if (!Array.isArray(selectedItems)) {
+    selectedItems = [selectedItems];
+  }
+
+  try {
+    const { items: allCartItems } = await getCartDetails(req.session.user.cart);
+
+    // Filtra os itens do carrinho para incluir apenas os selecionados
+    const selectedCartItems = allCartItems.filter(item => selectedItems.includes(item._id.toString()));
+
+    // Se, por algum motivo, nenhum item corresponder (ex: URL manipulada), volta ao carrinho
+    if (selectedCartItems.length === 0) {
+      return res.redirect('/cart');
     }
 
-    let { selectedItems } = req.query;
+    let totalPrice = 0;
+    let totalItems = 0;
+    selectedCartItems.forEach(item => {
+      totalPrice += (parseFloat(item.preco) || 0) * (parseInt(item.quantity, 10) || 0);
+      totalItems += parseInt(item.quantity, 10) || 0;
+    });
 
-    if (!selectedItems || selectedItems.length === 0) {
-        return res.redirect('/cart'); 
-    }
+    pageOptions.cart.items = selectedCartItems;
+    pageOptions.totalPrice = totalPrice;
+    pageOptions.totalItems = totalItems;
 
-    // Garante que selectedItems seja um array
-    if (!Array.isArray(selectedItems)) {
-        selectedItems = [selectedItems];
-    }
-
-    try {
-        const { items: allCartItems } = await getCartDetails(req.session.user.cart);
-
-        // Filtra os itens do carrinho para incluir apenas os selecionados
-        const selectedCartItems = allCartItems.filter(item => selectedItems.includes(item._id.toString()));
-
-        // Se, por algum motivo, nenhum item corresponder (ex: URL manipulada), volta ao carrinho
-        if (selectedCartItems.length === 0) {
-            return res.redirect('/cart');
-        }
-
-        let totalPrice = 0;
-        let totalItems = 0;
-        selectedCartItems.forEach(item => {
-            totalPrice += (parseFloat(item.preco) || 0) * (parseInt(item.quantity, 10) || 0);
-            totalItems += parseInt(item.quantity, 10) || 0;
-        });
-
-        pageOptions.cart.items = selectedCartItems;
-        pageOptions.totalPrice = totalPrice;
-        pageOptions.totalItems = totalItems;
-
-        renderPage(res, '../pages/public/checkout', { ...pageOptions, mensagem: 'Finalize sua compra aqui.' });
-    } catch (error) {
-        handleError(res, error, '../pages/public/checkout', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
-    }
+    renderPage(res, '../pages/public/checkout', { ...pageOptions, mensagem: 'Finalize sua compra aqui.' });
+  } catch (error) {
+    handleError(res, error, '../pages/public/checkout', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
+  }
 };
 
 export const getOrdersPage = async (req, res) => {
@@ -124,7 +124,7 @@ export const createOrder = async (req, res) => {
 
     const { endereco } = req.body;
 
-    const { _id, name, role } = req.session.user;
+    const { _id, name, role, telefone } = req.session.user;
 
     const payment_data = {
       description: 'Pagamento PIX - Encanto Rústico',
@@ -134,10 +134,11 @@ export const createOrder = async (req, res) => {
     const orderItems = buildOrderItems(req.body.items, validatedItems);
 
     let orderStatus;
+    let number = telefone.number;
     orderStatus = 'Pendente';
 
     const orderPayload = {
-      user: { id: _id, name, role },
+      user: { id: _id, name, role, number },
       items: orderItems,
       endereco: endereco,
       paymentMethod: payment_data,
@@ -190,6 +191,9 @@ export const payOrder = async (req, res) => {
 
     // Chama API para iniciar pagamento (endpoint hipotético)
     const apiRes = await apiFetch(`/orders/${id}/payment`, { method: 'PATCH' });;
+
+    console.log('API Response:', apiRes);
+
 
     // Se a API retornar uma URL de redirecionamento para pagamento
     if (apiRes && apiRes.paymentUrl) {

@@ -5,7 +5,6 @@
 
     <header class="page-header">
         <h1>Gerenciamento de Inventário</h1>
-        <p>Adicione, edite e acompanhe os detalhes dos produtos.</p>
     </header>
 
     <div class="inventory-container">
@@ -34,9 +33,9 @@
                                 !isNaN(Number(product.preco))) ? Number(product.preco) : null; const precoText=precoVal
                                 !==null ? precoVal.toLocaleString('pt-BR', { style: 'currency' , currency: 'BRL' })
                                 : 'Preço sob consulta' ; const estoque=(product.stock !=null) ? product.stock :
-                                (product.estoque !=null ? product.estoque : '—' ); const ativo=product.ativo=="true" ;
-                                const requerMontagem=product.requerMontagem==='on' || product.requerMontagem===true;
-                                const categoria=product.categoria || '—' ; %>
+                                (product.estoque != null ? product.estoque : '—' ); const ativo=product.ativo=="true" ;
+                                const requerMontagem = product.requerMontagem === "on" || product.requerMontagem === true;
+                                const categoria=product.categoria || '—'; %>
                                 <tr>
                                     <td>
                                         <img src="<%= imagem %>" alt="<%= nome %>" class="inventory-product-image">

@@ -134,7 +134,7 @@ export async function login(req, res) {
     handleAuthError(
       res,
       error,
-      '../pages/public/login',
+      '../pages/auth/login',
       'Login - Encanto Rústico',
       'Ocorreu um erro no servidor. Tente novamente mais tarde.'
     );
@@ -196,7 +196,7 @@ export const forgotPassword = async (req, res) => {
   try {
     await sendOtp(contact, send_method);
 
-    res.render('layout/main', {
+    return res.render('layout/main', {
       page: '../pages/auth/otpCode',
       titulo: 'Verificação de Código',
       mensagem: `Um código OTP foi enviado para ${contact}`,

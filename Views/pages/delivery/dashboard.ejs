@@ -142,8 +142,7 @@
     #selected-order-content {
         width: 100%;
         height: 40%;
-        ;
-        padding: 1.2rem;
+        padding: 0.25rem 0.7rem 0.7rem 0.7rem;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
@@ -159,24 +158,87 @@
         color: var(--cor-texto-secundario);
     }
 
+    #empty-state.hidden {
+        display: none;
+    }
+
     #empty-state .material-icons {
         font-size: 2.8rem;
         margin-bottom: 1rem;
         color: #ccc;
     }
 
-    #order-details-info h3 {
-        margin-top: 0;
-        font-size: 1.8rem;
-        color: var(--cor-texto-entrega);
-        margin-bottom: 1.5rem;
+    #order-details-info {
+        display: none;
+        width: 100%;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 70% 30%;
+        grid-template-areas:
+            "details-header details-confirmation"
+            "details-actions details-actions";
+        height: 100%;
     }
 
-    .info-grid {
+    #order-details-info.visible {
         display: grid;
-        grid-template-columns: 22% 25% auto;
+    }
+
+    .details-header {
+        grid-area: details-header;
+    }
+
+    .details-header h3 {
+        margin: 0 0 0.2rem 0;
+        font-size: 1.5rem;
+    }
+
+    .details-body {
+        display: grid;
+        grid-auto-columns: 50% 50%;
+        grid-template-rows: 50% 50%;
+        grid-template-areas:
+            "client status"
+            "endereco endereco";
+        /* flex-direction: column; */
+
         gap: 0.8rem;
-        margin-bottom: 1rem;
+        margin: 1rem;
+    }
+
+    .details-confirmation {
+        grid-area: details-confirmation;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        margin: 30px;
+        gap: 0.3rem
+    }
+
+    .details-confirmation input {
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .delivery-actions {
+        grid-area: details-actions;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        margin-top: auto;
+        padding: 1rem 0;
+        border-top: 1px solid var(--cor-borda-entrega);
+        border-bottom: 1px solid var(--cor-borda-entrega);
+    }
+
+    .delivery-actions #origin {
+        width: 200px;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-left: auto;
     }
 
     .info-item strong {
@@ -186,17 +248,8 @@
         font-weight: 600;
     }
 
-    .delivery-actions {
-        margin-top: auto;
-        align-items: center;
-        display: flex;
-        gap: 1rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--cor-borda-entrega);
-    }
-
     .btn {
-        padding: 0.8rem 1.5rem;
+        padding: 0.6rem 1.2rem;
         border-radius: 8px;
         font-weight: 600;
         text-transform: uppercase;
@@ -286,7 +339,7 @@
             <span class="material-icons" style="font-size: 5rem; color: #bbb;">map</span>
         </div>
 
-        
+
         <div id="selected-order-content">
             <div id="empty-state">
                 <span class="material-icons">list_alt</span>
@@ -294,45 +347,35 @@
             </div>
 
 
-            <div id="order-details-info" style="display: none;">
-                <h3>Detalhes do Pedido</h3>
-                <div class="info-grid">
-                    <div class="info-item" id="detail-client-name"></div>
-                    <div class="info-item" id="detail-address"></div>
-                    <!-- <div class="info-item" id="detail-distance"></div> -->
-
-
-                    <div style=" display: flex; align-items: center; justify-content: space-between; flex-direction: row;">
-
-
-                        <button type="button" class="btn btn-destaque" onclick="enviarCodigo()">
-                            Enviar Codigo de Entrega...
-                        </button>
-
-                        <input type="text" id="OtpToClient"
-                            style="width: 45%; margin-right: 10px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
-                            placeholder="codigo enviado ao usuário..">
-
-                        <button type="button" style="width: 55%;" class="btn btn-destaque" onclick="confirmarEntrega()">
-                            Confirmar Entrega
-                        </button>
-
+            <div id="order-details-info">
+                <div class="details-header">
+                    <h3>Detalhes do Pedido</h3>
+                    <div class="details-body">
+                        <div class="info-item" style="grid-area: client" id="detail-client-name"></div>
+                        <div class="info-item" style="grid-area: endereco" id="detail-address"></div>
+                        <div class="info-item" style="grid-area: status" id="detail-status"></div>
                     </div>
+                </div>
 
+                <div class="details-confirmation">
+                    <input type="number" name="number" id="number" value="" hidden>
+                    <button type="button" class="btn btn-destaque" onclick="enviarCodigo()">
+                        Enviar Codigo
+                    </button>
 
+                    <input type="text" id="OtpToClient" placeholder="Código do cliente" required>
+                    <button type="button" class="btn btn-destaque" onclick="confirmarEntrega()">
+                        Confirmar Entrega
+                    </button>
 
                 </div>
-                <div class="delivery-actions">
 
-                    <button type="button" class="btn btn-creatRota" onclick="tracarRota()">Traçar Rota</button>
+                <div class="delivery-actions">
+                    <button type="button" class="btn" onclick="tracarRota()">Traçar Rota</button>
                     <button class="btn btn-secundario" onclick="vernoMapa()">Ver no Mapa</button>
                     <button type="button" id="location-btn" class="btn btn-secundario"
                         onclick="toggleLocationTracking()">Obter Localização</button>
-                    <div style="margin-left: auto;" class="info-item">
-                        <strong>Minha Localização (Origem):</strong>
-                        <input type="text" id="origin"
-                            style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" readonly>
-                    </div>
+                    <input type="text" id="origin" placeholder="Minha Localização (Origem):" readonly>
                 </div>
             </div>
         </div>
@@ -517,33 +560,23 @@
             const cardElement = event.target.closest('.order-card');
             if (!cardElement) return;
 
-            // Remove a seleção de outros cartões;
             document.querySelectorAll('.order-card').forEach(card => card.classList.remove('selected'));
-            // Adiciona a seleção ao cartão clicado;
             cardElement.classList.add('selected');
 
-            // Esconde o estado de vazio e mostra os detalhes;
-            emptyState.style.display = 'none';
-            orderDetailsInfo.style.display = 'flex';
-            orderDetailsInfo.style.flexDirection = 'column';
-            orderDetailsInfo.style.flexGrow = '1';
+            emptyState.classList.add('hidden');
+            orderDetailsInfo.classList.add('visible');
 
-            console.log("elemento clicado:", cardElement);
-            // Preenche os detalhes;
             const orderData = JSON.parse(cardElement.dataset.order);
             document.getElementById('detail-client-name').innerHTML = `<strong>Cliente:</strong> ${orderData.user.name}`;
+            document.getElementById('number').value = orderData.user.number;
             document.getElementById('detail-address').innerHTML = `<strong>Endereço:</strong> ${orderData.endereco.rua}, ${orderData.endereco.numero}, ${orderData.endereco.bairro}`;
             document.getElementById('detail-status').innerHTML = `<strong>Status:</strong> <span class="order-status status-${orderData.status.toLowerCase().replace(' ', '-')}">${orderData.status}</span>`;
 
-            orderId = orderData._id;
             address_client = `${orderData.endereco.rua} - ${orderData.endereco.bairro}, ${orderData.endereco.cidade}, ${orderData.endereco.estado}, ${orderData.endereco.cep}`;
 
             console.log('Endereço do cliente:', address_client);
-
-            // Aqui você pode adicionar a lógica para o mapa e ações;
         });
 
-        // Lógica para o caso de não haver pedidos
         const orders = JSON.parse('<%- JSON.stringify(orders) %>');
         if (orders.length === 0) {
             emptyState.innerHTML = `
@@ -564,12 +597,10 @@
             return;
         }
 
-        // Limpa a rota anterior do mapa para focar apenas no ponto de destino
         if (directionsRenderer) {
             directionsRenderer.setDirections({ routes: [] });
         }
 
-        // Esconde o marcador de origem se ele estiver no mapa
         if (markerA) {
             markerA.setMap(null);
         }
@@ -599,10 +630,10 @@
 
 
 
-
-
     async function enviarCodigo() {
 
+        let number = document.getElementById('number').value;
+        console.log(number);
         const response = await fetch("/sendCodforDelivery", {
             method: 'POST',
             headers: {
@@ -610,13 +641,14 @@
             },
             body: JSON.stringify({ number })
         })
+
+
+
         const resCod = await response.json();
         console.log(resCod);
-
     }
 
     async function confirmarEntrega() {
-
         const confirmDeliverd = await fetch("/confirmDelivery", {
             method: 'POST',
             headers: {
@@ -625,13 +657,7 @@
             body: JSON.stringify({ number, code })
         })
         console.log(confirmDeliverd);
-
     }
-
-
-
-
-
 </script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&libraries=places&callback=initMap">

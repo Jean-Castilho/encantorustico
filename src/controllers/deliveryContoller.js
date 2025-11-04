@@ -30,7 +30,7 @@ export default class deliveryController {
             renderPage(res, '../pages/delivery/dashboard', { ...pageOptions, mensagem: 'Página de entrega é rota' });
         } catch (error) {
             console.error('Erro ao buscar pedidos para entrega:', error);
-            renderPage(res, '../pages/delivery/delivery', { ...pageOptions, mensagem: 'Erro ao carregar pedidos para entrega.' });
+            renderPage(res, '../pages/delivery/dashboard', { ...pageOptions, mensagem: 'Erro ao carregar pedidos para entrega.' });
         }
-    };
+    }; 
 }

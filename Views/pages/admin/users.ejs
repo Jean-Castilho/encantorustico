@@ -1,0 +1,75 @@
+<div class="container">
+    <link rel="stylesheet" href="/css/main.css">
+
+    <header class="page-header">
+        <h1>Gerenciamento de Usuários</h1>
+    </header>
+
+    <div class="inventory-container">
+
+        <% if (users && users.length > 0) { %>
+            <div class="inventory-table-container">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Tipo</th>
+                            <th>Data de Cadastro</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(user => { %>
+                            <% 
+                                const nome = user.name || 'Sem nome';
+                                const email = user.email.endereco || 'Sem email';
+                                const userType = user.userType || 'cliente';
+                                const isActive = user.isActive === true;
+                                const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-BR') : '—';
+                            %>
+                            <tr>
+                                <td><strong><%= nome %></strong></td>
+                                <td><%= email %></td>
+                                <td><%= userType %></td>
+                                <td><%= createdAt %></td>
+                                <td>
+                                    <% if (isActive) { %>
+                                        <span class="status-badge status-active">Ativo</span>
+                                    <% } else { %>
+                                        <span class="status-badge status-inactive">Inativo</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="/admin/users/edit/<%= user._id %>" class="btn btn-sm btn-secundario">Editar</a>
+                                        <form action="/admin/users/delete" method="post" onsubmit="return confirm('Confirma a exclusão deste usuário?');">
+                                            <input type="hidden" name="id" value="<%= user._id %>">
+                                            <button type="submit" class="btn btn-sm btn-remover">Excluir</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="inventory-actions">
+                <a href="/admin/users/add" class="btn btn-destaque">Adicionar Novo Usuário</a>
+            </div>
+
+        <% } else { %>
+
+            <div class="inventory-actions">
+                <a href="/admin/users/add" class="btn btn-destaque">Adicionar Novo Usuário</a>
+            </div>
+
+            <div class="alert alert-info">
+                Nenhum usuário encontrado. <a href="/admin/users/add">Adicione um novo usuário</a>.
+            </div>
+        <% } %>
+
+    </div>
+</div>

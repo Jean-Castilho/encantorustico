@@ -86,8 +86,6 @@ export const getOrdersPage = async (req, res) => {
     const ordernsEnviada = resApi.data.filter(order => order.status === 'shipped');
     pageOptions.ordernsEnviada = ordernsEnviada.length;
 
-
-
     pageOptions.orders = [...ordernsEnviada, ...ordernsApproved, ...ordernsDelivered]
 
     renderAdminPage(res, '../pages/admin/orders', { ...pageOptions });
@@ -97,9 +95,21 @@ export const getOrdersPage = async (req, res) => {
   }
 };
 
-export const getUsersPage = (req, res) => {
-  renderAdminPage(res, '../pages/admin/users', {
+export const getUsersPage = async (req, res) => {
+
+  const pageOptions = {
     titulo: 'Gerenciar Usuários',
-  });
+    users: [],
+  };
+
+  try {
+    const resApi = await apiFetch('/public/users',
+      { method: 'GET' }
+    );
+    const users = resApi.data;
+    renderAdminPage(res, '../pages/admin/users', { ...pageOptions, users });
+  } catch (error) {
+    handleError(res, error, '../pages/admin/users', pageOptions);
+  }
 };
 
