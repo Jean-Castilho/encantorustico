@@ -293,6 +293,53 @@
             max-height: 45vh;
         }
     }
+
+    @media (max-width: 768px) {
+        .delivery-dashboard {
+            padding: 1rem;
+        }
+
+        .orders-list-container {
+            max-height: 50vh;
+        }
+
+        #order-details-info {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "details-header"
+                "details-confirmation"
+                "details-actions";
+        }
+
+        .details-body {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "client"
+                "status"
+                "endereco";
+        }
+
+        .details-confirmation {
+            margin: 1rem 0;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .delivery-actions {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        .delivery-actions #origin {
+            width: 100%;
+            margin-left: 0;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="delivery-dashboard">
