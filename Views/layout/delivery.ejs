@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= titulo %></title>
+    <title>Entregador - <%= titulo %>
+    </title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/pages/delivery-dashboard.css">
+    <script src="/js/delivery-dashboard.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&callback=initMap&libraries=marker" async></script>
 
 </head>
 
-<body>
+<body class="delivery-page">
+
     <%- include('../partials/header') %>
 
-    <main>
-        <%- include(page) %>
-    </main>
+        <main>
+            <%- include(page) %>
+        </main>
 
-    <script>
-        const orders = <%- JSON.stringify(orders) %>
-    </script>
-    <script src="/js/delivery-dashboard.js"></script>
+        <script src="/js/main.js"></script>
+        
 </body>
 
 </html>

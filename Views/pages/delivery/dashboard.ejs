@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/pages/delivery-dashboard.css">
+
 <div class="delivery-dashboard">
 
     <!-- Coluna da Lista de Pedidos -->
@@ -24,10 +26,10 @@
                             <p class="order-address"> <strong>Endereço:</strong>
                                 <%= order.endereco.rua %>, <%= order.endereco.numero %>
 
-                                    <span
-                                        class="order-status status-<%= order.status.toLowerCase().replace(' ', '-') %>">
-                                    <%= order.status %>
-                                </span>
+                                        <span
+                                            class="order-status status-<%= order.status.toLowerCase().replace(' ', '-') %>">
+                                            <%= order.status %>
+                                        </span>
                             </p>
 
                         </div>
@@ -62,22 +64,21 @@
 
                 <div class="details-confirmation">
                     <input type="number" name="number" id="number" value="" hidden>
-                    <button type="button" class="btn btn-destaque" onclick="enviarCodigo()">
+                    <button type="button" id="send-code-btn" class="btn btn-destaque">
                         Enviar Codigo
                     </button>
 
                     <input type="text" id="OtpToClient" placeholder="Código do cliente" required>
-                    <button type="button" class="btn btn-destaque" onclick="confirmarEntrega()">
+                    <button type="button" id="confirm-delivery-btn" class="btn btn-destaque">
                         Confirmar Entrega
                     </button>
 
                 </div>
 
                 <div class="delivery-actions">
-                    <button type="button" class="btn" onclick="tracarRota()">Traçar Rota</button>
-                    <button class="btn btn-secundario" onclick="vernoMapa()">Ver no Mapa</button>
-                    <button type="button" id="location-btn" class="btn btn-secundario"
-                        onclick="toggleLocationTracking()">Obter Localização</button>
+                    <button type="button" id="trace-route-btn" class="btn">Traçar Rota</button>
+                    <button type="button" id="view-on-map-btn" class="btn btn-secundario">Ver no Mapa</button>
+                    <button type="button" id="location-btn" class="btn btn-secundario">Obter Localização</button>
                     <input type="text" id="origin" placeholder="Minha Localização (Origem):" readonly>
                 </div>
             </div>

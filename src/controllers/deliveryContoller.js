@@ -12,11 +12,16 @@ const renderPage = (res, page, options = {}) => {
 export default class deliveryController {
 
     getDeliveryPage = async (req, res) => {
+
+
+        res.locals.layout = "./layout/delivery";
+
         const pageOptions = {
             titulo: 'Página de Entrega',
             mensagem: 'Página de entrega é rota',
             apiKey: process.env.GOOGLE_MAPS_API_KEY,
             orders: [],
+            pageIdentifier: 'delivery',
         };
 
         try {
@@ -32,5 +37,5 @@ export default class deliveryController {
             console.error('Erro ao buscar pedidos para entrega:', error);
             renderPage(res, '../pages/delivery/dashboard', { ...pageOptions, mensagem: 'Erro ao carregar pedidos para entrega.' });
         }
-    }; 
+    };
 }
