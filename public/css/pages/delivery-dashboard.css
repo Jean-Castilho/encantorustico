@@ -154,7 +154,6 @@
     width: 100%;
     height: 40%;
     padding: 0.25rem 0.7rem 0.7rem 0.7rem;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
@@ -187,7 +186,6 @@
     grid-template-areas:
         "details-header details-confirmation"
         "details-actions details-actions";
-    height: 100%;
 }
 
 #order-details-info.visible {
@@ -308,7 +306,6 @@
 @media (max-width: 1200px) {
     .delivery-dashboard {
         grid-template-columns: 1fr;
-        height: auto;
         padding: 1.5rem;
     }
 
@@ -318,16 +315,35 @@
 }
 
 @media (max-width: 768px) {
+
     .delivery-dashboard {
+        height: auto;
         padding: 1rem;
+
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    #map-placeholder {
+        height: 70vh;
     }
 
     .orders-list-container {
-        max-height: 50vh;
+        max-height: 870px;
+
+    }
+
+    #selected-order-content {
+        height: auto;
+    }
+
+    .selected-order-container {
+        height: auto;
     }
 
     #order-details-info {
         grid-template-columns: 1fr;
+        grid-template-rows: 240px 120px 200px;
         grid-template-areas:
             "details-header"
             "details-confirmation"
@@ -335,6 +351,8 @@
     }
 
     .details-body {
+
+        height: 90px;
         grid-template-columns: 1fr;
         grid-template-areas:
             "client"
