@@ -7,6 +7,7 @@
     <title><%= titulo %></title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/pages/delivery-dashboard.css">
 
 </head>
 
@@ -17,6 +18,10 @@
         <%- include(page) %>
     </main>
 
+    <script>
+        const orders = <%- JSON.stringify(orders) %>;
+    </script>
+    <script src="/js/delivery-dashboard.js"></script>
 </body>
 
 </html>
