@@ -21,13 +21,13 @@
                                 <%= order.user.name %>
                             </p>
                             <p><strong>Distância:</strong> 5.2km</p>
-                            <p style="display: flex; justify-content: flex-start;"> <strong>Endereço:</strong>
+                            <p class="order-address"> <strong>Endereço:</strong>
                                 <%= order.endereco.rua %>, <%= order.endereco.numero %>
 
-                                        <span style="margin-left: 30px;"
-                                            class="order-status status-<%= order.status.toLowerCase().replace(' ', '-') %>">
-                                            <%= order.status %>
-                                        </span>
+                                    <span
+                                        class="order-status status-<%= order.status.toLowerCase().replace(' ', '-') %>">
+                                    <%= order.status %>
+                                </span>
                             </p>
 
                         </div>
@@ -39,7 +39,7 @@
     <!-- Coluna de Detalhes do Pedido Selecionado -->
     <div class="selected-order-container">
         <div id="map-placeholder">
-            <span class="material-icons" style="font-size: 5rem; color: #bbb;">map</span>
+            <span class="material-icons map-icon">map</span>
         </div>
 
 
@@ -54,9 +54,9 @@
                 <div class="details-header">
                     <h3>Detalhes do Pedido</h3>
                     <div class="details-body">
-                        <div class="info-item" style="grid-area: client" id="detail-client-name"></div>
-                        <div class="info-item" style="grid-area: endereco" id="detail-address"></div>
-                        <div class="info-item" style="grid-area: status" id="detail-status"></div>
+                        <div class="info-item client-info" id="detail-client-name"></div>
+                        <div class="info-item address-info" id="detail-address"></div>
+                        <div class="info-item status-info" id="detail-status"></div>
                     </div>
                 </div>
 
