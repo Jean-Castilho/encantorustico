@@ -2,7 +2,7 @@
 .cart-item {
     display: grid;
     grid-template-columns: 40px 150px auto 200px;
-    gap:  1.5rem;
+    gap: 1.5rem;
     align-items: center;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
@@ -48,4 +48,21 @@
 .cart-summary strong {
     font-size: 1.5rem;
     color: var(--cor-secundaria);
+}
+
+.cart-content {
+    display: flex;
+    align-items: start;
+    flex-direction: row;
+    gap: 2.5rem;
+}
+
+.cart-item-column{
+    
+}
+
+@media (max-width: 992px) {
+    .cart-content {
+        flex-direction: column;
+    }
 }

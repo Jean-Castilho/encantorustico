@@ -22,7 +22,7 @@
         transition: left 0.3s ease; /* Animate left property */
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         align-items: flex-start; /* Align items to the left */
-        padding: 4rem 2rem;
+        padding: 2rem 2rem;
         z-index: 1001; /* Above overlay */
     }
 
@@ -76,9 +76,9 @@
     /* --- Mobile Header Icons --- */
     .header-icons-container {
         margin-left: 0;
-        margin-top: 2rem;
+        margin-top: 0.1rem;
         border-top: 1px solid var(--cor-borda);
-        padding-top: 2rem;
+        padding-top: 0.2rem;
         width: 100%;
     }
 
