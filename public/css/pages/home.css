@@ -32,19 +32,24 @@
 .product-grid,
 .favorites-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjusted minmax */
-    gap: 2rem; /* Reduced gap */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* Adjusted minmax */
+    gap: 2rem;
+    /* Reduced gap */
     max-width: 1200px;
     margin: 0 auto;
+    justify-items: center;
 }
 
 .product-card {
+    max-width: 290px;
     background-color: #fff;
     border: 1px solid var(--cor-borda);
     border-radius: var(--borda-radius);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: left; /* Align text to the left */
+    text-align: left;
+    /* Align text to the left */
     display: flex;
     flex-direction: column;
 }
@@ -61,8 +66,10 @@
 
 .product-card img {
     width: 100%;
-    height: auto; /* Changed from 250px */
-    object-fit: contain; /* Changed from cover */
+    height: auto;
+    /* Changed from 250px */
+    object-fit: contain;
+    /* Changed from cover */
     transition: transform 0.4s ease;
 }
 
@@ -75,7 +82,8 @@
     top: 1rem;
     right: 1rem;
     display: flex;
-    flex-direction: column; /* Stack icons vertically */
+    flex-direction: column;
+    /* Stack icons vertically */
     gap: 0.8rem;
 }
 
@@ -103,7 +111,7 @@
 }
 
 .favorited .material-icons {
-  color: var(--cor-destaque);
+    color: var(--cor-destaque);
 }
 
 .product-card-content {
@@ -127,7 +135,8 @@
 }
 
 .product-card .btn {
-    margin-top: auto; /* Pushes button to the bottom */
+    margin-top: auto;
+    /* Pushes button to the bottom */
 }
 
 

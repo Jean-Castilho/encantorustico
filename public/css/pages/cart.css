@@ -1,6 +1,7 @@
 /* --- Page: Cart --- */
 .cart-item {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
     align-items: center;
     margin-bottom: 2rem;
@@ -13,8 +14,8 @@
 }
 
 .cart-item img {
-    width: 120px;
-    height: 120px;
+    width: 105px;
+    height: 105px;
     object-fit: cover;
     border-radius: var(--borda-radius);
 }
@@ -54,17 +55,4 @@
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    gap: 2.5rem;
-}
-
-
-@media (max-width: 992px) {
-    .cart-item h3{
-        font-size: 1.2rem;
-    }
-
-    
-    .cart-content {
-        flex-direction: column;
-    }
 }

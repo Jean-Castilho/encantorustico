@@ -302,17 +302,7 @@
     border-color: #bbb;
 }
 
-/* --- Responsiveness --- */
-@media (max-width: 1200px) {
-    .delivery-dashboard {
-        grid-template-columns: 1fr;
-        padding: 1.5rem;
-    }
 
-    .orders-list-container {
-        max-height: 45vh;
-    }
-}
 
 @media (max-width: 768px) {
 
