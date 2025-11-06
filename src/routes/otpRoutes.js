@@ -4,6 +4,6 @@ import { verifyOtp, resendOtp } from "../controllers/otpController.js";
 const router = express.Router();
 
 router.post("/verify-otp", verifyOtp);
-router.post("/resend-otp", resendOtp);
+router.get("/resend-otp/:contact", resendOtp);
 
 export default router;

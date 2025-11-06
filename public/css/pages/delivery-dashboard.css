@@ -10,10 +10,10 @@
 }
 
 .delivery-dashboard {
-    display: grid;
+    display: flex;
+    justify-content: space-evenly;
     width: 100%;
-    height: calc(100vh - 86px);
-    grid-template-columns: 350px 1fr;
+    height: calc(100vh - 100px);
     gap: 1rem;
     padding: 1rem;
     background-color: var(--cor-primaria-entrega);
@@ -25,6 +25,7 @@
     background-color: var(--cor-secundaria-entrega);
     border-radius: var(--borda-radius);
     box-shadow: var(--sombra-padrao);
+    width: 28%;
     padding: 1.5em;
     overflow-y: auto;
     transition: box-shadow 0.3s ease;
@@ -126,6 +127,7 @@
 
 /* --- Selected Order Details --- */
 .selected-order-container {
+    width: 67%;
     background-color: var(--cor-secundaria-entrega);
     border-radius: var(--borda-radius);
     box-shadow: var(--sombra-padrao);
@@ -249,9 +251,8 @@
     gap: 1rem;
     align-items: center;
     margin-top: auto;
-    padding: 1rem 0;
+    padding-top: 1rem;
     border-top: 1px solid var(--cor-borda-entrega);
-    border-bottom: 1px solid var(--cor-borda-entrega);
 }
 
 .delivery-actions #origin {
@@ -304,14 +305,12 @@
 
 
 
-@media (max-width: 768px) {
+@media (max-width: 990px) {
 
     .delivery-dashboard {
-        height: auto;
         padding: 1rem;
-
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
+        height: auto;
+        flex-direction: column-reverse;
     }
 
     #map-placeholder {
@@ -319,7 +318,8 @@
     }
 
     .orders-list-container {
-        max-height: 870px;
+        max-height: 770px;
+        width: 100%;
 
     }
 
@@ -329,6 +329,7 @@
 
     .selected-order-container {
         height: auto;
+        width: 100%;
     }
 
     #order-details-info {

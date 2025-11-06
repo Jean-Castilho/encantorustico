@@ -23,11 +23,12 @@ export const sendOtp = async (contact, method) => {
 };
 
 export const resendOtp = async (req, res) => {
-    const { contact } = req.body;
+    const { contact } = req.params;
     const method = isEmail(contact) ? 'email' : 'sms';
 
     try {
         await sendOtp(contact, method);
+        
         res.render('layout/main', {
             page: '../pages/auth/otpCode',
             titulo: 'Verificação de Código',

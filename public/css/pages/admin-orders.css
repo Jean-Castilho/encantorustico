@@ -1,6 +1,7 @@
 /* --- Page: Admin Orders --- */
 .orders-admin-container {
     font-family: var(--fonte-corpo);
+    width: -webkit-fill-available;
     padding: 2rem;
     background-color: #f8f9fa;
 }
