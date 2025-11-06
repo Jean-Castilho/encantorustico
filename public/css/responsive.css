@@ -4,7 +4,8 @@
     }
 
     .search-bar {
-        display: none; /* Oculta a barra de pesquisa principal */
+        display: none;
+        /* Oculta a barra de pesquisa principal */
     }
 }
 
@@ -12,18 +13,23 @@
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 0; /* Align to the top */
+        top: 0;
+        /* Align to the top */
         flex-direction: column;
         background-color: var(--cor-primaria);
-        width: 80%; /* Make it a sidebar */
+        width: 80%;
+        /* Make it a sidebar */
         max-width: 320px;
         height: 100%;
         text-align: center;
-        transition: left 0.3s ease; /* Animate left property */
+        transition: left 0.3s ease;
+        /* Animate left property */
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        align-items: flex-start; /* Align items to the left */
+        align-items: flex-start;
+        /* Align items to the left */
         padding: 2rem 2rem;
-        z-index: 1001; /* Above overlay */
+        z-index: 1001;
+        /* Above overlay */
     }
 
     .nav-menu.active {
@@ -58,7 +64,8 @@
     .hamburger {
         display: block;
         cursor: pointer;
-        z-index: 1002; /* Above menu and overlay */
+        z-index: 1002;
+        /* Above menu and overlay */
     }
 
     .hamburger.active .bar:nth-child(2) {
@@ -83,15 +90,19 @@
     }
 
     .header-icons {
-        flex-direction: column; /* Stack icons vertically */
+        flex-direction: column;
+        /* Stack icons vertically */
         gap: 1.5rem;
-        align-items: flex-start; /* Align to the left */
+        align-items: flex-start;
+        /* Align to the left */
     }
 
     .header-icons .nav-link {
-        padding: 8px 0; /* Adjust padding */
+        padding: 8px 0;
+        /* Adjust padding */
         border-radius: 0;
-        font-size: 1.2rem; /* Match other links */
+        font-size: 1.2rem;
+        /* Match other links */
     }
 
     .header-icons .nav-link:hover {
@@ -111,7 +122,6 @@
     }
 
     .cart-item {
-        grid-template-columns: 100px 1fr;
         gap: 1rem;
     }
 
@@ -160,6 +170,23 @@
         grid-template-columns: 1fr;
         /* Stack categories on smaller screens */
     }
+
+    .card-icon .material-icons {
+        font-size: 1.4rem;
+    }
+
+    .dashboard-card {
+        width: 200px;
+        height: 200px;
+    }
+
+    .card-icon {
+        margin: none;
+    }
+
+    .card-content h3 {
+        font-size: 1.1rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -206,4 +233,21 @@
         width: 60px;
         height: 60px;
     }
+    
+    .dashboard-card {
+        width: 200px;
+        height: 200px;
+    }
+
+    
+    .card-icon {
+        margin: none;
+    }
+
+    
+    .card-content h3 {
+        font-size: 1.1rem;
+    }
+
+
 }
