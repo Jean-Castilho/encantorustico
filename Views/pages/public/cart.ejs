@@ -23,9 +23,10 @@
                                 <div class="cart-item" data-item-id="<%= item._id %>"
                                     data-item-price="<%= item.preco %>" data-item-quantity="<%= item.quantity %>">
 
-                                    
+
                                     <input type="checkbox" name="selectedItems" value="<%= item._id %>"
-                                        class="item-checkbox" checked style="width: fit-content; transform: scale(1.5);">
+                                        class="item-checkbox" checked
+                                        style="width: fit-content; transform: scale(1.5);">
 
 
                                     <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>">
@@ -35,7 +36,8 @@
                                         </h3>
                                         <p><strong>R$ <%= (parseFloat(item.preco)) %></strong></p>
                                     </div>
-                                    <button class="btn btn-remover" data-product-id="<%= id %>">Remover</button>
+                                    <button class="btn btn-remover" style="font-size:0.8rem; width: -webkit-fill-available;"
+                                        data-product-id="<%= id %>">Remover</button>
                                 </div>
                                 <% }); %>
                     </section>

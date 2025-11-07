@@ -164,20 +164,21 @@
                     <div class="form-group">
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <label for="email" class="form-label" style="margin-bottom: 0;">Endereço de E-mail</label>
+                            <label for="email" class="form-label" style="margin-bottom: 0;">E-mail</label>
                             <% if (session.user.email && session.user.email.verified) { %>
                                 <span class="verification-badge verified">
                                     <i class="material-icons">check_circle</i> Verificado
                                 </span>
                                 <% } else if (session.user.email) { %>
                                     <span class="verification-badge not-verified">
-                                        <i class="material-icons">warning</i> Não verificado
-                                        <a href="/resend-otp/<%= session.user.email.endereco %>"
-                                            class="verify-link">(Verificar agora)</a>
+                                        <i class="material-icons">warning</i>
+                                        <a href="/resend-otp/<%= session.user.email.endereco %>" style="color: #e65100;">
+                                            (Verificar agora)</a>
                                     </span>
                                     <% } %>
                         </div>
-                        <input type="email" id="email" name="email" class="form-control" value="<%= session.user.email.endereco %>">
+                        <input type="email" id="email" name="email" class="form-control"
+                            value="<%= session.user.email.endereco %>">
                     </div>
 
                     <div class="form-group">
@@ -190,8 +191,8 @@
                                 </span>
                                 <% } else if (session.user.telefone && session.user.telefone.number) { %>
                                     <span class="verification-badge not-verified">
-                                        <i class="material-icons">warning</i> Não verificado
-                                        <a href="/send-sms-otp?phone=<%= session.user.telefone.number %>"
+                                        <i class="material-icons">warning</i>
+                                        <a href="/send-sms-otp?phone=<%= session.user.telefone.number %>" style="color: #e65100;"
                                             class="verify-link">(Verificar agora)</a>
                                     </span>
                                     <% } %>

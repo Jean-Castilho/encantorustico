@@ -133,10 +133,8 @@
 
     .header-icons .nav-link {
         padding: 8px 0;
-        /* Adjust padding */
         border-radius: 0;
-        font-size: 1.35rem;
-        /* Match other links */
+        font-size: 1.5rem;
     }
 
     .header-icons .nav-link:hover {
@@ -192,11 +190,11 @@
     }
 
     .product-title {
-        font-size: 2em;
+        font-size: 1.8rem;
     }
 
     .product-price {
-        font-size: 1.8em;
+        font-size: 1.6rem;
     }
 
     .add-to-cart-btn {
@@ -210,7 +208,7 @@
     }
 
     .card-icon .material-icons {
-        font-size: 1.4rem;
+        font-size: 2.5rem;
     }
 
     .dashboard-card {
@@ -256,8 +254,8 @@
     }
 
     .btn {
-        width: 100%;
-        padding: 15px;
+        font-size: 0.8rem;
+        padding: 10px 16px;
     }
 
     .product-grid,

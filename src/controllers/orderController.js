@@ -105,19 +105,6 @@ export const getOrdersPage = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const createOrder = async (req, res) => {
   try {
     const validatedItems = await validateOrderItems(req.body.items);
@@ -135,7 +122,7 @@ export const createOrder = async (req, res) => {
 
     let orderStatus;
     let number = telefone.number;
-    orderStatus = 'Pendente';
+    orderStatus = 'pending';
 
     const orderPayload = {
       user: { id: _id, name, role, number },
@@ -215,7 +202,7 @@ export const cancelOrder = async (req, res) => {
     const orderId = req.params.id;
     if (!orderId) return res.status(400).send('Order id missing');
 
-    const apiRes = await apiFetch(`/orders/${orderId}/cancel`, { method: 'POST' });
+    const apiRes = await apiFetch(`/orders/${orderId}/cancel`, { method: 'PUT' });
 
     // redireciona ao histórico de pedidos
     req.session.message = apiRes.message || 'Pedido cancelado.';

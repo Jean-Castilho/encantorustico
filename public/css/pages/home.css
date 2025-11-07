@@ -102,8 +102,7 @@
 }
 
 .product-card-icons .icon-btn:hover {
-    background-color: var(--cor-destaque);
-    color: #fff;
+    color: var(--cor-destaque);
     transform: scale(1.1);
 }
 

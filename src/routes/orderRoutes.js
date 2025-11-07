@@ -2,7 +2,8 @@ import { Router } from 'express';
 import {
     createOrder,
     getOrdersPage,
-    payOrder
+    payOrder,
+    cancelOrder,
 } from '../controllers/orderController.js';
 
 const router = Router();
@@ -22,7 +23,7 @@ router.get('/pay/:id', async (req, res, next) => {
 });
 
 // Cancelar pedido;
-router.post('/cancel/:id', async (req, res, next) => {
+router.get('/cancel/:id', async (req, res, next) => {
     try {
         const { cancelOrder } = await import('../controllers/orderController.js');
         return cancelOrder(req, res, next);
