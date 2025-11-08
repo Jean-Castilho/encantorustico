@@ -3,7 +3,7 @@
  * @file Gerencia a interatividade do painel de controle de entregas, 
  * incluindo a seleção de pedidos, a exibição de detalhes e a integração 
  * com o mapa para visualização e rastreamento de rotas.
- * @author Jean Carlos
+ * @author Jean Castilho
  */
 
 /**
@@ -279,6 +279,9 @@ class DeliveryDashboard {
         });
     }
 
+
+    
+
     async enviarCodigo() {
         const number = document.getElementById('number').value;
         try {
@@ -309,4 +312,7 @@ class DeliveryDashboard {
             console.error('Erro ao confirmar entrega:', error);
         }
     }
+
+
+
 }

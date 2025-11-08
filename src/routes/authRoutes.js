@@ -5,7 +5,8 @@ import {
   getLoginPage, getRegisterPage,
   getProfilePage,
   getFavoritesPage,
-  getCartPage, login, register, logout, changePasswordPage, forgotPassword} from "../controllers/authController.js";
+  getCartPage, login, register, logout, changePasswordPage, forgotPassword
+} from "../controllers/authController.js";
 import { addFavorite, removeFavorite, addCart, getProductByIdsCart, removeCart } from "../controllers/usersController.js";
 import { apiFetch } from "../utils/apiClient.js";
 
@@ -35,13 +36,6 @@ router.post("/cart/add/:id", addCart);
 router.get('/cart/products', getProductByIdsCart);
 router.post("/cart/remove/:id", removeCart);
 
-
-
-
-
-
-
-
 router.post("/contact", async (req, res) => {
   const { email, subject, message } = req.body;
 
@@ -62,29 +56,32 @@ router.post("/contact", async (req, res) => {
 
 
 router.post("/sendCodforDelivery", async (req, res) => {
+
   const { number } = req.body;
 
-  const response = await apiFetch(`/whatzapp/send-code`, {
+  console.log("number: ", number);
+
+  return await apiFetch(`/whatzapp/send-code`, {
     method: 'POST',
-    body: JSON.stringify({number}),
+    body: JSON.stringify({ number }),
   });
 
-  console.log("number: ",number);
-
 });
-
-
 
 router.post("/confirmDelivery", async (req, res) => {
   const { number, code } = req.body;
 
-  const response = await apiFetch(`/verifyCode`, {
+  return await apiFetch(`/verifyCode`, {
     method: 'PUT',
     body: JSON.stringify({ status: 'shipped' }),
   });
 
   return { messagem: "produto saiu para entrega" }
 });
+
+
+
+
 
 
 
