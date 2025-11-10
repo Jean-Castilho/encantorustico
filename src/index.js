@@ -1,10 +1,10 @@
 
-import pagesRoutes from './pagesRoutes.js';
-import authRoutes from './authRoutes.js';
-import adminRouter from './adminRouter.js';
-import orderRoutes from './orderRoutes.js';
-import otpRoutes from './otpRoutes.js';
-import deliveryRouter from './deliveryRouter.js';
+import pagesRoutes from './routes/pagesRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import adminRouter from './routes/adminRouter.js';
+import orderRoutes from './routes/orderRoutes.js';
+import otpRoutes from './routes/otpRoutes.js';
+import deliveryRouter from './routes/deliveryRouter.js';
 
 
 /**

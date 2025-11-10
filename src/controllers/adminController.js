@@ -15,8 +15,9 @@ export const getAdminDashboard = async (req, res) => {
     return res.redirect('/login');
   }
 
-  const resApiUsers = await apiFetch('/public/users',{
-    method: 'GET'}
+  const resApiUsers = await apiFetch('/public/users', {
+    method: 'GET'
+  }
   );
   const users = resApiUsers.data;
 
@@ -30,7 +31,7 @@ export const getAdminDashboard = async (req, res) => {
   const ordernsApproved = resApiOrders.data.filter(order => order.status === 'approved');
   const totalPriceApproved = parseFloat(ordernsApproved.reduce((total, order) => total + order.valor, 0).toFixed(3));
 
-  
+
 
   renderAdminPage(res, '../pages/admin/dashboard', {
     titulo: 'Dashboard',
@@ -111,5 +112,23 @@ export const getUsersPage = async (req, res) => {
   } catch (error) {
     handleError(res, error, '../pages/admin/users', pageOptions);
   }
+};
+
+export const getEditUserPage = async (req, res) => {
+  const { id } = req.params;
+
+  const pageOptions = {
+    titulo: 'Editar Usuário',
+    user: null,
+  };
+
+  try {
+    const resApi = await apiFetch(`/public/${id}`, { method: 'GET' });
+    const user = resApi.data;
+    renderAdminPage(res, '../pages/admin/editUser', { ...pageOptions, user });
+  } catch (error) {
+    handleError(res, error, '../pages/admin/editUser', pageOptions);
+  }
+  
 };
 

@@ -1,7 +1,7 @@
 import { apiFetch } from '../utils/apiClient.js';
 import { getCartDetails } from '../services/cartService.js';
 
-// Helper Functions
+// Helper Functions;
 
 const normalizeProducts = (data) => {
   let products = [];

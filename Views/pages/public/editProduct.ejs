@@ -50,7 +50,7 @@
                 <div class="form-group">
                     <label class="form-label">Requer montagem</label>
                     <div>
-                        <label><input type="checkbox" name="requerMontagem" value="on" <%= requerMontagemChecked %> /> Sim</label>
+                        <label><input type="checkbox" name="requerMontagem" value="on" <%= requerMontagemChecked %> /> Sim </label>
                     </div>
                 </div>
 
@@ -136,15 +136,17 @@
     // Garantir que checkboxes representem corretamente os valores vindos do servidor
     (function syncCheckboxes(){
         try{
+            
             const reqChk = document.querySelector('input[name="requerMontagem"]');
             if (reqChk) {
                 const val = '<%= product.requerMontagem %>';
-                reqChk.checked = (val === 'on' || val === 'true' || val === '1' || val === true);
+                reqChk.checked = (val === 'on' || val === 'true' || val === true);
             }
+
             const ativoChk = document.querySelector('input[name="ativo"]');
             if (ativoChk) {
                 const val2 = '<%= product.ativo %>';
-                ativoChk.checked = (val2 === 'true' || val2 === true || val2 === '1');
+                ativoChk.checked = (val2 === 'true' || val2 === true);
             }
         }catch(e){/* noop */}
     })();

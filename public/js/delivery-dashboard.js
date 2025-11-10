@@ -34,6 +34,7 @@ class DeliveryDashboard {
         this.locationBtn = document.getElementById('location-btn');
         this.sendCodeBtn = document.getElementById('send-code-btn');
         this.confirmDeliveryBtn = document.getElementById('confirm-delivery-btn');
+        this.otpSection = this.confirmDeliveryBtn.parentElement;
         this.traceRouteBtn = document.getElementById('trace-route-btn');
         this.viewOnMapBtn = document.getElementById('view-on-map-btn');
     }
@@ -116,11 +117,34 @@ class DeliveryDashboard {
      * Atualiza a seção de detalhes do pedido com as informações do pedido selecionado.
      * @param {object} orderData - Os dados do pedido.
      */
+
     updateOrderDetails(orderData) {
         document.getElementById('detail-client-name').innerHTML = `<strong>Cliente:</strong> ${orderData.user.name}`;
         document.getElementById('number').value = orderData.user.number;
         document.getElementById('detail-address').innerHTML = `<strong>Endereço:</strong> ${orderData.endereco.rua}, ${orderData.endereco.numero}, ${orderData.endereco.bairro}`;
         document.getElementById('detail-status').innerHTML = `<strong>Status:</strong> <span class="order-status status-${orderData.status.toLowerCase().replace(' ', '-')}">${orderData.status}</span>`;
+    
+        const deliveryConfirmationSection = this.sendCodeBtn.closest('.details-confirmation');
+        let confirmedMessage = document.getElementById('delivery-confirmed-message');
+        
+        if (!confirmedMessage) {
+            confirmedMessage = document.createElement('div');
+            confirmedMessage.id = 'delivery-confirmed-message';
+            confirmedMessage.style.display = 'none';
+            confirmedMessage.classList.add('info-item'); 
+            deliveryConfirmationSection.appendChild(confirmedMessage);
+        }
+
+        if (orderData.status.toLowerCase() === 'entregue') {
+            this.sendCodeBtn.style.display = 'none';
+            this.otpSection.style.display = 'none';
+            confirmedMessage.innerHTML = '<strong>Entrega já foi confirmada.</strong>';
+            confirmedMessage.style.display = 'block';
+        } else {
+            this.sendCodeBtn.style.display = 'block';
+            this.otpSection.style.display = 'none';
+            confirmedMessage.style.display = 'none';
+        }
     }
 
     /**
@@ -279,21 +303,37 @@ class DeliveryDashboard {
         });
     }
 
-
-    
-
     async enviarCodigo() {
         const number = document.getElementById('number').value;
+        if (!number) {
+            alert('Por favor, selecione um pedido antes de enviar o código.');
+            return;
+        }
+
+        this.sendCodeBtn.disabled = true;
+        this.sendCodeBtn.textContent = 'Enviando...';
+
         try {
             const response = await fetch("/sendCodforDelivery", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ number })
             });
-            const resCod = await response.json();
-            console.log(resCod);
+
+            if (response.ok) {
+                this.sendCodeBtn.style.display = 'none';
+                this.otpSection.style.display = 'block';
+                alert('Código de confirmação enviado para o cliente!');
+            } else {
+                const resCod = await response.json();
+                alert(`Erro ao enviar código: ${resCod.message || 'Erro desconhecido.'}`);
+            }
         } catch (error) {
             console.error('Erro ao enviar código:', error);
+            alert('Não foi possível conectar ao servidor para enviar o código. Tente novamente.');
+        } finally {
+            this.sendCodeBtn.disabled = false;
+            this.sendCodeBtn.textContent = 'Enviar Codigo';
         }
     }
 

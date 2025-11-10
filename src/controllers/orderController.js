@@ -159,7 +159,10 @@ export const createOrder = async (req, res) => {
       qr_code_base64: apiResponse.data.paymentMethod.payment.qr_code_base64
     };
 
-    renderPage(res, '../pages/public/payment-confirmation', { ...pageOptions });
+    return res.render('layout/main', {
+      page: '../pages/public/payment-confirmation',
+      ...pageOptions,
+    });
 
   } catch (error) {
     console.error('Erro ao criar o pedido:', error);

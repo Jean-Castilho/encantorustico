@@ -114,3 +114,24 @@ export const getProductByIdsCart = async (req, res) => {
         });
     }
 };
+
+export const updateUser = async (req, res) => {
+    const { id } = req.params;
+    const { name, email, userType } = req.body;
+
+    try {
+        const resApi = await apiFetch(`/public/users/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ name, email, userType }),
+        });
+
+        if (resApi.success) {
+            res.json({ success: true, message: 'Usuário atualizado com sucesso!' });
+        } else {
+            res.status(resApi.status || 500).json({ success: false, message: resApi.message || 'Erro ao atualizar usuário.' });
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar usuário:', error.message);
+        res.status(error.status || 500).json({ success: false, message: error.message || 'Erro interno do servidor' });
+    }
+};

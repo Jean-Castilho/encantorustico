@@ -25,7 +25,8 @@ import {
     getAdminDashboard,
     getInventoryPage,
     getOrdersPage,
-    getUsersPage
+    getUsersPage,
+    getEditUserPage
 } from '../controllers/adminController.js';
 
 // products Controllers
@@ -35,10 +36,15 @@ import {
     postEditProduct
 } from '../controllers/productsController.js';
 
+import { updateUser } from '../controllers/usersController.js';
+
 router.get('/dashboard', getAdminDashboard);
 router.get('/inventory', getInventoryPage);
 router.get('/orders', getOrdersPage); 
 router.get('/users', getUsersPage);
+
+router.get('/users/edit/:id', getEditUserPage);
+router.put('/users/edit/:id', updateUser);
 
 router.post('/products/new', upload.array('imagens', 5), postAddProduct);
 router.post('/products/delete', deleteProduct);

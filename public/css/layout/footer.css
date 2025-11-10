@@ -1,6 +1,8 @@
 /* --- Component: Footer --- */
 .footer {
     background-color: var(--cor-primaria);
+    
+    width: -webkit-fill-available;
     /* Fundo neutro claro */
     color: var(--cor-texto-escuro);
     /* Texto escuro para contraste */

@@ -56,7 +56,7 @@ app.use((req, res, next) => {
   next();
 });
 
-import loadRoutes from './src/routes/index.js';
+import loadRoutes from './src/index.js';
 
 // Rotas da aplicação
 loadRoutes(app);
