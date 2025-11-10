@@ -1,0 +1,98 @@
+<div class="order-details-container">
+    <div class="order-details-header">
+        <h1>Detalhes do Pedido</h1>
+    </div>
+
+    <div class="order-details-grid">
+        <div class="order-main-content">
+            <div class="detail-section">
+                <h2>Produtos</h2>
+                <table class="product-list-table">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unitário</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.items.forEach(item => { %>
+                            <tr>
+                                <td>
+                                    <div class="product-item-info">
+                                        <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.name %>">
+                                        <div>
+                                            <strong><%= item.name %></strong>
+                                            <p>SKU: <%= item._id %></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><%= item.quantity %></td>
+                                <td><%= item.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                <td><%= (item.quantity * item.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="order-sidebar">
+            <div class="detail-section">
+                <h2>Resumo do Pedido</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <p><strong>ID do Pedido:</strong></p>
+                        <p><%= order._id %></p>
+                    </div>
+                    <div class="info-item">
+                        <p><strong>Data:</strong></p>
+                        <p><%= new Date(order.createdAt).toLocaleDateString('pt-BR') %></p>
+                    </div>
+                    <div class="info-item">
+                        <p><strong>Total:</strong></p>
+                        <p><strong><%= order.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h2>Cliente</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <p><strong>Nome:</strong></p>
+                        <p><%= order.user.name %></p>
+                    </div>
+                    <div class="info-item">
+                        <p><strong>Email:</strong></p>
+                        <p><%= order.user.email %></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section order-status-section">
+                <h2>Status do Pedido</h2>
+                <span class="status status-<%= order.status.toLowerCase().replace(' ', '-') %>">
+                    <%= order.status %>
+                </span>
+            </div>
+
+            <div class="detail-section order-actions">
+                <h2>Ações</h2>
+                <form action="/admin/orders/<%= order._id %>/status" method="POST">
+                    <div class="form-group">
+                        <label for="status">Atualizar Status</label>
+                        <select id="status" name="status" class="form-control">
+                            <option value="Pendente" <%= order.status === 'Pendente' ? 'selected' : '' %>>Pendente</option>
+                            <option value="Em Rota" <%= order.status === 'Em Rota' ? 'selected' : '' %>>Em Rota</option>
+                            <option value="Entregue" <%= order.status === 'Entregue' ? 'selected' : '' %>>Entregue</option>
+                            <option value="Cancelado" <%= order.status === 'Cancelado' ? 'selected' : '' %>>Cancelado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

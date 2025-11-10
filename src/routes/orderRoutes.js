@@ -4,12 +4,14 @@ import {
     getOrdersPage,
     payOrder,
     cancelOrder,
+    getDetailsOrderPage
 } from '../controllers/orderController.js';
 
 const router = Router();
 
 router.get('/', getOrdersPage);
 
+router.get("/:id/details", getDetailsOrderPage);
 // Rota para criar um novo pedido (Endpoint da API);
 router.post('/', createOrder);
 
@@ -25,7 +27,6 @@ router.get('/pay/:id', async (req, res, next) => {
 // Cancelar pedido;
 router.get('/cancel/:id', async (req, res, next) => {
     try {
-        const { cancelOrder } = await import('../controllers/orderController.js');
         return cancelOrder(req, res, next);
     } catch (e) {
         next(e);

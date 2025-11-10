@@ -124,11 +124,15 @@ export const getEditUserPage = async (req, res) => {
 
   try {
     const resApi = await apiFetch(`/public/${id}`, { method: 'GET' });
-    const user = resApi.data;
-    renderAdminPage(res, '../pages/admin/editUser', { ...pageOptions, user });
+
+    console.log(resApi.data)
+
+    pageOptions.user = resApi.data;
+    renderAdminPage(res, '../pages/admin/editUser', { ...pageOptions });
+
   } catch (error) {
     handleError(res, error, '../pages/admin/editUser', pageOptions);
   }
-  
+
 };
 

@@ -105,6 +105,10 @@ export const getOrdersPage = async (req, res) => {
   }
 };
 
+
+
+
+
 export const createOrder = async (req, res) => {
   try {
     const validatedItems = await validateOrderItems(req.body.items);
@@ -246,4 +250,25 @@ export const getInvoice = async (req, res) => {
   }
 };
 
+
+
+export const getDetailsOrderPage = async (req, res) => {
+  const { id } = req.params;
+
+  const pageOptions = {
+    titulo: 'Detalhes do Pedido',
+    order: null,
+  };
+
+  try {
+    const resApi = await apiFetch(`/orders/${id}`, { method: 'GET' });
+
+    console.log("resApi ",resApi)
+
+    pageOptions.order = resApi.data;
+    renderPage(res, '../pages/admin/orderDetails', { ...pageOptions });
+  } catch (error) {
+    handleError(res, error, '../pages/admin/orderDetails', pageOptions);
+  }
+};
 
