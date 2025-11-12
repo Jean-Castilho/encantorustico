@@ -232,8 +232,8 @@
         font-size: 16px;
     }
 
-.hero-section {
-        padding: 3.2rem 2.2rem;
+    .hero-section {
+        padding: 4.2rem 3rem;
     }
 
     .product-detail-page {
@@ -244,16 +244,13 @@
         margin: 1.5rem auto;
     }
 
-    h1 {
-        font-size: 1.5rem;
-    }
-
     .hero-content {
         padding: 2rem 1rem;
     }
 
     .hero-content h1 {
-        font-size: 1.3rem;
+        font-size: 1.8rem;
+        margin-bottom: 0.6rem;
     }
 
     .btn {
@@ -261,7 +258,14 @@
         padding: 10px 16px;
     }
 
-    .product-grid,
+    .product-grid {
+        gap: 1rem;
+        padding-top: 20px;
+        width: 700px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .favorites-grid,
     .category-grid {
         gap: 1rem;

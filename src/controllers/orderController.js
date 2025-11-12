@@ -6,7 +6,7 @@ import { formatCurrency, formatDate, formatTime, statusLabel } from '../utils/fo
 
 dotenv.config();
 
-const renderPage = (res, page, options = {}) => {
+const renderPage = (res, page, options) => {
   // disponibiliza helpers nas views;
   res.locals.formatters = { formatCurrency, formatDate, formatTime, statusLabel };
   res.render(res.locals.layout, {
@@ -83,7 +83,7 @@ export const getOrdersPage = async (req, res) => {
 
   try {
     const userId = req.session.user._id;
-    const resOrders = await apiFetch(`/orders/${userId}`);
+    const resOrders = await apiFetch(`/orders/${userId}/pedido`);
     const orders = resOrders.data;
 
     if (!orders || orders.length === 0) {
@@ -186,9 +186,10 @@ export const payOrder = async (req, res) => {
     // Chama API para iniciar pagamento (endpoint hipotético)
     const apiRes = await apiFetch(`/orders/${id}/payment`, { method: 'PATCH' });;
 
-    console.log('API Response:', apiRes);
+    console.log('API Response:', apiRes.data.paymentMethod.payment);
 
     const pageOptions = {
+      page: '../pages/public/payment-confirmation',
       titulo: 'Confirmação de Pagamento',
       mensagem: 'Por favor, confirme seu pagamento abaixo.',
       order: apiRes.data,
@@ -196,8 +197,7 @@ export const payOrder = async (req, res) => {
       qr_code_base64: apiRes.data.paymentMethod.payment.qr_code_base64
     };
 
-    // Caso contrário renderiza página de pagamento com dados retornados
-    return renderPage(res, '../pages/public/payment-confirmation', { ...pageOptions });
+    return res.render('layout/main', pageOptions);
   } catch (error) {
     console.error('Erro ao iniciar pagamento:', error);
     return handleError(res, error, '../pages/public/error', { titulo: 'Erro no Pagamento', mensagem: error.message });
@@ -263,7 +263,7 @@ export const getDetailsOrderPage = async (req, res) => {
   try {
     const resApi = await apiFetch(`/orders/${id}`, { method: 'GET' });
 
-    console.log("resApi ",resApi)
+    console.log("resApi ", resApi)
 
     pageOptions.order = resApi.data;
     renderPage(res, '../pages/admin/orderDetails', { ...pageOptions });
