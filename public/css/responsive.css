@@ -4,7 +4,12 @@
         padding: 1.5rem;
     }
 
-    .orders-list-container {}
+    .chekoutForm {
+        gap: 40px;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
 }
 
 @media (max-width: 990px) {
@@ -31,7 +36,7 @@
     }
 }
 
-@media (max-width: 990px) {
+@media (max-width: 950px) {
 
     .filter-btn {
         padding: 10px 10px;

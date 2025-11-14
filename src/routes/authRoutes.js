@@ -79,14 +79,6 @@ router.post("/confirmDelivery", async (req, res) => {
   return { messagem: "produto saiu para entrega" }
 });
 
-
-
-
-
-
-
-
-
 router.get("/cep/:cep", (req, res) => {
   const cep = req.params.cep;
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;

@@ -133,7 +133,7 @@ const getPaymentPage = async (req, res) => {
 const getPaymentConfirmationPage = (req, res) => {
   renderPage(res, '../pages/public/payment-confirmation', {
     titulo: 'Pagamento Confirmado - Encanto Rústico',
-    mensagem: 'Seu pedido foi recebido com sucesso!',
+    mensagem: 'Seu pagamento foi recebido com sucesso!',
   });
 };
 

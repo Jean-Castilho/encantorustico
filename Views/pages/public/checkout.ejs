@@ -1,54 +1,52 @@
-<div class="container" id="checkout-container" style="margin-top: 3rem;">
-    <header class="page-header" style="text-align: center; margin-bottom: 3rem;">
+<div class="container" id="checkout-container">
+    <header class="page-header" style="text-align: center; margin-bottom: 2rem;">
         <h1>Finalizar Compra</h1>
     </header>
 
     <% if (cart && cart.items && cart.items.length> 0) { %>
-        <form action="/orders" method="POST">
-            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2.5rem; align-items: start;">
+        <form action="/orders" method="POST" class="chekoutForm">
+            <!-- Coluna de Formulários (Endereço e Pagamento) -->
+            <section class="checkout-forms-column">
+                <div class="card">
+                    <h4>Detalhes de Entrega</h4>
+                    <div class="form-group">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" name="endereco[cep]" class="form-control" placeholder="00000-000"
+                            onblur="consultarCEP(this.value)" value="<%= user.endereco ? user.endereco.cep : '' %>"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rua">Rua / Avenida</label>
+                        <input type="text" id="rua" name="endereco[rua]" class="form-control"
+                            value="<%= user.endereco ? user.endereco.rua : '' %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numero">Número</label>
+                        <input type="text" id="numero" name="endereco[numero]" class="form-control"
+                            value="<%= user.endereco ? user.endereco.numero : '' %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="complemento">Complemento (opcional)</label>
+                        <input type="text" id="complemento" name="endereco[complemento]" class="form-control"
+                            value="<%= user.endereco ? user.endereco.complemento : '' %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" id="bairro" name="endereco[bairro]" class="form-control"
+                            value="<%= user.endereco ? user.endereco.bairro : '' %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" id="cidade" name="endereco[cidade]" class="form-control"
+                            value="<%= user.endereco ? user.endereco.cidade : '' %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <input type="text" id="estado" name="endereco[estado]" class="form-control"
+                            value="<%= user.endereco ? user.endereco.estado : '' %>" required>
+                    </div>
 
-                <!-- Coluna de Formulários (Endereço e Pagamento) --> 
-                <section class="checkout-forms-column">
-                    <div class="card">
-                        <h4>Detalhes de Entrega</h4>
-                        <div class="form-group">
-                            <label for="cep">CEP</label>
-                            <input type="text" id="cep" name="endereco[cep]" class="form-control"
-                                placeholder="00000-000" onblur="consultarCEP(this.value)"
-                                value="<%= user.endereco ? user.endereco.cep : '' %>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="rua">Rua / Avenida</label>
-                            <input type="text" id="rua" name="endereco[rua]" class="form-control" 
-                                value="<%= user.endereco ? user.endereco.rua : '' %>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="numero">Número</label>
-                            <input type="text" id="numero" name="endereco[numero]" class="form-control"
-                                value="<%= user.endereco ? user.endereco.numero : '' %>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="complemento">Complemento (opcional)</label>
-                            <input type="text" id="complemento" name="endereco[complemento]" class="form-control"
-                                value="<%= user.endereco ? user.endereco.complemento : '' %>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="bairro">Bairro</label>
-                            <input type="text" id="bairro" name="endereco[bairro]" class="form-control"
-                                value="<%= user.endereco ? user.endereco.bairro : '' %>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cidade">Cidade</label>
-                            <input type="text" id="cidade" name="endereco[cidade]" class="form-control"
-                                value="<%= user.endereco ? user.endereco.cidade : '' %>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="estado">Estado</label>
-                            <input type="text" id="estado" name="endereco[estado]" class="form-control"
-                                value="<%= user.endereco ? user.endereco.estado : '' %>" required>
-                        </div>
-
-                        <!--
+                    <!--
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="saveAddress" name="saveAddress" value="true">
                             <label class="form-check-label" for="saveAddress">
@@ -56,49 +54,48 @@
                             </label>
                         </div>
                         -->
-                    </div>
+                </div>
 
-                </section>
+            </section>
 
-                <!-- Coluna do Resumo do Pedido -->
-                <aside class="summary-column">
-                    <div class="card" id="summary-card">
-                        <h4>Resumo do Pedido</h4>
-                        <div id="checkout-items-list">
-                            <% cart.items.forEach((item, index)=> { %>
-                                <div class="checkout-item"
-                                    style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-                                    <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>"
-                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--borda-radius);">
-                                    <div style="flex-grow: 1;">
-                                        <p style="margin: 0; font-weight: bold;">
-                                            <%= item.nome %>
-                                        </p>
-                                    </div>
-                                    <p style="margin: 0; font-weight: bold;">R$ <%= (parseFloat(item.preco) ||
-                                            0).toFixed(2).replace('.', ',' ) %>
+            <!-- Coluna do Resumo do Pedido -->
+            <aside class="summary-column">
+                <div class="card" id="summary-card">
+                    <h4>Resumo do Pedido</h4>
+                    <div id="checkout-items-list">
+                        <% cart.items.forEach((item, index)=> { %>
+                            <div class="checkout-item"
+                                style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                                <img src="/uploads/<%= item.imagens[0] %>" alt="<%= item.nome %>"
+                                    style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--borda-radius);">
+                                <div style="flex-grow: 1;">
+                                    <p style="margin: 0; font-weight: bold;">
+                                        <%= item.nome %>
                                     </p>
-                                    <input type="hidden" name="items[<%= index %>][productId]" value="<%= item._id %>">
-                                    <input type="hidden" name="items[<%= index %>][quantity]" value="1">
                                 </div>
-                                <% }); %>
-                        </div>
-                        <hr style="margin: 1.5rem 0;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                            <span>Subtotal (<%= totalItems %> itens)</span>
-                            <strong>R$ <%= totalPrice.toFixed(2).replace('.', ',' ) %></strong>
-                        </div>
-                        <div
-                            style="display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 2rem;">
-                            <span>Valor Total</span>
-                            <strong>R$ <%= totalPrice.toFixed(2).replace('.', ',' ) %></strong>
-                        </div>
-                        <input type="hidden" name="paymentMethod" value="pix">
-                        <button type="submit" class="btn btn-destaque" style="width: 100%;">Finalizar Compra e
-                            Pagar</button>
+                                <p style="margin: 0; font-weight: bold;">R$ <%= (parseFloat(item.preco) ||
+                                        0).toFixed(2).replace('.', ',' ) %>
+                                </p>
+                                <input type="hidden" name="items[<%= index %>][productId]" value="<%= item._id %>">
+                                <input type="hidden" name="items[<%= index %>][quantity]" value="1">
+                            </div>
+                            <% }); %>
                     </div>
-                </aside>
-            </div>
+                    <hr style="margin: 1.5rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span>Subtotal (<%= totalItems %> itens)</span>
+                        <strong>R$ <%= totalPrice.toFixed(2).replace('.', ',' ) %></strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; margin-bottom: 2rem;">
+                        <span>Valor Total</span>
+                        <strong>R$ <%= totalPrice.toFixed(2).replace('.', ',' ) %></strong>
+                    </div>
+                    <input type="hidden" name="paymentMethod" value="pix">
+                    <button type="submit" class="btn btn-destaque" style="width: 100%;">Finalizar Compra e
+                        Pagar</button>
+                </div>
+            </aside>
+
         </form>
         <% } else { %>
             <div class="card" style="text-align: center; padding: 4rem;">

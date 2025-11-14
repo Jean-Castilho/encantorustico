@@ -1,142 +1,156 @@
-<% 
-  const items = Array.isArray(products) ? products : (Array.isArray(allProducts) ? allProducts : []);
-  const userId = session?.user?._id || null;
-  const favorites = session?.user?.favorites || [];
-  const cart = session?.user?.cart || [];
-%>
+<% const items=Array.isArray(products) ? products : (Array.isArray(allProducts) ? allProducts : []); const
+  userId=session?.user?._id || null; const favorites=session?.user?.favorites || []; const cart=session?.user?.cart ||
+  []; %>
 
-<style>
+  <style>
     .in-cart i {
-        color: #28a745; /* Verde para indicar que está no carrinho */
+      color: #28a745;
+      /* Verde para indicar que está no carrinho */
     }
-</style>
+  </style>
 
-<section class="hero-section">
-  <div class="hero-content">
-    <h1>Móveis Rústicos que Contam Histórias</h1>
-    <a href="/products" class="btn btn-primario">Todos os Produtos</a>
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Móveis Rústicos que Contam Histórias</h1>
+      <a href="/products" class="btn btn-primario">Todos os Produtos</a>
 
-  </div>
-</section>
-
-    <h2 style="margin-top: 1.4rem; margin-top: 1rem;">Destaques da Semana</h2>
-<div class="container">
-  <section class="featured-products">
-    <div class="product-grid">
-    
-      <% if (items.length > 0) { %>
-        <% items.slice(0, 3).forEach(product => { 
-             if (!product) return;
-             const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] : '/assets/img/fallback.jpg';
-             const id = product._id;
-             const favoritUrl = userId ? `/addFavorite/${id}` : '/login';
-             const carrinhoUrl = userId ? (cart.includes(id.toString()) ? '/cart' : `/cart/add/${id}`) : '/login';
-             const productUrl = `/product/${id}`;
-             const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Preço sob consulta';
-             const isFavorited = favorites.includes(id.toString());
-             const isInCart = cart.includes(id.toString());
-        %>
-        
-          <div class="product-card">
-            <div class="product-image-container">
-              <a href="<%= productUrl %>" class="product-link">
-                <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>" alt="<%= product.nome %>">
-              </a>
-              <div class="product-card-icons">
-                <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>" data-product-id="<%= id %>">
-                  <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
-                </a>
-                <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>" data-product-id="<%= id %>">
-                  <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
-                </a>
-              </div>
-            </div>
-            <div class="product-card-content">
-              <h3><%= product.nome %></h3>
-              <p class="price"><%= preco %></p>
-              <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
-            </div>
-          </div>
-        <% }); %>
-      <% } else { %>
-        <p>Nenhum produto em destaque no momento. Volte em breve!</p>
-      <% } %>
-    
     </div>
   </section>
 
-  <section class="product-categories">
-    <h2>Categorias em Destaque</h2>
-    <div class="category-grid">
-      <% const categories=['Sala de Estar', 'Área Gourmet' , 'Cozinha' ]; %>
-        <% categories.forEach(category => { %>
-          <div class="category-card">
-            <a href="/category/<%= category %>" class="category-title-link">
-              <h3>
-                <%= category %>
-              </h3>
-            </a>
-            <div class="category-products-scroll">
-              <% const productsInCategory=allProducts.filter(p=> p.categoria === category); %>
+  <h2 style="margin-top: 1.4rem; margin-top: 1rem;">Destaques da Semana</h2>
+  <div class="container">
+    <section class="featured-products">
+      <div class="product-grid">
+
+        <% if (items.length> 0) { %>
+          <% items.slice(0, 3).forEach(product=> {
+            if (!product) return;
+            const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] :
+            '/assets/img/fallback.jpg';
+            const id = product._id;
+            const favoritUrl = userId ? `/addFavorite/${id}` : '/login';
+            const carrinhoUrl = userId ? (cart.includes(id.toString()) ? '/cart' : `/cart/add/${id}`) : '/login';
+            const productUrl = `/product/${id}`;
+            const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency',
+            currency: 'BRL' }) : 'Preço sob consulta';
+            const isFavorited = favorites.includes(id.toString());
+            const isInCart = cart.includes(id.toString());
+            %>
+
+            <div class="product-card">
+              <div class="product-image-container">
+                <a href="<%= productUrl %>" class="product-link">
+                  <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>"
+                    alt="<%= product.nome %>">
+                </a>
+                <div class="product-card-icons">
+                  <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>"
+                    data-product-id="<%= id %>">
+                    <i class="material-icons">
+                      <%= isFavorited ? 'favorite' : 'favorite_border' %>
+                    </i>
+                  </a>
+                  <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>"
+                    data-product-id="<%= id %>">
+                    <i class="material-icons">
+                      <%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %>
+                    </i>
+                  </a>
+                </div>
+              </div>
+              <div class="product-card-content">
+                <h3>
+                  <%= product.nome %>
+                </h3>
+                <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
+              </div>
+            </div>
+            <% }); %>
+              <% } else { %>
+                <p>Nenhum produto em destaque no momento. Volte em breve!</p>
+                <% } %>
+
+      </div>
+    </section>
+
+    <section class="product-categories" style="margin: 20px;">
+      <h2>Categorias em Destaque</h2>
+      <div class="category-grid">
+        <% const categories=['Sala de Estar', 'Área Gourmet' , 'Cozinha' ]; %>
+          <% categories.forEach(category=> { %>
+            <div class="category-card">
+              <a href="/category/<%= category %>" class="category-title-link">
+                <h3>
+                  <%= category %>
+                </h3>
+              </a>
+              <div class="category-products-scroll">
+                <% const productsInCategory=allProducts.filter(p=> p.categoria === category); %>
                   <% if (productsInCategory && productsInCategory.length> 0) { %>
                     <% productsInCategory.forEach(product=> { %>
                       <% const imagem=(product.imagens && product.imagens.length> 0)
-                          ? product.imagens[0]
-                          : '/assets/img/fallback.jpg';
-                          const id = product._id;
-                          const productUrl = `/product/${id}`;
-                          const preco = (product.preco != null)
-                          ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency',
-                          currency: 'BRL' })
-                          : 'Preço sob consulta';
-                          %>
-                          <div class="product-card category-product-item">
-                            <img src="/uploads/<%= imagem %>" alt="<%= product.nome %>">
-                            <h4>
+                        ? product.imagens[0]
+                        : '/assets/img/fallback.jpg';
+                        const id = product._id;
+                        const productUrl = `/product/${id}`;
+                        const preco = (product.preco != null)
+                        ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency',
+                        currency: 'BRL' })
+                        : 'Preço sob consulta';
+                        %>
+
+                        <div class="product-card category-product-item">
+                          <img src="/uploads/<%= imagem %>" alt="<%= product.nome %>">
+
+                          <div class="product-card-content" style="padding: 3px;">
+                            <h3>
                               <%= product.nome %>
-                            </h4>
+                            </h3>
                             <p class="price">
                               <%= preco %>
                             </p>
-                            <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver
-                              Detalhes</a>
+                            <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
                           </div>
-                          <% }); %>
-                  <% } else { %>
-                    <p>Nenhum produto disponível nesta categoria no momento.</p>
-                  <% } %>
+                        </div>
+
+                        <% }); %>
+                          <% } else { %>
+                            <p>Nenhum produto disponível nesta categoria no momento.</p>
+                            <% } %>
+              </div>
             </div>
-          </div>
-        <% }); %>
+            <% }); %>
+      </div>
+    </section>
+  </div>
+
+  <%- include('../../partials/footer') %>
+
+
+    <div id="notification-home"
+      style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;">
     </div>
-  </section>
-</div>
-
-<%- include('../../partials/footer') %>
-
-
-<div id="notification-home" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;"></div>
 
 
 
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const notification = document.getElementById('notification-home');
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const notification = document.getElementById('notification-home');
 
-    function showNotification(message, isSuccess) {
-        notification.textContent = message;
-        notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
-        notification.style.display = 'block';
-        setTimeout(() => {
+        function showNotification(message, isSuccess) {
+          notification.textContent = message;
+          notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
+          notification.style.display = 'block';
+          setTimeout(() => {
             notification.style.display = 'none';
-        }, 3000);
-    }
+          }, 3000);
+        }
 
-    // Handle favorite clicks
-    const favoriteButtons = document.querySelectorAll('.favorite-btn');
-    favoriteButtons.forEach(button => {
-        button.addEventListener('click', async (event) => {
+        // Handle favorite clicks
+        const favoriteButtons = document.querySelectorAll('.favorite-btn');
+        favoriteButtons.forEach(button => {
+          button.addEventListener('click', async (event) => {
             event.preventDefault();
             const productId = button.dataset.productId;
             if (!productId) return;
@@ -147,36 +161,36 @@ document.addEventListener('DOMContentLoaded', () => {
             const url = isFavorited ? `/removeFavorite/${productId}` : `/addFavorite/${productId}`;
 
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const result = await response.json();
-                showNotification(result.message, result.success);
-
-                if (result.success) {
-                    button.classList.toggle('favorited');
-                    const icon = button.querySelector('i');
-                    icon.textContent = isFavorited ? 'favorite_border' : 'favorite';
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
                 }
-            } catch (error) {
-                showNotification('Erro de conexão. Tente novamente.', false);
-            }
-        });
-    });
+              });
 
-    // Handle cart clicks
-    const cartButtons = document.querySelectorAll('.add-to-cart-btn');
-    cartButtons.forEach(button => {
-        button.addEventListener('click', async (event) => {
+              const result = await response.json();
+              showNotification(result.message, result.success);
+
+              if (result.success) {
+                button.classList.toggle('favorited');
+                const icon = button.querySelector('i');
+                icon.textContent = isFavorited ? 'favorite_border' : 'favorite';
+              }
+            } catch (error) {
+              showNotification('Erro de conexão. Tente novamente.', false);
+            }
+          });
+        });
+
+        // Handle cart clicks
+        const cartButtons = document.querySelectorAll('.add-to-cart-btn');
+        cartButtons.forEach(button => {
+          button.addEventListener('click', async (event) => {
             event.preventDefault();
 
             if (button.classList.contains('in-cart')) {
-                window.location.href = '/cart';
-                return;
+              window.location.href = '/cart';
+              return;
             }
 
             const productId = button.dataset.productId;
@@ -185,26 +199,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const url = `/cart/add/${productId}`;
 
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const result = await response.json();
-                showNotification(result.message, result.success);
-
-                if (result.success) {
-                    button.classList.add('in-cart');
-                    const icon = button.querySelector('i');
-                    icon.textContent = 'shopping_cart_checkout';
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
                 }
+              });
+
+              const result = await response.json();
+              showNotification(result.message, result.success);
+
+              if (result.success) {
+                button.classList.add('in-cart');
+                const icon = button.querySelector('i');
+                icon.textContent = 'shopping_cart_checkout';
+              }
 
             } catch (error) {
-                showNotification('Erro de conexão. Tente novamente.', false);
+              showNotification('Erro de conexão. Tente novamente.', false);
             }
+          });
         });
-    });
-});
-</script>
+      });
+    </script>
