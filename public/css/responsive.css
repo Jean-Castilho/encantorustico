@@ -12,6 +12,18 @@
 
 }
 
+@media (max-width: 1090px) {
+
+
+    .container {
+        padding: 0.9rem 5rem;
+    }
+
+    .cart-content {
+        gap: 3rem;
+    }
+}
+
 @media (max-width: 990px) {
     .contact-content {
         grid-template-columns: 1fr;
@@ -151,7 +163,7 @@
     }
 
     .hero-content h1 {
-        font-size: 2.8rem;
+        font-size: 2.4rem;
     }
 
     .hero-section {
@@ -246,7 +258,9 @@
     }
 
     .container {
-        margin: 1.5rem auto;
+        width: -webkit-fill-available;
+        padding: 0.1rem 0.2rem;
+        margin: 0.25rem auto;
     }
 
     .hero-content {
@@ -258,6 +272,11 @@
         margin-bottom: 0.6rem;
     }
 
+    h2 {
+        padding: 1.2rem;
+    }
+
+
     .btn {
         font-size: 0.8rem;
         padding: 10px 16px;
@@ -265,10 +284,9 @@
 
     .product-grid {
         gap: 1rem;
-        padding-top: 20px;
-        width: 700px;
+        padding: 35px;
+        width: max-content;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
     }
 
     .favorites-grid,
@@ -308,6 +326,4 @@
     .card-content h3 {
         font-size: 1.1rem;
     }
-
-
-}
+};

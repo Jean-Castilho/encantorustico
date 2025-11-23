@@ -31,7 +31,9 @@
               <% } %>
 
                 <% if (user.role==='delivery' || user.role==='admin' ) { %>
-                  <a href="/delivery" class="nav-link <%= (typeof pageIdentifier !== 'undefined' && pageIdentifier === 'delivery') ? 'active' : '' %>" aria-label="Painel do Entregador">
+                  <a href="admin/delivery"
+                    class="nav-link <%= (typeof pageIdentifier !== 'undefined' && pageIdentifier === 'delivery') ? 'active' : '' %>"
+                    aria-label="Painel do Entregador">
                     <span class="material-icons notranslate md-22">local_shipping</span>
                   </a>
                   <% } %>

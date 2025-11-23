@@ -1,39 +1,25 @@
 {
-  "name": "EncantoRustico",
-  "version": "1.0.1",
-  "description": "venda de moveis é decoraçoes",
-  "keywords": [
-    "moveis",
-    "decoracoes",
-    "usuarios",
-    "autenticacao",
-    "verificacao",
-    "otp",
-    "code",
-    "token",
-    "produtos",
-    "venda",
-    "gerenciamento",
-    "ecommerce",
-    "loja",
-    "online",
-    "pagamento",
-    "pix",
-    "qr-code"
-  ],
-  "license": "ISC",
-  "author": "Jean-Castilho",
-  "type": "module",
+  "name": "harpia",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "node test.js",
     "start": "node index.js"
   },
+  "keywords": [],
+  "author": "Jean-Castilho",
+  "license": "ISC",
+  "type": "module",
   "dependencies": {
-    "dotenv": "^17.2.2",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
-    "express": "^4.19.2",
+    "express": "^5.1.0",
     "express-session": "^1.18.2",
-    "mercadopago": "^2.0.8",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^7.0.0",
     "multer": "^2.0.2"
   }
 }

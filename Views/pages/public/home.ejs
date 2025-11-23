@@ -1,11 +1,29 @@
 <% const items=Array.isArray(products) ? products : (Array.isArray(allProducts) ? allProducts : []); const
-  userId=session?.user?._id || null; const favorites=session?.user?.favorites || []; const cart=session?.user?.cart ||
-  []; %>
+  userId=session?.user?._id || null; const favorites=(session?.user?.favorites || []).map(String); const
+  cart=(session?.user?.cart || []).map(String); %>
 
   <style>
+    /* ===== General Section Styles ===== */
     .in-cart i {
       color: #28a745;
       /* Verde para indicar que está no carrinho */
+    }
+
+    .icon-btn {
+      cursor: pointer;
+    }
+
+    .section-title {
+      margin: 2.6rem;
+    }
+
+    .product-categories {
+      margin: 20px 0;
+    }
+
+    /* ===== Product Card Specific Styles ===== */
+    .category-card-content {
+      padding: 3px;
     }
   </style>
 
@@ -17,66 +35,24 @@
     </div>
   </section>
 
-  <h2 style="margin-top: 1.4rem; margin-top: 1rem;">Destaques da Semana</h2>
   <div class="container">
+    <h2 class="section-title">Destaques da Semana</h2>
     <section class="featured-products">
       <div class="product-grid">
-
         <% if (items.length> 0) { %>
-          <% items.slice(0, 3).forEach(product=> {
-            if (!product) return;
-            const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] :
-            '/assets/img/fallback.jpg';
-            const id = product._id;
-            const favoritUrl = userId ? `/addFavorite/${id}` : '/login';
-            const carrinhoUrl = userId ? (cart.includes(id.toString()) ? '/cart' : `/cart/add/${id}`) : '/login';
-            const productUrl = `/product/${id}`;
-            const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency',
-            currency: 'BRL' }) : 'Preço sob consulta';
-            const isFavorited = favorites.includes(id.toString());
-            const isInCart = cart.includes(id.toString());
-            %>
-
-            <div class="product-card">
-              <div class="product-image-container">
-                <a href="<%= productUrl %>" class="product-link">
-                  <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>"
-                    alt="<%= product.nome %>">
-                </a>
-                <div class="product-card-icons">
-                  <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>"
-                    data-product-id="<%= id %>">
-                    <i class="material-icons">
-                      <%= isFavorited ? 'favorite' : 'favorite_border' %>
-                    </i>
-                  </a>
-                  <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>"
-                    data-product-id="<%= id %>">
-                    <i class="material-icons">
-                      <%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %>
-                    </i>
-                  </a>
-                </div>
-              </div>
-              <div class="product-card-content">
-                <h3>
-                  <%= product.nome %>
-                </h3>
-                <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
-              </div>
-            </div>
-            <% }); %>
-              <% } else { %>
-                <p>Nenhum produto em destaque no momento. Volte em breve!</p>
-                <% } %>
-
+          <% items.slice(0, 3).forEach(product=> { %>
+            <%- include('../../partials/_product-card', { product, favorites, cart, cardType: 'main' }) %>
+              <% }); %>
+                <% } else { %>
+                  <p>Nenhum produto em destaque no momento. Volte em breve!</p>
+                  <% } %>
       </div>
     </section>
 
-    <section class="product-categories" style="margin: 20px;">
-      <h2>Categorias em Destaque</h2>
+    <section class="product-categories">
+      <h2 class="section-title">Categorias em Destaque</h2>
       <div class="category-grid">
-        <% const categories=['Sala de Estar', 'Área Gourmet' , 'Cozinha' ]; %>
+        <% const categories=['Sala de Estar', 'Área Gourmet' , 'Cozinha' , 'Escritorio' ]; %>
           <% categories.forEach(category=> { %>
             <div class="category-card">
               <a href="/category/<%= category %>" class="category-title-link">
@@ -85,33 +61,12 @@
                 </h3>
               </a>
               <div class="category-products-scroll">
-                <% const productsInCategory=allProducts.filter(p=> p.categoria === category); %>
+                <% const productsInCategory=items.filter(p=> p.categoria === category); %>
                   <% if (productsInCategory && productsInCategory.length> 0) { %>
                     <% productsInCategory.forEach(product=> { %>
-                      <% const imagem=(product.imagens && product.imagens.length> 0)
-                        ? product.imagens[0]
-                        : '/assets/img/fallback.jpg';
-                        const id = product._id;
-                        const productUrl = `/product/${id}`;
-                        const preco = (product.preco != null)
-                        ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency',
-                        currency: 'BRL' })
-                        : 'Preço sob consulta';
-                        %>
 
-                        <div class="product-card category-product-item">
-                          <img src="/uploads/<%= imagem %>" alt="<%= product.nome %>">
 
-                          <div class="product-card-content" style="padding: 3px;">
-                            <h3>
-                              <%= product.nome %>
-                            </h3>
-                            <p class="price">
-                              <%= preco %>
-                            </p>
-                            <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
-                          </div>
-                        </div>
+                      <%- include('../../partials/_product-card', { product, favorites, cart, cardType: 'category' }) %>
 
                         <% }); %>
                           <% } else { %>
@@ -124,9 +79,6 @@
     </section>
   </div>
 
-  <%- include('../../partials/footer') %>
-
-
     <div id="notification-home"
       style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;">
     </div>
@@ -137,9 +89,10 @@
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const notification = document.getElementById('notification-home');
+        const csrfToken = '<%= csrfToken %>'; // Pega o token CSRF renderizado pelo EJS
 
-        function showNotification(message, isSuccess) {
-          notification.textContent = message;
+        function showNotification(mensagem, isSuccess) {
+          notification.textContent = mensagem;
           notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
           notification.style.display = 'block';
           setTimeout(() => {
@@ -155,21 +108,24 @@
             const productId = button.dataset.productId;
             if (!productId) return;
 
-
-
             const isFavorited = button.classList.contains('favorited');
-            const url = isFavorited ? `/removeFavorite/${productId}` : `/addFavorite/${productId}`;
+            const url = isFavorited ? '/auth/favorites/remove' : '/auth/favorites/add';
 
             try {
               const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
-                }
+                  'Content-Type': 'application/json',
+                  'x-csrf-token': csrfToken // Envia o token no cabeçalho
+                },
+                body: JSON.stringify({
+                  productId: productId,
+                  _csrf: csrfToken // Envia o token no corpo também por segurança
+                })
               });
 
               const result = await response.json();
-              showNotification(result.message, result.success);
+              showNotification(result.mensagem, response.ok);
 
               if (result.success) {
                 button.classList.toggle('favorited');
@@ -196,18 +152,22 @@
             const productId = button.dataset.productId;
             if (!productId) return;
 
-            const url = `/cart/add/${productId}`;
+            const url = `/auth/cart/add`;
 
             try {
               const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({
+                  productId: productId,
+                  _csrf: csrfToken // Envia o token no corpo também por segurança
+                })
               });
 
               const result = await response.json();
-              showNotification(result.message, result.success);
+              showNotification(result.mensagem, result.success);
 
               if (result.success) {
                 button.classList.add('in-cart');

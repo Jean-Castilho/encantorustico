@@ -45,8 +45,8 @@
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a href="/admin/users/edit/<%= user._id %>" class="btn btn-sm btn-secundario">Editar</a>
-                                        <form action="/admin/users/delete" method="post" onsubmit="return confirm('Confirma a exclusão deste usuário?');">
+                                        <a href="/admin/user/edit/<%= user._id %>" class="btn btn-sm btn-secundario">Editar</a>
+                                        <form class="delete-user-form">
                                             <input type="hidden" name="id" value="<%= user._id %>">
                                             <button type="submit" class="btn btn-sm btn-remover">Excluir</button>
                                         </form>
@@ -75,3 +75,64 @@
 
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.delete-user-form').forEach(form => {
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const button = this.querySelector('button[type="submit"]');
+            const originalButtonText = button.textContent;
+            const userId = this.querySelector('input[name="id"]').value;
+
+            if (!confirm(`Tem certeza que deseja excluir este usuário?`)) {
+                return;
+            }
+
+            const notification = document.getElementById('notification-home') || (()=>{
+                const newDiv = document.createElement('div');
+                newDiv.id = 'notification-home';
+                document.body.prepend(newDiv);
+                return newDiv;
+            })();
+
+            function showNotification(message, isSuccess) {
+                notification.textContent = message;
+                notification.className = isSuccess ? 'notification success' : 'notification error';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+
+            button.textContent = "Removendo...";
+            button.disabled = true;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            try {
+                const response = await fetch(`/admin/users/${userId}`, {
+                    method: "DELETE",
+                    headers: {
+                        'X-CSRF-Token': csrfToken
+                    },
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showNotification(result.message, true);
+                    this.closest('tr').remove();
+                } else {
+                    showNotification(result.message || 'Ocorreu um erro.', false);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showNotification("Ocorreu um erro ao excluir o usuário.", false);
+            } finally {
+                button.textContent = originalButtonText;
+                button.disabled = false;
+            }
+        });
+    });
+</script>

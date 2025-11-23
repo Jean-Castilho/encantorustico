@@ -8,7 +8,7 @@
     <title>
         <%= titulo %>
     </title>
-
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/23.0.10/css/intlTelInput.css">
     <link rel="stylesheet" href="/css/main.css">
@@ -16,17 +16,18 @@
 
 <body>
 
+    
     <div id="notification-home"
-        style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;">
+      style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;">
     </div>
 
 
     <%- include('../partials/header') %>
-        <main>
-            <%- include(page) %>
-        </main>
 
-        <script src="/js/main.js"></script>
+    <main>
+        <%- include(page) %>
+    </main>
+    
 </body>
 
 </html>

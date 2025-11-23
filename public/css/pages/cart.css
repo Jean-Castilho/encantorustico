@@ -1,4 +1,12 @@
 /* --- Page: Cart --- */
+
+
+
+.cart-items-column{
+   width: 500px;
+}
+
+
 .cart-item {
     display: flex;
     flex-wrap: wrap;
@@ -53,7 +61,7 @@
 .cart-content {
     display: flex;
     align-items: center;
-
+    gap: 10rem;
     justify-content: space-evenly;
     flex-direction: row;
 }

@@ -1,5 +1,9 @@
 /* --- Page: Admin Inventory --- */
 .inventory-container {
+    
+    width: 980px;
+    min-height: 400px;
+    margin: 40px;
     background-color: #fff;
     padding: 2rem;
     border-radius: var(--borda-radius);
@@ -87,6 +91,8 @@
 }
 
 .alert-info {
+    margin: 20px;
+    margin-top: 50px;
     background-color: #cce5ff;
     color: #004085;
     padding: 1.5rem;

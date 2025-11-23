@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="/css/pages/delivery-dashboard.css">
+
+
+<div class="delivery-dashboard">
+
+    <!-- Coluna da Lista de Pedidos -->
+    <div class="orders-list-container">
+        <div class="orders-list-header">
+            <h2>Pedidos de Entrega</h2>
+            <span id="order-count">
+                <%= orders.length %>
+            </span>
+        </div>
+        <div id="order-list">
+            <% if (orders.length===0) { %>
+                <p>Nenhum pedido disponível no momento.</p>
+                <% } else { %>
+                    <% orders.forEach(order=> { %>
+                        <div class="order-card" data-order-id="<%= order.id %>"
+                            data-order='<%- JSON.stringify(order) %>'>
+                            <h3>Pedido #<%= order._id.substring(0, 8) %>
+                            </h3>
+                            <p><strong>Cliente:</strong>
+                                <%= order.user.name %>
+                            </p>
+                            <p><strong>Distância:</strong> 5.2km</p>
+                            <p class="order-address"> <strong>Endereço:</strong>
+                                <%= order.endereco.rua %>, <%= order.endereco.numero %>
+
+                                        <span
+                                            class="order-status status-<%= order.status.toLowerCase().replace(' ', '-') %>">
+                                            <%= order.status %>
+                                        </span>
+                            </p>
+
+                        </div>
+                        <% }); %>
+                            <% } %>
+        </div>
+    </div>
+
+    <!-- Coluna de Detalhes do Pedido Selecionado -->
+    <div class="selected-order-container">
+        <div id="map-placeholder">
+            <span class="material-icons map-icon">map</span>
+        </div>
+
+
+        <div id="selected-order-content">
+
+
+            <div style="height: 200px;" id="empty-state">
+                <span class="material-icons">list_alt</span>
+                <h3>Selecione um Pedido</h3>
+            </div>
+
+
+            <div id="order-details-info">
+                <div class="details-header">
+                    <h3>Detalhes do Pedido</h3>
+                    <div class="details-body">
+                        <div class="info-item client-info" id="detail-client-name"></div>
+                        <div class="info-item address-info" id="detail-address"></div>
+                        <div class="info-item status-info" id="detail-status"></div>
+                    </div>
+                </div>
+
+                <div class="details-confirmation">
+
+                    <input type="number" name="number" id="number" value="" hidden>
+                    <button type="button" id="send-code-btn" class="btn btn-destaque">
+                        Enviar Codigo
+                    </button>
+
+                    <div style="display:none;">
+                        <input type="text" id="OtpToClient" placeholder="Código do cliente" required>
+                        <button type="button" id="confirm-delivery-btn" class="btn btn-destaque">
+                            Confirmar Entrega
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="delivery-actions">
+                    <button type="button" id="trace-route-btn" class="btn">Traçar Rota</button>
+                    <button type="button" id="view-on-map-btn" class="btn btn-secundario">Ver no Mapa</button>
+                    <button type="button" id="location-btn" class="btn btn-secundario">Obter Localização</button>
+                    <input type="text" id="origin" placeholder="Minha Localização (Origem):" readonly>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

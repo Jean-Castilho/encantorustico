@@ -5,7 +5,7 @@
     background-position: center;
     color: var(--cor-texto-claro);
     text-align: center;
-    padding: 8rem 2rem;
+    padding: 6rem 2rem;
     width: 100%;
     display: flex;
     align-items: center;
@@ -14,7 +14,6 @@
 
 .hero-content {
     max-width: 650px;
-    background-color: rgba(0, 0, 0, 0.55);
     padding: 3rem;
     border-radius: var(--borda-radius);
 }
@@ -22,7 +21,7 @@
 .hero-content h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: #fff;
+    color: var(--cor-destaque);
 }
 
 .featured-products {
@@ -32,6 +31,7 @@
 
 .product-grid {
     display: flex;
+    flex-wrap: wrap;
     gap: 4rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -129,6 +129,7 @@
     flex-direction: column;
     justify-content: flex-end;
 }
+
 
 .product-card h3 {
     font-size: 1.25rem;

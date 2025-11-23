@@ -164,11 +164,11 @@ class DeliveryDashboard {
      */
     traceRoute() {
         if (!this.markerA) {
-            alert('Primeiro, obtenha sua localização clicando em "Obter Localização".');
+            this.showNotification('Primeiro, obtenha sua localização clicando em "Obter Localização".', 'error');
             return;
         }
         if (!this.address_client) {
-            alert('Selecione um pedido para definir o destino.');
+            this.showNotification('Selecione um pedido para definir o destino.', 'error');
             return;
         }
 
@@ -184,7 +184,7 @@ class DeliveryDashboard {
                 if (this.markerA) this.markerA.setMap(null);
                 if (this.markerB) this.markerB.setMap(null);
             } else {
-                alert('Falha ao traçar a rota: ' + status);
+                this.showNotification('Falha ao traçar a rota: ' + status, 'error');
             }
         });
     }
@@ -211,7 +211,7 @@ class DeliveryDashboard {
                 this.locationBtn.textContent = 'Parar Rastreamento';
                 this.locationBtn.classList.replace('btn-secundario', 'btn-destaque');
             } else {
-                alert("Seu navegador não suporta geolocalização.");
+                this.showNotification("Seu navegador não suporta geolocalização.", 'error');
             }
         }
     }
@@ -248,7 +248,7 @@ class DeliveryDashboard {
      * @param {GeolocationPositionError} error - O objeto de erro de geolocalização.
      */
     handleLocationError(error) {
-        alert("Não foi possível obter sua localização. Verifique as permissões do navegador.");
+        this.showNotification("Não foi possível obter sua localização. Verifique as permissões do navegador.", 'error');
         this.locationWatchId = null;
         this.locationBtn.textContent = 'Obter Localização';
         this.locationBtn.classList.replace('btn-destaque', 'btn-secundario');
@@ -274,7 +274,7 @@ class DeliveryDashboard {
      */
     viewOnMap() {
         if (!this.address_client) {
-            alert('Por favor, selecione um pedido para ver o endereço no mapa.');
+            this.showNotification('Por favor, selecione um pedido para ver o endereço no mapa.', 'error');
             return;
         }
 
@@ -298,7 +298,7 @@ class DeliveryDashboard {
                     this.markerB.setMap(this.map);
                 }
             } else {
-                alert('A geocodificação do endereço falhou: ' + status);
+                this.showNotification('A geocodificação do endereço falhou: ' + status, 'error');
             }
         });
     }
@@ -306,7 +306,7 @@ class DeliveryDashboard {
     async enviarCodigo() {
         const number = document.getElementById('number').value;
         if (!number) {
-            alert('Por favor, selecione um pedido antes de enviar o código.');
+            this.showNotification('Por favor, selecione um pedido antes de enviar o código.', 'error');
             return;
         }
 
@@ -323,14 +323,14 @@ class DeliveryDashboard {
             if (response.ok) {
                 this.sendCodeBtn.style.display = 'none';
                 this.otpSection.style.display = 'block';
-                alert('Código de confirmação enviado para o cliente!');
+                this.showNotification('Código de confirmação enviado para o cliente!', 'success');
             } else {
                 const resCod = await response.json();
-                alert(`Erro ao enviar código: ${resCod.message || 'Erro desconhecido.'}`);
+                this.showNotification(`Erro ao enviar código: ${resCod.message || 'Erro desconhecido.'}`, 'error');
             }
         } catch (error) {
             console.error('Erro ao enviar código:', error);
-            alert('Não foi possível conectar ao servidor para enviar o código. Tente novamente.');
+            this.showNotification('Não foi possível conectar ao servidor para enviar o código. Tente novamente.', 'error');
         } finally {
             this.sendCodeBtn.disabled = false;
             this.sendCodeBtn.textContent = 'Enviar Codigo';
@@ -340,19 +340,50 @@ class DeliveryDashboard {
     async confirmarEntrega() {
         const number = document.getElementById('number').value;
         const code = document.getElementById('OtpToClient').value;
+
+        if (!code || code.length < 4) {
+            this.showNotification('Por favor, insira um código de confirmação válido.', 'error');
+            return;
+        }
+
+        this.confirmDeliveryBtn.disabled = true;
+        this.confirmDeliveryBtn.textContent = 'Confirmando...';
+
         try {
             const response = await fetch("/confirmDelivery", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ number, code })
             });
+
             const result = await response.json();
-            console.log(result);
+
+            if (response.ok) {
+                this.showNotification('Entrega confirmada com sucesso!', 'success');
+                // Atualiza a UI para refletir o novo status
+                const selectedCard = this.orderList.querySelector('.order-card.selected');
+                if (selectedCard) {
+                    const orderData = JSON.parse(selectedCard.dataset.order);
+                    orderData.status = 'Entregue';
+                    selectedCard.dataset.order = JSON.stringify(orderData); // Atualiza os dados no elemento
+                    this.updateOrderDetails(orderData); // Re-renderiza os detalhes
+                }
+            } else {
+                this.showNotification(result.message || 'Falha ao confirmar a entrega.', 'error');
+            }
         } catch (error) {
             console.error('Erro ao confirmar entrega:', error);
+            this.showNotification('Erro de conexão ao confirmar a entrega. Tente novamente.', 'error');
+        } finally {
+            this.confirmDeliveryBtn.disabled = false;
+            this.confirmDeliveryBtn.textContent = 'Confirmar Entrega';
         }
     }
 
-
+    showNotification(message, type = 'info') {
+        // Esta função pode ser implementada para mostrar um toast/snackbar em vez de um alert.
+        // Por simplicidade, usaremos alert por enquanto, mas com a estrutura pronta para substituição.
+        alert(`[${type.toUpperCase()}] ${message}`);
+    }
 
 }

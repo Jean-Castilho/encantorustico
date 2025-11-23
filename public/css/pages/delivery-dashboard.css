@@ -17,12 +17,14 @@
     gap: 1rem;
     padding: 1rem;
     background-color: var(--cor-primaria-entrega);
+    background-color: var(--cor-primaria);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* --- Orders List --- */
 .orders-list-container {
     background-color: var(--cor-secundaria-entrega);
+    background-color: #fff;
     border-radius: var(--borda-radius);
     box-shadow: var(--sombra-padrao);
     width: 28%;
@@ -40,6 +42,7 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--cor-borda-entrega);
+    border-bottom: 1px solid var(--cor-borda);
     padding-bottom: 0.8rem;
     margin-bottom: 1.5rem;
 }
@@ -48,10 +51,12 @@
     margin: 0;
     font-size: 1.3rem;
     color: var(--cor-texto-entrega);
+    color: var(--cor-texto-escuro);
 }
 
 #order-count {
     background-color: var(--cor-destaque-entrega);
+    background-color: var(--cor-destaque);
     color: white;
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
@@ -62,25 +67,30 @@
 .order-card {
     background-color: #fff;
     border: 1px solid var(--cor-borda-entrega);
+    border: 1px solid var(--cor-borda);
     border-radius: var(--borda-radius);
     padding: 1.5rem;
     margin-bottom: 1rem;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-left-color 0.2s ease;
     border-left: 1px solid var(--cor-borda-entrega);
+    border-left: 1px solid var(--cor-borda);
 }
 
 .order-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     border-left-color: var(--cor-destaque-entrega);
+    border-left-color: var(--cor-destaque);
 }
 
 .order-card.selected {
     background-color: #f0f7ff;
     border-color: var(--cor-destaque-entrega);
+    border-color: var(--cor-destaque);
     border-left-width: 5px;
     box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+    box-shadow: 0 4px 15px rgba(169, 110, 91, 0.2);
 }
 
 .order-card h3 {
@@ -92,6 +102,7 @@
 .order-card p {
     margin: 0.2rem 0;
     color: var(--cor-texto-secundario);
+    color: var(--cor-secundaria);
     font-size: 0.75rem;
 }
 
@@ -129,6 +140,7 @@
 .selected-order-container {
     width: 67%;
     background-color: var(--cor-secundaria-entrega);
+    background-color: #fff;
     border-radius: var(--borda-radius);
     box-shadow: var(--sombra-padrao);
     display: flex;
@@ -140,6 +152,7 @@
     height: 60%;
     background-color: #e9ecef;
     border-radius: var(--borda-radius) var(--borda-radius) 0 0;
+    border-radius: var(--borda-radius) var(--borda-radius) 0 0; /* Mantido, pois é específico do layout */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,6 +181,7 @@
     height: 100%;
     text-align: center;
     color: var(--cor-texto-secundario);
+    color: var(--cor-secundaria);
 }
 
 #empty-state.hidden {
@@ -253,6 +267,7 @@
     margin-top: auto;
     padding-top: 1rem;
     border-top: 1px solid var(--cor-borda-entrega);
+    padding-top: 1rem;    border-top: 1px solid var(--cor-borda);
 }
 
 .delivery-actions #origin {
@@ -283,11 +298,13 @@
 
 .btn-destaque {
     background-color: var(--cor-destaque-entrega);
+    background-color: var(--cor-destaque);
     color: white;
 }
 
 .btn-destaque:hover {
     background-color: #0056b3;
+    background-color: #9a6250; /* Cor de hover do botão de ação já existente */
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
 }

@@ -1,8 +1,6 @@
 <div class="container">
     <link rel="stylesheet" href="/css/main.css">
 
-
-
     <header class="page-header">
         <h1>Gerenciamento de Inventário</h1>
     </header>
@@ -28,14 +26,14 @@
                         <% products.forEach(product=> { %>
                             <% const nome=product.nome || product.name || 'Sem nome' ; const rawImg=(product.imagens &&
                                 product.imagens.length) ? product.imagens[0] : null; const imagem=rawImg ?
-                                (String(rawImg).startsWith('http') ? rawImg : ('/uploads/' + rawImg))
+                                (String(rawImg).startsWith('http') ? rawImg : ('/products/images/' + rawImg))
                                 : '/images/no-image.png' ; const precoVal=(product.preco !=null &&
                                 !isNaN(Number(product.preco))) ? Number(product.preco) : null; const precoText=precoVal
                                 !==null ? precoVal.toLocaleString('pt-BR', { style: 'currency' , currency: 'BRL' })
                                 : 'Preço sob consulta' ; const estoque=(product.stock !=null) ? product.stock :
-                                (product.estoque != null ? product.estoque : '—' ); const ativo=product.ativo=="true" ;
-                                const requerMontagem = product.requerMontagem === "on" || product.requerMontagem === true;
-                                const categoria=product.categoria || '—'; %>
+                                (product.estoque !=null ? product.estoque : '—' ); const ativo=product.ativo=="true" ;
+                                const requerMontagem=product.requerMontagem==="on" || product.requerMontagem===true;
+                                const categoria=product.categoria || '—' ; %>
                                 <tr>
                                     <td>
                                         <img src="<%= imagem %>" alt="<%= nome %>" class="inventory-product-image">
@@ -69,11 +67,10 @@
                                     <td>
                                         <div class="action-buttons">
 
-                                            <a href="/product/edit/<%= product._id %>"
+                                            <a href="/admin/products/edit/<%= product._id %>"
                                                 class="btn btn-sm btn-secundario">Editar</a>
 
-                                            <form action="/admin/products/delete" method="post"
-                                                onsubmit="return confirm('Confirma a exclusão deste produto?');">
+                                            <form class="delete-product-form">
                                                 <input type="hidden" name="id" value="<%= product._id %>">
                                                 <button type="submit" class="btn btn-sm btn-remover">Excluir</button>
                                             </form>
@@ -86,19 +83,79 @@
             </div>
 
             <div class="inventory-actions">
-                <a href="/product/add" class="btn btn-destaque">Adicionar Novo Produto</a>
+                <a href="/admin/add-product" class="btn btn-destaque">Adicionar Novo Produto</a>
             </div>
 
             <% } else { %>
 
-                <div class="inventory-actions">
-                    <a href="/product/add" class="btn btn-destaque">Adicionar Novo Produto</a>
-                </div>
-
                 <div class="alert alert-info">
-                    Nenhum produto encontrado. <a href="/product/add">Adicione um novo produto</a>.
+                    Nenhum produto encontrado. <a href="/admin/add-product">Adicione um novo produto</a>.
                 </div>
                 <% } %>
-
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.delete-product-form').forEach(form => {
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const button = this.querySelector('button[type="submit"]');
+            const originalButtonText = button.textContent;
+            const productId = this.querySelector('input[name="id"]').value;
+
+            // Simple confirmation dialog
+            if (!confirm(`Tem certeza que deseja excluir este produto?`)) {
+                return;
+            }
+
+            const notification = document.getElementById('notification-home') || (()=>{
+                const newDiv = document.createElement('div');
+                newDiv.id = 'notification-home';
+                document.body.prepend(newDiv);
+                return newDiv;
+            })();
+
+            function showNotification(message, isSuccess) {
+                notification.textContent = message;
+                notification.className = isSuccess ? 'notification success' : 'notification error';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+
+            button.textContent = "Removendo...";
+            button.disabled = true;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            try {
+                const response = await fetch(`/admin/products/delete`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify({ id: productId }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showNotification(result.message, true);
+                    // Remove the table row from the DOM;
+                    this.closest('tr').remove();
+                } else {
+                    showNotification(result.message || 'Ocorreu um erro.', false);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showNotification("Ocorreu um erro ao excluir o produto.", false);
+            } finally {
+                button.textContent = originalButtonText;
+                button.disabled = false;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,37 @@
+
+<%
+  if (!product) return;
+  const id = product._id.toString();
+  const productUrl = `/product/${id}`;
+  const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] : '/assets/img/fallback.jpg';
+  const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Preço sob consulta';
+  const isFavorited = favorites.includes(id);
+  const isInCart = cart.includes(id);
+  const isCategoryCard = cardType === 'category';
+
+%>
+
+<div class="product-card <%= isCategoryCard ? 'category-product-item' : '' %>">
+  <div class="product-image-container">
+    <a href="<%= productUrl %>" class="product-link">
+      <img src="/products/images/<%= imagem %>" alt="<%= product.nome %>" loading="lazy">
+    </a>
+    <% if (!isCategoryCard) { %>
+      <div class="product-card-icons">
+        <a class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>" data-product-id="<%= id %>">
+          <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
+        </a>
+        <a class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>" data-product-id="<%= id %>">
+          <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
+        </a>
+      </div>
+    <% } %>
+  </div>
+  <div class="product-card-content <%= isCategoryCard ? 'category-card-content' : '' %>">
+    <h3><%= product.nome %></h3>
+    <% if (isCategoryCard) { %>
+      <p class="price"><%= preco %></p>
+    <% } %>
+    <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
+  </div>
+</div>

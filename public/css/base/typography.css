@@ -43,7 +43,7 @@ h6 {
 }
 
 a {
-    color: var(--cor-destaque);
+    color: white;
     text-decoration: none;
     transition: color 0.3s ease;
 }

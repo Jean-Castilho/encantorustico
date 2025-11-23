@@ -1,0 +1,106 @@
+<div class="container" id="otp-page">
+    <header class="page-header">
+        <h1>Verificação de Código OTP</h1>
+        <p><%= mensagem %></p>
+    </header>
+
+    <div class="otp-content">
+        <section class="otp-form-section">
+            <div class="card">
+                <h3>Insira o Código</h3>
+                <form action="/verify-otp" method="POST" id="otp-form">
+                    <input type="hidden" name="contact" value="<%= contact %>">
+                    <input type="hidden" name="code" id="otp-full-code">
+                    <div class="form-group otp-input-group">
+                        <label for="otpCode-1" class="form-label sr-only">Código OTP</label>
+                        <div class="otp-input-container">
+                            <input type="text" id="otpCode-1" class="otp-input" maxlength="1" required pattern="[0-9]">
+                            <input type="text" id="otpCode-2" class="otp-input" maxlength="1" required pattern="[0-9]">
+                            <input type="text" id="otpCode-3" class="otp-input" maxlength="1" required pattern="[0-9]">
+                            <input type="text" id="otpCode-4" class="otp-input" maxlength="1" required pattern="[0-9]">
+                            <input type="text" id="otpCode-5" class="otp-input" maxlength="1" required pattern="[0-9]">
+                            <input type="text" id="otpCode-6" class="otp-input" maxlength="1" required pattern="[0-9]">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-destaque">Verificar Código</button>
+                    </div>
+                </form>
+                <p class="resend-otp">Não recebeu o código? <a href="/resend-otp?contact=<%= contact %>">Reenviar Código</a></p>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const otpContainer = document.querySelector('.otp-input-container');
+        if (otpContainer) {
+            const inputs = [...otpContainer.querySelectorAll('input[type=text]')];
+            const form = document.getElementById('otp-form');
+            const hiddenInput = document.getElementById('otp-full-code');
+
+            if (inputs.length > 0) {
+                inputs[0].focus();
+            }
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', () => {
+                    // If a character is entered, move to the next input
+                    if (input.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                        // If backspace is pressed on an empty input, move to the previous input
+                        inputs[index - 1].focus();
+                    } else if (e.key === 'ArrowLeft' && index > 0) {
+                        // Move to previous input on left arrow key
+                        e.preventDefault();
+                        inputs[index - 1].focus();
+                    } else if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+                        // Move to next input on right arrow key
+                        e.preventDefault();
+                        inputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pasteData = e.clipboardData.getData('text');
+                    const otpDigits = pasteData.replace(/\s/g, '').split('');
+                    
+                    inputs.forEach((input, i) => {
+                        if (otpDigits[i]) {
+                            input.value = otpDigits[i];
+                        }
+                    });
+
+                    // Focus the last input that was filled
+                    const lastFilledIndex = Math.min(otpDigits.length - 1, inputs.length - 1);
+                    if (lastFilledIndex < inputs.length -1) {
+                        inputs[lastFilledIndex + 1].focus();
+                    } else {
+                        inputs[lastFilledIndex].focus();
+                    }
+                });
+            });
+
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    const otpValue = inputs.map(input => input.value).join('');
+                    if (hiddenInput) {
+                        hiddenInput.value = otpValue;
+                    }
+                    // Optional: Add validation to ensure all fields are filled
+                    if (otpValue.length !== inputs.length) {
+                        e.preventDefault();
+                        alert('Por favor, preencha todos os campos do código OTP.');
+                    }
+                });
+            }
+        }
+    });
+</script>

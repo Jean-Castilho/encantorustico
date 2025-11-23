@@ -1,95 +1,133 @@
 <div class="container">
-    <header class="page-header" style="text-align: center; margin-bottom: 3rem;">
-        <h1>Meus Favoritos</h1>
-    </header>
+  <header class="page-header" style="text-align: center; margin-bottom: 1.6rem">
+    <h1>Meus Favoritos</h1>
+  </header>
 
-    <% if (favorites && favorites.length > 0) { %>
-        <div class="favorites-grid">
-            <% favorites.forEach(item=> { %>
-                <% const imagem = (item.imagens && item.imagens.length> 0) ? item.imagens[0] : '/assets/img/fallback.jpg';
-                    const id = item.id;
-                    const productUrl = `/product/${id}`;
-                    %>
-                    <div class="product-card" id="favorite-card-<%= id %>">
-                        <a href="<%= productUrl %>">
-                            <img src="/uploads/<%= imagem %>" alt="<%= item.name %>">
-                        </a>
-                        <div style="padding: 1.5rem;">
-                            <h3><a href="<%= productUrl %>"
-                                    style="color: var(--cor-secundaria); text-decoration: none;">
-                                    <%= item.name %>
-                                </a></h3>
-                            <p class="price">R$ <%= item.preco %>
-                            </p>
-                            <button class="btn btn-remover remove-favorite-btn" data-product-id="<%= id %>">Remover dos
-                                Favoritos</button>
-                        </div>
-                    </div>
-                    <% }); %>
-        </div>
-        <% } else { %>
-            <div class="card" style="text-align: center; padding: 4rem;">
-                <h2>Sua lista de favoritos está vazia.</h2>
-                <p style="margin-top: 1rem; margin-bottom: 2rem;">Clique no ícone de coração nos produtos para
-                    guardá-los aqui.</p>
-                <a href="/products" class="btn btn-destaque">Ver Produtos</a>
-            </div>
-            <% } %>
+  <% if (favorites && favorites.length > 0) { %>
+  <div class="favorites-grid">
+    <% favorites.forEach(item=> { %> <% const imagem = (item.imagens &&
+    item.imagens.length> 0) ? item.imagens[0] : '/assets/img/fallback.jpg';
+    
+    
+    
+    const id = item._id.toString(); 
+    
+    const productUrl = `/product/${id}`; %>
+    <div class="product-card" id="favorite-card-<%= id %>">
+      <a href="<%= productUrl %>">
+        <img src="/products/images/<%= imagem %>" alt="<%= item.name %>" />
+      </a>
+      <div style="padding: 1.5rem">
+        <h3>
+          <a
+            href="<%= productUrl %>"
+            style="color: var(--cor-secundaria); text-decoration: none"
+          >
+            <%= item.name %>
+          </a>
+        </h3>
+        <p class="price">R$ <%= item.preco %></p>
+        <button
+          class="btn btn-remover remove-favorite-btn"
+          data-product-id="<%= id %>"
+        >
+          Remover dos Favoritos
+        </button>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+  <% } else { %>
+  <div class="card" style="text-align: center; padding: 4rem">
+    <h2>Sua lista de favoritos está vazia.</h2>
+    <p style="margin-top: 1rem; margin-bottom: 2rem">
+      Clique no ícone de coração nos produtos para guardá-los aqui.
+    </p>
+    <a href="/products" class="btn btn-destaque">Ver Produtos</a>
+  </div>
+  <% } %>
 </div>
 
-<div id="notification-fav"
-    style="display: none; position: fixed; top: 20px; right: 20px; z-index: 1050; padding: 15px; border-radius: 5px; color: white;">
-</div>
+<div
+  id="notification-fav"
+  style="
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    padding: 15px;
+    border-radius: 5px;
+    color: white;
+  "
+></div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const notification = document.getElementById('notification-fav');
+  document.addEventListener("DOMContentLoaded", () => {
+    const notification = document.getElementById("notification-home");
 
-        function showNotification(message, isSuccess) {
-            notification.textContent = message;
-            notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
+    function showNotification(mensagem, isSuccess) {
+      notification.textContent = mensagem;
+      notification.style.backgroundColor = isSuccess ? "#28a745" : "#dc3545";
+      notification.style.display = "block";
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, 3000);
+    }
+
+    const removeButtons = document.querySelectorAll(".remove-favorite-btn");
+    removeButtons.forEach((button) => {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+
+        const csrfToken = document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute("content");
+
+        const productId = button.dataset.productId;
+        console.log("productId", productId)
+        if (!productId) return;
+
+        const url = `/auth/favorites/remove`;
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-csrf-token": csrfToken, // Envia o token no cabeçalho
+            },
+            body: JSON.stringify({
+              productId,
+              csrfToken, // Envia o token no corpo também por segurança
+            }),
+          });
+
+          const result = await response.json();
+
+          console.log(result);
+
+          showNotification(result.mensagem, result.success);
+
+          if (result.success) {
+            const cardToRemove = document.getElementById(
+              `favorite-card-${productId}`
+            );
+
+            if (cardToRemove) {
+              cardToRemove.remove();
+            }
+            // Opcional: verificar se a lista de favoritos está vazia e mostrar a mensagem
+            const grid = document.querySelector(".favorites-grid");
+            if (grid && grid.children.length === 0) {
+              // Recarregar ou injetar o HTML da mensagem de lista vazia
+              window.location.reload();
+            }
+          }
+        } catch (error) {
+          showNotification("Erro de conexão. Tente novamente.", false);
         }
-
-        const removeButtons = document.querySelectorAll('.remove-favorite-btn');
-        removeButtons.forEach(button => {
-            button.addEventListener('click', async (event) => {
-                event.preventDefault();
-                const productId = button.dataset.productId;
-                if (!productId) return;
-
-                const url = `/removeFavorite/${productId}`;
-
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    const result = await response.json();
-                    showNotification(result.message, result.success);
-
-                    if (result.success) {
-                        const cardToRemove = document.getElementById(`favorite-card-${productId}`);
-                        if (cardToRemove) {
-                            cardToRemove.remove();
-                        }
-                        // Opcional: verificar se a lista de favoritos está vazia e mostrar a mensagem
-                        const grid = document.querySelector('.favorites-grid');
-                        if (grid && grid.children.length === 0) {
-                            // Recarregar ou injetar o HTML da mensagem de lista vazia
-                            window.location.reload();
-                        }
-                    }
-                } catch (error) {
-                    showNotification('Erro de conexão. Tente novamente.', false);
-                }
-            });
-        });
+      });
     });
+  });
 </script>

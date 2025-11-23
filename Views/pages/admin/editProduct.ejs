@@ -1,0 +1,227 @@
+<div class="add-product-form">
+    <div class="card">
+        <div class="page-header">
+            <h1>Editar Produto</h1>
+        </div>
+
+        <form id="updatedForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <!-- Valores normalizados fornecidos pelo controller -->
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="nome" class="form-label">Nome do Produto</label>
+                    <input type="text" id="nome" name="nome" class="form-control"
+                        placeholder="Ex: Poltrona Costela com Puff" value="<%= nomeVal %>" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="slug" class="form-label">Slug (URL amigável)</label>
+                    <input type="text" id="slug" name="slug" class="form-control"
+                        placeholder="Ex: poltrona-costela-com-puff-couro-preto" value="<%= slugVal %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="preco" class="form-label">Preço (R$)</label>
+                    <input type="number" id="preco" name="preco" class="form-control" step="0.01"
+                        placeholder="Ex: 1299.99" value="<%= precoVal %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria" class="form-label">Categoria</label>
+                    <input type="text" id="categoria" name="categoria" class="form-control"
+                        placeholder="Ex: Móveis, Decoração" value="<%= categoriaVal %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="colecao" class="form-label">Coleção</label>
+                    <input type="text" id="colecao" name="colecao" class="form-control"
+                        placeholder="Ex: Coleção Viena 2024" value="<%= colecaoVal %>">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea id="descricao" name="descricao" class="form-control" rows="5"
+                        placeholder="Descrição do produto"><%= descricaoVal %></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="ambientes" class="form-label">Ambientes</label>
+                    <input type="text" id="ambientes" name="ambientes" class="form-control"
+                        placeholder="Ex: sala de estar, cozinha" value="<%= ambientesVal %>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Requer montagem</label>
+                    <div>
+                        <label><input type="checkbox" name="requerMontagem" value="on" <%=requerMontagemChecked %> />
+                            Sim </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ativo</label>
+                    <div>
+                        <label><input type="checkbox" name="ativo" value="true" <%=ativoChecked %> /> Publicar</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="garantia" class="form-label">Garantia</label>
+                    <input type="text" id="garantia" name="garantia" class="form-control" value="<%= garantiaVal %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="peso" class="form-label">Peso (kg)</label>
+                    <input type="text" id="peso" name="peso" class="form-control" value="<%= pesoVal %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="estoque" class="form-label">Estoque</label>
+                    <input type="number" id="estoque" name="estoque" class="form-control" value="<%= estoqueVal %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="altura" class="form-label">Altura (cm)</label>
+                    <input type="number" id="altura" name="dimensoes[altura]" class="form-control" step="0.01"
+                        value="<%= alturaVal %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="largura" class="form-label">Largura (cm)</label>
+                    <input type="number" id="largura" name="dimensoes[largura]" class="form-control" step="0.01"
+                        value="<%= larguraVal %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="profundidade" class="form-label">Profundidade (cm)</label>
+                    <input type="number" id="profundidade" name="dimensoes[profundidade]" class="form-control"
+                        step="0.01" value="<%= profundidadeVal %>">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="imagens" class="form-label">Imagens (até 5)</label>
+                    <input type="file" id="imagens" name="imagens" class="form-control" accept="image/*" multiple>
+                    <div id="preview" style="display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap;">
+                        <% if (product.imagens && product.imagens.length> 0) { %>
+                            <% product.imagens.forEach((img, idx)=> { %>
+                                <label
+                                    style="display:inline-flex; flex-direction:column; align-items:center; gap:0.25rem;">
+                                    <input type="checkbox" name="existingImages[]" value="<%= img %>" checked
+                                        style="display:block;" />
+                                    <img src="/products/images/<%= img %>" alt="preview"
+                                        style="width:80px; height:80px; object-fit:cover; border-radius:6px;" />
+                                    <small style="font-size:0.7rem; color:#6c757d;">manter</small>
+                                </label>
+                                <% }); %>
+                                    <% } %>
+                    </div>
+                </div>
+
+                <div class="form-actions full-width"
+                    style="display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem;">
+                    <a href="/admin/inventory" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" id="updatedButton" type="submit" class="btn btn-primary">Salvar
+                        alterações</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    document
+        .getElementById("updatedForm")
+        .addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const notification = document.getElementById('notification-home');
+            const loginButton = document.getElementById("updatedButton");
+            const originalButonText = loginButton.textContent;
+
+            function showNotification(message, isSuccess) {
+                notification.textContent = message;
+                notification.style.backgroundColor = isSuccess ? '#dc3545' : '#28a745';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+
+            loginButton.textContent = "Sending...";
+            loginButton.disable = true;
+
+            const formData = new FormData(this);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const id = '<%= product._id %>';
+
+            try {
+                const response = await fetch(`/admin/products/edit/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showNotification(result.message, true);
+                    setTimeout(() => {
+                        window.location.href = "/admin/inventory";
+                    }, 1000);
+                } else {
+                    showNotification(result.message, false);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showNotification("An error occurred while uploading the product.", false);
+            }
+            setTimeout(() => {
+                loginButton.textContent = originalButonText;
+                loginButton.disabled = false;
+            }, 6000);
+
+
+        });
+
+
+
+
+
+
+    // Preview de imagens selecionadas
+    document.getElementById('imagens')?.addEventListener('change', function (e) {
+        const preview = document.getElementById('preview');
+        preview.innerHTML = '';
+        Array.from(this.files).slice(0, 5).forEach(file => {
+            const url = URL.createObjectURL(file);
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.width = '80px';
+            img.style.height = '80px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '6px';
+            preview.appendChild(img);
+        });
+    });
+
+    // Garantir que checkboxes representem corretamente os valores vindos do servidor
+    (function syncCheckboxes() {
+        try {
+
+            const reqChk = document.querySelector('input[name="requerMontagem"]');
+            if (reqChk) {
+                const val = '<%= product.requerMontagem %>';
+                reqChk.checked = (val === 'on' || val === 'true' || val === true);
+            }
+
+            const ativoChk = document.querySelector('input[name="ativo"]');
+            if (ativoChk) {
+                const val2 = '<%= product.ativo %>';
+                ativoChk.checked = (val2 === 'true' || val2 === true);
+            }
+        } catch (e) {/* noop */ }
+    })();
+</script>

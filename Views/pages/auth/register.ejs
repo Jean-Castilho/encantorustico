@@ -13,7 +13,11 @@
             </div>
         <% } %>
 -->
-        <form action="/register" method="POST" class="register-form">
+        <form id="registerForm" class="register-form">
+            <div class="form-group">
+                <label for="name" class="form-label">Nome de Usuário</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
             <div class="form-group">
                 <label for="email" class="form-label">E-mail</label>
                 <input type="email" id="email" name="email" class="form-control" required>
@@ -22,21 +26,19 @@
                 <label for="password" class="form-label">Senha</label>
                 <input type="password" id="password" name="password" class="form-control" required>
             </div>
-
-            <div class="form-group">
-                <label for="name" class="form-label">Nome de Usuário</label>
-                <input type="text" id="name" name="name" class="form-control" required>
-            </div>
             <div class="form-group">
                 <label for="number" class="form-label">Número de Telefone</label>
-                <input type="tel" id="number" name="number" class="form-control" pattern="[0-9]{2}[0-9]{5}[0-9]{4}"
-                    placeholder="Ex: 11987654321" required>
-                <small>Formato: DDNNNNNNNNN (apenas números)</small>
+                <input type="tel" id="phone" name="phone" class="form-control" required>
             </div>
 
+            <input type="hidden" id="full_phone" name="full_phone" />
+
+
             <div class="form-group" style="margin-top: 2rem;">
-                <button type="submit" class="btn btn-destaque" style="width: 100%;">Registrar</button>
+                <button type="submit" class="btn btn-destaque" id="registerButton"
+                    style="width: 100%;">Registrar</button>
             </div>
+
         </form>
 
         <div style="text-align: center; margin-top: 2rem;">
@@ -44,3 +46,72 @@
         </div>
     </div>
 </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/23.0.10/js/intlTelInput.min.js"></script>
+<script>
+    const phoneInputField = document.querySelector("#phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript:
+            "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/23.0.10/js/utils.js",
+        initialCountry: "br",
+        preferredCountries: ["br", "us", "pt"],
+        separateDialCode: true,
+        formatOnDisplay: true,
+    });
+
+    document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+
+            const notification = document.getElementById('notification-home');
+            const registerButton = document.getElementById("registerButton");
+            const originalButtonText = registerButton.textContent;
+
+            function showNotification(mensagem, isSuccess) {
+                notification.textContent = mensagem;
+                notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+
+            registerButton.textContent = "Sending...";
+            registerButton.disabled = true;
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            const fullPhone = phoneInput.getNumber();
+            document.getElementById("full_phone").value = fullPhone;
+            data.phone = fullPhone;
+
+            try {
+                const response = await fetch("/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+                showNotification(result.mensagem, result.success);
+
+                if (response.ok) {
+                    window.location.href = "/";
+                } else {
+                    showNotification(result.mensagem, result.success);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showNotification(result.mensagem, result.success);
+            }
+
+            registerButton.textContent = originalButtonText;
+            registerButton.disabled = false;
+        });
+</script>

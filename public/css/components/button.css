@@ -1,10 +1,10 @@
 /* --- Component: Buttons --- */
 .btn {
     display: inline-block;
-    padding: 14px 28px;
+    font-size: 1.3rem;
     border: 2px solid transparent;
     border-radius: var(--borda-radius);
-    font-family: var(--fonte-corpo);
+    font-family: white;
     font-weight: bold;
     cursor: pointer;
     text-align: center;

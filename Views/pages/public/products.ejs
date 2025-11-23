@@ -61,74 +61,88 @@
         <h1>Todos os Produtos</h1>
     </header>
 
-    <%
-      // Lista de todas as categorias disponíveis
-      const allCategories = ['Sala de Estar', 'Área Gourmet', 'Cozinha', 'Quarto', 'Área Externa', 'Banheiro', 'Escritório'];
-      // Garante que 'items' seja um array, independentemente da origem dos dados
-      const items = Array.isArray(products) ? products : (Array.isArray(allProducts) ? allProducts : []);
-    %>
+    <% 
+    const allCategories=['Sala de Estar', 'Área Gourmet' , 'Cozinha'
+        , 'Quarto' , 'Área Externa' , 'Banheiro' , 'Escritório' ]; 
+        const items=Array.isArray(products) ? products : (Array.isArray(allProducts) ? allProducts : []); 
+        %>
 
-    <!-- Barra de Filtro de Categoria -->
-    <div class="category-filter-bar">
-        <button class="filter-btn active" data-category="all">Todas</button>
-        <% allCategories.forEach(category => { %>
-        <button class="filter-btn" data-category="<%= category %>"><%= category %></button>
-        <% }); %>
-    </div>
 
-    <!-- Grid Único de Produtos -->
-    <div class="product-grid">
-        <% if (items.length > 0) { %>
-        <% items.forEach(product => { %>
-        <%
-              // Extrai e formata os dados do produto
-              const imagem = (product.imagens && product.imagens.length > 0) ? product.imagens[0] : '/assets/img/fallback.jpg';
-              const id = product._id || product.id || '';
-              const productUrl = `/product/${id}`;
-              const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'Preço sob consulta';
-              
-              // Verifica se o produto está nos favoritos ou no carrinho do usuário
-              const isFavorited = (session?.user?.favorites || []).map(String).includes(String(id));
-              const isInCart = (session?.user?.cart || []).map(String).includes(String(id));
 
-              // Define as URLs de ação (requer login)
-              const favoritUrl = session?.user?._id ? `/addFavorite/${id}` : '/login';
-              const carrinhoUrl = session?.user?._id ? (isInCart ? '/cart' : `/cart/add/${id}`) : '/login';
-
-              // Formata as categorias do produto para o atributo de dados
-              const productCategories = Array.isArray(product.categoria) ? product.categoria.join(',') : (product.categoria || '');
-            %>
-
-        <!-- Card do Produto -->
-        <div class="product-card" data-categories="<%= productCategories %>">
-            <div class="product-image-container">
-                <a href="<%= productUrl %>" class="product-link">
-                    <img src="<%= imagem.startsWith('/uploads') ? imagem : '/uploads/' + imagem %>"
-                        alt="<%= product.nome %>">
-                </a>
-                <div class="product-card-icons">
-                    <a href="<%= favoritUrl %>" class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>"
-                        data-product-id="<%= id %>">
-                        <i class="material-icons"><%= isFavorited ? 'favorite' : 'favorite_border' %></i>
-                    </a>
-                    <a href="<%= carrinhoUrl %>" class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>"
-                        data-product-id="<%= id %>">
-                        <i class="material-icons"><%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %></i>
-                    </a>
-                </div>
-            </div>
-            <div class="product-card-content">
-                <h3><%= product.nome %></h3>
-                <p class="price"><%= preco %></p>
-                <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
-            </div>
+        <!-- Barra de Filtro de Categoria -->
+        <div class="category-filter-bar">
+            <button class="filter-btn active" data-category="all">Todas</button>
+            <% allCategories.forEach(category=> { %>
+                <button class="filter-btn" data-category="<%= category %>">
+                    <%= category %>
+                </button>
+                <% }); %>
         </div>
-        <% }); %>
-        <% } else { %>
-        <p style="text-align: center; grid-column: 1 / -1;">Nenhum produto encontrado no momento. Volte em breve!
-        </p>
-        <% } %>
-    </div>
+
+        <!-- Grid Único de Produtos -->
+        <div class="product-grid">
+            <% if (items.length> 0) { %>
+                <% items.forEach(product=> { %>
+                    <% 
+                     const imagem=(product.imagens && product.imagens.length>0) ? product.imagens[0] : '/assets/img/fallback.jpg';
+                        const id = product._id || '';
+                        const productUrl = `/product/${id}`;
+                        const preco = (product.preco != null) ? Number(product.preco).toLocaleString('pt-BR', { style:
+                        'currency', currency: 'BRL' }) : 'Preço sob consulta';
+
+                        // Verifica se o produto está nos favoritos ou no carrinho do usuário
+                        const isFavorited = (session?.user?.favorites || []).map(String).includes(String(id));
+                        const isInCart = (session?.user?.cart || []).map(String).includes(String(id));
+
+                        // Define as URLs de ação (requer login)
+                        const favoritUrl = session?.user?._id ? `/addFavorite/${id}` : '/login';
+                        const carrinhoUrl = session?.user?._id ? (isInCart ? '/cart' : `/cart/add/${id}`) : '/login';
+
+                        // Formata as categorias do produto para o atributo de dados
+                        const productCategories = Array.isArray(product.categoria) ? product.categoria.join(',') :
+                        (product.categoria || '');
+                        %>
+
+                        <!-- Card do Produto -->
+                        <div class="product-card" data-categories="<%= productCategories %>">
+                            <div class="product-image-container">
+                                <a href="<%= productUrl %>" class="product-link">
+                                    <img src="/products/images/<%= product.imagens[0] %>" alt="<%= product.nome %>">
+                                </a>
+                                <div class="product-card-icons">
+                                    <a href="<%= favoritUrl %>"
+                                        class="favorite-btn icon-btn <%= isFavorited ? 'favorited' : '' %>"
+                                        data-product-id="<%= id %>">
+                                        <i class="material-icons">
+                                            <%= isFavorited ? 'favorite' : 'favorite_border' %>
+                                        </i>
+                                    </a>
+                                    <a href="<%= carrinhoUrl %>"
+                                        class="add-to-cart-btn icon-btn <%= isInCart ? 'in-cart' : '' %>"
+                                        data-product-id="<%= id %>">
+                                        <i class="material-icons">
+                                            <%= isInCart ? 'shopping_cart_checkout' : 'shopping_cart' %>
+                                        </i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-card-content">
+                                <h3>
+                                    <%= product.nome %>
+                                </h3>
+                                <p class="price">
+                                    <%= preco %>
+                                </p>
+                                <a href="<%= productUrl %>" class="btn btn-secundario btn-sm">Ver Detalhes</a>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } else { %>
+                                <p style="text-align: center; grid-column: 1 / -1;">Nenhum produto encontrado no
+                                    momento. Volte em breve!
+                                </p>
+                                <% } %>
+        </div>
 </div>
 
 <div id="notification-products"
@@ -140,6 +154,8 @@
         // --- LÓGICA DE FILTRAGEM DE PRODUTOS ---
         const filterButtons = document.querySelectorAll('.filter-btn');
         const productCards = document.querySelectorAll('.product-card');
+
+        const csrfToken = '<%= csrfToken %>';
 
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -183,15 +199,21 @@
                 if (!productId) return;
 
                 const isFavorited = button.classList.contains('favorited');
-                const url = isFavorited ? `/removeFavorite/${productId}` : `/addFavorite/${productId}`;
+                const url = isFavorited ? '/auth/favorites/remove' : '/auth/favorites/add';
 
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
+                            'Content-Type': 'application/json',
+                            'x-csrf-token': csrfToken // Envia o token no cabeçalho
+                        },
+                        body: JSON.stringify({
+                            productId: productId,
+                            _csrf: csrfToken // Envia o token no corpo também por segurança
+                        })
                     });
+
                     const result = await response.json();
                     showNotification(result.message, result.success);
 
@@ -219,15 +241,23 @@
                 const productId = button.dataset.productId;
                 if (!productId) return;
 
-                const url = `/cart/add/${productId}`;
+                const url = `/auth/cart/add`;
 
                 try {
+
                     const response = await fetch(url, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
-                        }
+                            'Content-Type': 'application/json',
+
+                            'x-csrf-token': csrfToken
+                        },
+                        body: JSON.stringify({
+                            productId: productId,
+                            _csrf: csrfToken // Envia o token no corpo também por segurança
+                        })
                     });
+
                     const result = await response.json();
                     showNotification(result.message, result.success);
 
