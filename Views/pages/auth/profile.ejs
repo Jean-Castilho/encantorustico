@@ -4,12 +4,13 @@
         grid-template-columns: 1fr 2fr;
         gap: 2.5rem;
         align-items: start;
-        margin: 6rem;
+        margin: 1rem;
         margin-top: 0px;
     }
 
     /* --- User Card --- */
     .user-card {
+        min-width: 400px;
         background-color: #fff;
         padding: 2rem;
         border-radius: var(--borda-radius);
@@ -75,6 +76,15 @@
         margin-bottom: 1.5rem;
     }
 
+    @media (max-width: 470px) {
+
+        .user-card {
+
+            min-width: 300px;
+        }
+
+    }
+
     /* --- Responsiveness --- */
     @media (max-width: 992px) {
         .profile-grid {
@@ -135,7 +145,7 @@
     <div class="profile-grid">
 
         <!-- Coluna Lateral: Cartão do Usuário e Ações -->
-        <aside class="sidebar-column user-card" style="min-width: 400px;">
+        <aside class="sidebar-column user-card">
             <img src="/images/About-hero.png" alt="Avatar do Usuário" class="user-avatar">
             <h3>
                 <%= session.user.name %>
@@ -246,8 +256,8 @@
             saveButton.textContent = "Sending...";
             saveButton.disabled = true;
 
-            function showNotification(mensagem, isSuccess) {
-                notification.textContent = mensagem;
+            function showNotification(message, isSuccess) {
+                notification.textContent = message;
                 notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
                 notification.style.display = 'block';
                 setTimeout(() => {
@@ -277,17 +287,17 @@
                 });
 
                 const result = await response.json();
-                showNotification(result.mensagem, result.success);
+                showNotification(result.message, result.success);
 
                 if (response.ok) {
                     saveButton.textContent = "Atualizado";
 
                 } else {
-                    showNotification(result.mensagem, result.success);
+                    showNotification(result.message, result.success);
                 }
             } catch (error) {
                 console.error("Error:", error);
-                showNotification(result.mensagem, result.success);
+                showNotification(result.message, result.success);
             }
             setTimeout(() => {
                 saveButton.textContent = originalButtonText;

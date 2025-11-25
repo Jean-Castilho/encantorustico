@@ -130,8 +130,8 @@
 <script>
   const notification = document.getElementById("notification-cart");
 
-  function showNotification(mensagem, isSuccess) {
-    notification.textContent = mensagem;
+  function showNotification(message, isSuccess) {
+    notification.textContent = message;
     notification.style.backgroundColor = isSuccess ? "#28a745" : "#dc3545";
     notification.style.display = "block";
     setTimeout(() => {
@@ -216,7 +216,7 @@
       }
 
       updateSummary(); // Atualiza o resumo localmente
-      showNotification(result.mensagem || "Item removido com sucesso!", true);
+      showNotification(result.message || "Item removido com sucesso!", true);
 
       // Se o carrinho ficar vazio, recarrega a página para mostrar o estado "vazio"
       if (document.querySelectorAll(".cart-item").length === 0) {
@@ -290,12 +290,12 @@
         });
 
         const result = await response.json();
-        showNotification(result.mensagem, result.success);
+        showNotification(result.message, result.success);
 
         if (response.ok) {
           window.location.href = "/admin/inventory";
         } else {
-          showNotification(result.mensagem, result.success);
+          showNotification(result.message, result.success);
         }
       } catch (error) {
         console.error("Error:", error);

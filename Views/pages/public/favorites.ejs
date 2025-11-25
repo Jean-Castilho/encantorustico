@@ -66,8 +66,8 @@
   document.addEventListener("DOMContentLoaded", () => {
     const notification = document.getElementById("notification-home");
 
-    function showNotification(mensagem, isSuccess) {
-      notification.textContent = mensagem;
+    function showNotification(message, isSuccess) {
+      notification.textContent = message;
       notification.style.backgroundColor = isSuccess ? "#28a745" : "#dc3545";
       notification.style.display = "block";
       setTimeout(() => {
@@ -107,7 +107,7 @@
 
           console.log(result);
 
-          showNotification(result.mensagem, result.success);
+          showNotification(result.message, result.success);
 
           if (result.success) {
             const cardToRemove = document.getElementById(
@@ -117,10 +117,10 @@
             if (cardToRemove) {
               cardToRemove.remove();
             }
-            // Opcional: verificar se a lista de favoritos está vazia e mostrar a mensagem
+            // Opcional: verificar se a lista de favoritos está vazia e mostrar a message
             const grid = document.querySelector(".favorites-grid");
             if (grid && grid.children.length === 0) {
-              // Recarregar ou injetar o HTML da mensagem de lista vazia
+              // Recarregar ou injetar o HTML da message de lista vazia
               window.location.reload();
             }
           }

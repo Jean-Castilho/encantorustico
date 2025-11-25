@@ -65,9 +65,9 @@ export const getCheckoutPage = async (req, res) => {
     pageOptions.totalPrice = totalPrice;
     pageOptions.totalItems = totalItems;
 
-    renderPage(res, '../pages/public/checkout', { ...pageOptions, mensagem: 'Finalize sua compra aqui.' });
+    renderPage(res, '../pages/public/checkout', { ...pageOptions, message: 'Finalize sua compra aqui.' });
   } catch (error) {
-    handleError(res, error, '../pages/public/checkout', { ...pageOptions, mensagem: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
+    handleError(res, error, '../pages/public/checkout', { ...pageOptions, message: 'Erro ao carregar seu carrinho. Tente novamente mais tarde.' });
   }
 };
 
@@ -87,21 +87,21 @@ export const getOrdersPage = async (req, res) => {
     const orders = resOrders.data;
 
     if (!orders || orders.length === 0) {
-      return renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: 'Você ainda não fez nenhum pedido.' });
+      return renderPage(res, '../pages/public/orders', { ...pageOptions, message: 'Você ainda não fez nenhum pedido.' });
     }
 
     pageOptions.orders = orders;
 
     if (!orders || orders.length === 0) {
-      return renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: 'Você ainda não fez nenhum pedido.' });
+      return renderPage(res, '../pages/public/orders', { ...pageOptions, message: 'Você ainda não fez nenhum pedido.' });
     }
 
-    renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: 'Seu histórico de pedidos.' });
+    renderPage(res, '../pages/public/orders', { ...pageOptions, message: 'Seu histórico de pedidos.' });
   } catch (error) {
 
     const apiMessage = (error && error.data && (error.data.message || error.data.msg)) || error.message || 'Erro ao carregar seu histórico de pedidos.';
     console.error('Erro ao buscar orders para usuário:', apiMessage, error);
-    return renderPage(res, '../pages/public/orders', { ...pageOptions, mensagem: apiMessage });
+    return renderPage(res, '../pages/public/orders', { ...pageOptions, message: apiMessage });
   }
 };
 
@@ -157,7 +157,7 @@ export const createOrder = async (req, res) => {
 
     const pageOptions = {
       titulo: 'Pedido Confirmado',
-      mensagem: 'Seu pedido foi recebido com sucesso!',
+      message: 'Seu pedido foi recebido com sucesso!',
       order: apiResponse.data,
       qr_code: apiResponse.data.paymentMethod.payment.qr_code,
       qr_code_base64: apiResponse.data.paymentMethod.payment.qr_code_base64
@@ -172,7 +172,7 @@ export const createOrder = async (req, res) => {
     console.error('Erro ao criar o pedido:', error);
     handleError(res, error, '../pages/public/error', {
       titulo: 'Erro ao Criar Pedido',
-      mensagem: error.message,
+      message: error.message,
       error: { status: error.statusCode || 500, stack: error.stack }
     });
   }
@@ -191,7 +191,7 @@ export const payOrder = async (req, res) => {
     const pageOptions = {
       page: '../pages/public/payment-confirmation',
       titulo: 'Confirmação de Pagamento',
-      mensagem: 'Por favor, confirme seu pagamento abaixo.',
+      message: 'Por favor, confirme seu pagamento abaixo.',
       order: apiRes.data,
       qr_code: apiRes.data.paymentMethod.payment.qr_code,
       qr_code_base64: apiRes.data.paymentMethod.payment.qr_code_base64
@@ -200,7 +200,7 @@ export const payOrder = async (req, res) => {
     return res.render('layout/main', pageOptions);
   } catch (error) {
     console.error('Erro ao iniciar pagamento:', error);
-    return handleError(res, error, '../pages/public/error', { titulo: 'Erro no Pagamento', mensagem: error.message });
+    return handleError(res, error, '../pages/public/error', { titulo: 'Erro no Pagamento', message: error.message });
   }
 };
 
@@ -216,7 +216,7 @@ export const cancelOrder = async (req, res) => {
     return res.redirect('/orders');
   } catch (error) {
     console.error('Erro ao cancelar pedido:', error);
-    return handleError(res, error, '../pages/public/error', { titulo: 'Erro ao Cancelar', mensagem: error.message });
+    return handleError(res, error, '../pages/public/error', { titulo: 'Erro ao Cancelar', message: error.message });
   }
 };
 
@@ -246,7 +246,7 @@ export const getInvoice = async (req, res) => {
     return res.status(500).send('Formato de invoice desconhecido');
   } catch (error) {
     console.error('Erro ao obter invoice:', error);
-    return handleError(res, error, '../pages/public/error', { titulo: 'Erro ao Baixar Fatura', mensagem: error.message });
+    return handleError(res, error, '../pages/public/error', { titulo: 'Erro ao Baixar Fatura', message: error.message });
   }
 };
 

@@ -23,6 +23,8 @@ export default class ProductController {
    * @param {number} retries - The number of times to retry on failure.
    * @returns {Promise<string>} A promise that resolves with the unique filename.
    */
+
+  
   async #uploadFileWithRetry(file, bucket, retries = 3) {
     for (let i = 0; i < retries; i++) {
       try {

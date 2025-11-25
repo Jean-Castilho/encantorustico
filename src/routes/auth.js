@@ -60,6 +60,17 @@ router.put("/updatedUser", ensureAuthenticated, validateCsrfToken, async (req, r
   }
 });
 
+router.post("/forgot-password", validateCsrfToken, async (req, res, next) => {
+
+  console.log("req.body:", req.body);
+
+  const {contact, send_method } = req.body;
+
+  
+
+
+})
+
 router.post("/favorites/add", ensureAuthenticated, validateCsrfToken, async (req, res, next) => {
   const { productId } = req.body;
 
@@ -90,7 +101,7 @@ router.post("/favorites/remove", ensureAuthenticated, validateCsrfToken, async (
   const { productId } = req.body;
 
   if (!productId) {
-    return res.status(400).json({ success: false, mensagem: "ID do produto é obrigatório." });
+    return res.status(400).json({ success: false, message: "ID do produto é obrigatório." });
   }
 
   try {
@@ -115,7 +126,7 @@ router.post("/cart/add", ensureAuthenticated, validateCsrfToken, async (req, res
   const userId = req.userId;
 
   if (!productId) {
-    return res.status(400).json({ success: false, mensagem: "ID do produto é obrigatório." });
+    return res.status(400).json({ success: false, message: "ID do produto é obrigatório." });
   }
 
   try {
@@ -139,7 +150,7 @@ router.post("/cart/remove", ensureAuthenticated, validateCsrfToken, async (req, 
   const { productId } = req.body;
 
   if (!productId) {
-    return res.status(400).json({ success: false, mensagem: "ID do produto é obrigatório." });
+    return res.status(400).json({ success: false, message: "ID do produto é obrigatório." });
   }
 
   try {
@@ -159,26 +170,12 @@ router.post("/cart/remove", ensureAuthenticated, validateCsrfToken, async (req, 
   }
 });
 
-
 router.post("/create-order", ensureAuthenticated, validateCsrfToken, async (req, res, next) => {
 
   console.log(req.body);
 
 
 
-});
-
-
-
-router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Erro ao destruir a sessão:", err);
-      return res.status(500).redirect('/');
-    }
-    res.clearCookie('connect.sid');
-    res.redirect('/');
-  });
 });
 
 export default router;

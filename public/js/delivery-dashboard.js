@@ -148,7 +148,7 @@ class DeliveryDashboard {
     }
 
     /**
-     * Verifica se há pedidos na lista e exibe uma mensagem apropriada se não houver.
+     * Verifica se há pedidos na lista e exibe uma message apropriada se não houver.
      */
     checkInitialOrders() {
         if (this.orderList && this.orderList.children.length === 0) {

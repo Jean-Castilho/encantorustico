@@ -258,7 +258,7 @@ export const getDelivery = async (req, res) => {
 
   const pageOptions = {
     titulo: 'Página de Entrega',
-    mensagem: 'Página de entrega é rota',
+    message: 'Página de entrega é rota',
     apiKey: process.env.GOOGLE_MAPS_API_KEY,
     orders: [],
   };
@@ -272,9 +272,9 @@ export const getDelivery = async (req, res) => {
 
     pageOptions.orders = [...ordernsShipped, ...ordernsApproved] || [];
 
-    renderPage(res, '../pages/admin/delivery/dashboard', { ...pageOptions, mensagem: 'Página de entrega é rota' });
+    renderPage(res, '../pages/admin/delivery/dashboard', { ...pageOptions, message: 'Página de entrega é rota' });
   } catch (error) {
     console.error('Erro ao buscar pedidos para entrega:', error);
-    renderPage(res, '../pages/admin/delivery/dashboard', { ...pageOptions, mensagem: 'Erro ao carregar pedidos para entrega.' });
+    renderPage(res, '../pages/admin/delivery/dashboard', { ...pageOptions, message: 'Erro ao carregar pedidos para entrega.' });
   }
 };

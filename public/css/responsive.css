@@ -16,7 +16,7 @@
 
 
     .container {
-        padding: 0.9rem 5rem;
+        padding: 0.9rem 3rem;
     }
 
     .cart-content {
@@ -259,8 +259,8 @@
 
     .container {
         width: -webkit-fill-available;
-        padding: 0.1rem 0.2rem;
-        margin: 0.25rem auto;
+        padding: 0rem 1.5rem 1.5rem 1.2rem;
+        margin: 0.35rem auto;
     }
 
     .hero-content {
@@ -273,7 +273,8 @@
     }
 
     h2 {
-        padding: 1.2rem;
+        font-size: 2rem;
+        padding: 0.8rem;
     }
 
 
@@ -284,7 +285,7 @@
 
     .product-grid {
         gap: 1rem;
-        padding: 35px;
+        padding: 1.2rem 1.2rem;
         width: max-content;
         overflow-x: auto;
     }
@@ -326,4 +327,6 @@
     .card-content h3 {
         font-size: 1.1rem;
     }
-};
+}
+
+;

@@ -75,8 +75,8 @@
       saveButton.textContent = "Sending...";
       saveButton.disabled = true;
 
-      function showNotification(mensagem, isSuccess) {
-        notification.textContent = mensagem;
+      function showNotification(message, isSuccess) {
+        notification.textContent = message;
         notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
         notification.style.display = 'block';
         setTimeout(() => {
@@ -110,11 +110,11 @@
           saveButton.textContent = "atualizado";
 
         } else {
-          showNotification(result.mensagem, result.success);
+          showNotification(result.message, result.success);
         }
       } catch (error) {
         console.error("Error:", error);
-        showNotification(result.mensagem, result.success);
+        showNotification(result.message, result.success);
       }
 
       setTimeout(() => {

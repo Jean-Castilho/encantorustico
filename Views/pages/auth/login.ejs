@@ -32,7 +32,8 @@
                 </form>
 
                 <div style="text-align: center; margin-top: 2rem;">
-                    <p style="margin: 0;">Não tem uma conta? <a href="/register">Registre-se aqui</a>.</p>
+                    <p style="margin: 0;">Não tem uma conta? <a href="/register" style="color: #9a6250;">Registre-se
+                            aqui</a>.</p>
                 </div>
     </div>
 </div>
@@ -73,12 +74,12 @@
                 });
 
                 const result = await response.json();
-                showNotification(result.mensagem, result.success);
+                showNotification(result.message, result.success);
 
                 if (response.ok) {
                     window.location.href = "/";
                 } else {
-                    showNotification(result.mensagem, result.success);
+                    showNotification(result.message, result.success);
                 }
             } catch (error) {
 

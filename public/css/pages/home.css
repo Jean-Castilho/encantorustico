@@ -15,6 +15,7 @@
 .hero-content {
     max-width: 650px;
     padding: 3rem;
+    background: #1c1b1b6b;
     border-radius: var(--borda-radius);
 }
 
@@ -31,7 +32,7 @@
 
 .product-grid {
     display: flex;
-    flex-wrap: wrap;
+    padding: 1rem;
     gap: 4rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -161,9 +162,11 @@
 }
 
 .category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
     gap: 2rem;
+
 }
 
 .category-card {

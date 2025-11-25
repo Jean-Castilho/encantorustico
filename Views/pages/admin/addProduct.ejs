@@ -172,12 +172,12 @@
                 });
 
                 const result = await response.json();
-                showNotification(result.mensagem, result.success);
+                showNotification(result.message, result.success);
 
                 if (response.ok) {
                     window.location.href = "/admin/inventory";
                 } else {
-                    showNotification(result.mensagem, result.success);
+                    showNotification(result.message, result.success);
                 }
                 
             } catch (error) {

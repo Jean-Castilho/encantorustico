@@ -66,7 +66,7 @@ export const authMiddleware = (req, res, next) => {
 
     return res.status(statusCode).json({
       success: false,
-      mensagem: "Acesso negado. Nenhum token fornecido."
+      message: "Acesso negado. Nenhum token fornecido."
     });
   }
 
@@ -75,7 +75,7 @@ export const authMiddleware = (req, res, next) => {
 
     return res.status(statusCode).json({
       success: false,
-      mensagem: "Token inválido ou expirado."
+      message: "Token inválido ou expirado."
     });
   }// Adiciona os dados do usuário decodificados ao objeto de requisição para uso posterior
 

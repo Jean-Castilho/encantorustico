@@ -24,7 +24,7 @@ export const getHome = async (req, res) => {
   renderPage(res, "../pages/public/home", {
     titulo: "Encanto Rústico",
     estilo: "home",
-    mensagem: "Bem-vindo à nossa loja de móveis e decorações!",
+    message: "Bem-vindo à nossa loja de móveis e decorações!",
     products: products,
   });
 };
@@ -33,7 +33,7 @@ export const getContact = (req, res) => {
   renderPage(res, "../pages/public/contact", {
     titulo: "Contato",
     estilo: "contact",
-    mensagem: "Entre em contato conosco!",
+    message: "Entre em contato conosco!",
   });
 };
 
@@ -41,7 +41,7 @@ export const getAbout = (req, res) => {
   renderPage(res, "../pages/public/about", {
     titulo: "Sobre Nós",
     estilo: "about",
-    mensagem: "Saiba mais sobre nossa loja!",
+    message: "Saiba mais sobre nossa loja!",
   });
 };
 
@@ -51,7 +51,7 @@ export const getProducts = async (req, res) => {
   renderPage(res, "../pages/public/products", {
     titulo: "Produtos",
     estilo: "products",
-    mensagem: "Confira nossos produtos!",
+    message: "Confira nossos produtos!",
     products: allProducts,
   });
 };
@@ -60,7 +60,7 @@ export const getRegister = (req, res) => {
   renderPage(res, "../pages/auth/register", {
     titulo: "Registrar Conta",
     estilo: "register",
-    mensagem: "Crie sua conta para começar a comprar!",
+    message: "Crie sua conta para começar a comprar!",
   });
 };
 
@@ -68,7 +68,7 @@ export const getLogin = (req, res) => {
   renderPage(res, "../pages/auth/login", {
     titulo: "Realizar Login",
     estilo: "login",
-    mensagem: "seja Bem vindo de volta...",
+    message: "seja Bem vindo de volta...",
   });
 };
 
@@ -84,22 +84,24 @@ export const getProfile = (req, res) => {
   renderPage(res, "../pages/auth/profile", {
     titulo: "configuarçao",
     estilo: "peofile",
-    mensagem: "sessao profile...",
+    message: "sessao profile...",
   });
 };
-
 
 export const getResetPassword = (req, res) => {
   renderPage(res, "../pages/auth/changePassword", {
     titulo: "Alterar Senha",
-    mensagem: "solicite o codigo para redefinir senha",
+    message: "solicite o codigo para redefinir senha",
   });
 };
 
-export const postResetPassword = (req, res) => {
-console.log(req);
+export const getVerifyOtp = (req, res) =>{
+  
+  renderPage(res, "../pages/auth/verifyOtp", {
+    titulo: "Alterar Senha",
+    message: "solicite o codigo para redefinir senha",
+  });
 }
-
 
 export const getFavoritesPage = async (req, res) => {
   const pageOptions = {
@@ -110,7 +112,7 @@ export const getFavoritesPage = async (req, res) => {
   if (!req.session.user) {
     return renderPage(res, "../pages/public/favorites", {
       ...pageOptions,
-      mensagem: "Usuário não autenticado",
+      message: "Usuário não autenticado",
     });
   }
 
@@ -119,7 +121,7 @@ export const getFavoritesPage = async (req, res) => {
   if (!favoritProducts || favoritProducts.length === 0) {
     return renderPage(res, "../pages/public/favorites", {
       ...pageOptions,
-      mensagem: "Você ainda não adicionou nenhum produto aos seus favoritos.",
+      message: "Você ainda não adicionou nenhum produto aos seus favoritos.",
     });
   }
 
@@ -140,13 +142,13 @@ export const getFavoritesPage = async (req, res) => {
     renderPage(res, "../pages/public/favorites", {
       ...pageOptions,
       favorites: favoriteItems,
-      mensagem: "Seus produtos favoritos.",
+      message: "Seus produtos favoritos.",
     });
   } catch (error) {
     console.error("Erro ao buscar favoritos:", error);
     renderPage(res, "../pages/public/favorites", {
       ...pageOptions,
-      mensagem: "Erro ao carregar seus favoritos. Tente novamente mais tarde.",
+      message: "Erro ao carregar seus favoritos. Tente novamente mais tarde.",
     });
   }
 };
@@ -167,7 +169,7 @@ export const getCartPage = async (req, res) => {
   ) {
     return renderPage(res, "../pages/public/cart", {
       ...pageOptions,
-      mensagem: "Seu carrinho está vazio.",
+      message: "Seu carrinho está vazio.",
     });
   }
 
@@ -208,13 +210,13 @@ export const getCartPage = async (req, res) => {
       cart: { items: itemsWithQuantity },
       totalPrice,
       totalItems,
-      mensagem: "Seus produtos no carrinho.",
+      message: "Seus produtos no carrinho.",
     });
   } catch (error) {
     console.error("Erro ao carregar o carrinho:", error);
     renderPage(res, "../pages/public/cart", {
       ...pageOptions,
-      mensagem: "Erro ao carregar seu carrinho. Tente novamente mais tarde.",
+      message: "Erro ao carregar seu carrinho. Tente novamente mais tarde.",
     });
   }
 };
@@ -263,7 +265,7 @@ export const getOrders = async (req, res) => {
     if (!orders || orders.length === 0) {
       return renderPage(res, "../pages/public/orders", {
         ...pageOptions,
-        mensagem: "Você ainda não fez nenhum pedido.",
+        message: "Você ainda não fez nenhum pedido.",
       });
     }
 
@@ -272,13 +274,13 @@ export const getOrders = async (req, res) => {
     if (!orders || orders.length === 0) {
       return renderPage(res, "../pages/public/orders", {
         ...pageOptions,
-        mensagem: "Você ainda não fez nenhum pedido.",
+        message: "Você ainda não fez nenhum pedido.",
       });
     }
 
     renderPage(res, "../pages/public/orders", {
       ...pageOptions,
-      mensagem: "Seu histórico de pedidos.",
+      message: "Seu histórico de pedidos.",
     });
   } catch (error) {
     const apiMessage =
@@ -288,7 +290,7 @@ export const getOrders = async (req, res) => {
     console.error("Erro ao buscar orders para usuário:", apiMessage, error);
     return renderPage(res, "../pages/public/orders", {
       ...pageOptions,
-      mensagem: apiMessage,
+      message: apiMessage,
     });
   }
 };

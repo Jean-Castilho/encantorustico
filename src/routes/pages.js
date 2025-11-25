@@ -5,8 +5,8 @@ import {
   getRegister,
   getLogin, 
   getProfile, 
+  getVerifyOtp,
   getResetPassword,
-  postResetPassword,
   getFavoritesPage, 
   getCartPage, 
   getContact, 
@@ -44,10 +44,21 @@ router.get("/orders", getOrders);
 router.post("/checkout", getCheckout);
 
 router.get("/change-password", generateCsrfToken, getResetPassword);
+router.get("/verifyOtp", getVerifyOtp)
 
 router.get('/favorites', generateCsrfToken, getFavoritesPage);
 router.get('/cart', generateCsrfToken, getCartPage);
 
 
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Erro ao destruir a sessão:", err);
+      return res.status(500).redirect('/');
+    }
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
+});
 
 export default router;

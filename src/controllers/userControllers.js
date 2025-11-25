@@ -81,7 +81,7 @@ export default class UserControllers {
     req.session.user = newUser;
 
     return {
-      mensagem: "Usuário criado com sucesso.",
+      message: "Usuário criado com sucesso.",
       token: token,
       user: userCreated,
     };
@@ -90,7 +90,7 @@ export default class UserControllers {
   async login(req, res) {
     const { email, password } = req.body;
 
-    console.log(email,password)
+    console.log(email, password)
 
     const user = await this.getUserByEmail(email);
     console.log(user);
@@ -111,7 +111,7 @@ export default class UserControllers {
 
     req.session.user = user;
 
-    return { mensagem: "Login realizado", user, token };
+    return { message: "Login realizado", user, token };
   }
 
   async verifieldUser({ email, phone } = {}) {
@@ -130,10 +130,27 @@ export default class UserControllers {
   }
 
   async getUserById(id) {
-     if (!id) return null;
+    if (!id) return null;
 
     return await this.getCollection().findOne({ _id: new ObjectId(id) });
-  
+
+  }
+
+  async resetPassword(id, updateData) {
+    if (!ObjectId.isValid(id)) {
+      throw new Error("ID de usuário inválido");
+    };
+    const objectId = new ObjectId(id);
+
+    const updateFields = {};
+    if (updateData.password) {
+      updateFields.password = await criarHashPass(updateData.password);
+    };
+
+
+    
+
+
   }
 
   async updateUser(id, updateData) {
@@ -157,12 +174,12 @@ export default class UserControllers {
       const allowedRoles = ['user', 'stockist', 'delivery', 'admin'];
       if (allowedRoles.includes(updateData.role)) {
         updateFields.role = updateData.role;
-        
+
       } else {
         throw new Error("Tipo de usuário (role) inválido.");
       }
     }
-    
+
     // Adiciona o campo updatedAt
     updateFields.updatedAt = new Date();
 

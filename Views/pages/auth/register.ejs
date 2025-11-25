@@ -6,10 +6,10 @@
         </header>
 
 
-        <!-- Mensagem de erro 
-        <% if (typeof mensagem !== 'undefined' && mensagem) { %>
+        <!-- message de erro 
+        <% if (typeof message !== 'undefined' && message) { %>
             <div style="background-color: #ffdddd; border-left: 6px solid #f44336; color: #333; padding: 1rem; margin-bottom: 1.5rem; ">
-                <p style="margin: 0;"><%= mensagem %></p>
+                <p style="margin: 0;"><%= message %></p>
             </div>
         <% } %>
 -->
@@ -70,8 +70,8 @@
             const registerButton = document.getElementById("registerButton");
             const originalButtonText = registerButton.textContent;
 
-            function showNotification(mensagem, isSuccess) {
-                notification.textContent = mensagem;
+            function showNotification(message, isSuccess) {
+                notification.textContent = message;
                 notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
                 notification.style.display = 'block';
                 setTimeout(() => {
@@ -99,16 +99,16 @@
                 });
 
                 const result = await response.json();
-                showNotification(result.mensagem, result.success);
+                showNotification(result.message, result.success);
 
                 if (response.ok) {
                     window.location.href = "/";
                 } else {
-                    showNotification(result.mensagem, result.success);
+                    showNotification(result.message, result.success);
                 }
             } catch (error) {
                 console.error("Error:", error);
-                showNotification(result.mensagem, result.success);
+                showNotification(result.message, result.success);
             }
 
             registerButton.textContent = originalButtonText;

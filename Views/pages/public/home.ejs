@@ -13,10 +13,6 @@
       cursor: pointer;
     }
 
-    .section-title {
-      margin: 2.6rem;
-    }
-
     .product-categories {
       margin: 20px 0;
     }
@@ -30,7 +26,7 @@
   <section class="hero-section">
     <div class="hero-content">
       <h1>Móveis Rústicos que Contam Histórias</h1>
-      <a href="/products" class="btn btn-primario">Todos os Produtos</a>
+      <a href="/products" class="btn btn-primario" style="color: #ffffff;">Todos os Produtos</a>
 
     </div>
   </section>
@@ -91,8 +87,8 @@
         const notification = document.getElementById('notification-home');
         const csrfToken = '<%= csrfToken %>'; // Pega o token CSRF renderizado pelo EJS
 
-        function showNotification(mensagem, isSuccess) {
-          notification.textContent = mensagem;
+        function showNotification(message, isSuccess) {
+          notification.textContent = message;
           notification.style.backgroundColor = isSuccess ? '#28a745' : '#dc3545';
           notification.style.display = 'block';
           setTimeout(() => {
@@ -125,7 +121,7 @@
               });
 
               const result = await response.json();
-              showNotification(result.mensagem, response.ok);
+              showNotification(result.message, response.ok);
 
               if (result.success) {
                 button.classList.toggle('favorited');
@@ -167,7 +163,7 @@
               });
 
               const result = await response.json();
-              showNotification(result.mensagem, result.success);
+              showNotification(result.message, result.success);
 
               if (result.success) {
                 button.classList.add('in-cart');
